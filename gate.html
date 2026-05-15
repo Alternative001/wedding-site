@@ -281,13 +281,13 @@
           class="gate-input"
           id="gatePassword"
           type="password"
-          placeholder="Passwort"
-          aria-label="Passwort"
+          placeholder="password · Passwort"
+          aria-label="Password"
           required
           autofocus
         />
         <button type="submit" class="gate-submit">
-          Eintreten →
+          Enter →
         </button>
       </div>
       <div class="gate-msg" id="gateMsg" role="status" aria-live="polite"></div>
@@ -305,42 +305,38 @@
   </main>
 
   <script>
-    // -----------------------------------------------------------------
-    // Configure your password here. Change as needed.
-    // -----------------------------------------------------------------
-    const PASSWORD = 'garda2027';
-    const REDIRECT_TO = 'index.html';
+    // "lemon"   → English site
+    // "zitrone" → German site
+    const PASSWORDS = {
+      'lemon':   'index-en.html',
+      'zitrone': 'index.html',
+    };
 
-    // Notes:
-    // - This is a *soft* gate (client-side only). Anyone determined can
-    //   view the source. For a real lock, put the gate on a server.
-    // - We normalize input (trim + lowercase) so guests don't get caught
-    //   on capitalization or trailing spaces.
-
-    const form = document.getElementById('gateForm');
+    const form  = document.getElementById('gateForm');
     const input = document.getElementById('gatePassword');
-    const row = document.getElementById('inputRow');
-    const msg = document.getElementById('gateMsg');
+    const row   = document.getElementById('inputRow');
+    const msg   = document.getElementById('gateMsg');
 
-    // Already unlocked? Skip straight through.
-    if (sessionStorage.getItem('jl-gate-unlocked') === '1') {
-      location.replace(REDIRECT_TO);
-    }
+    // Already unlocked? Send straight to the stored destination.
+    const saved = sessionStorage.getItem('jl-gate-redirect');
+    if (saved) location.replace(saved);
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const v = (input.value || '').trim().toLowerCase();
-      if (v === PASSWORD.toLowerCase()) {
-        msg.textContent = 'Willkommen — wir leiten Dich weiter ✨';
+      const v    = (input.value || '').trim().toLowerCase();
+      const dest = PASSWORDS[v];
+      if (dest) {
+        msg.textContent = v === 'zitrone'
+          ? 'Willkommen — wir leiten Dich weiter ✨'
+          : 'Welcome — taking you there ✨';
         msg.classList.remove('is-error');
-        sessionStorage.setItem('jl-gate-unlocked', '1');
-        setTimeout(() => { location.href = REDIRECT_TO; }, 600);
+        sessionStorage.setItem('jl-gate-redirect', dest);
+        setTimeout(() => { location.href = dest; }, 600);
       } else {
-        msg.textContent = 'Hmm, das war nicht ganz richtig. Versuch es nochmal.';
+        msg.textContent = 'Not quite — try again. · Nicht ganz — versuch es nochmal.';
         msg.classList.add('is-error');
         row.classList.remove('is-wrong');
-        // force reflow so the animation can replay
-        void row.offsetWidth;
+        void row.offsetWidth; // force reflow so shake replays
         row.classList.add('is-wrong');
         input.select();
       }
@@ -350,7 +346,6 @@
       document.getElementById('hintText').classList.toggle('is-open');
     });
 
-    // Quietly clear the error state when the user starts typing again.
     input.addEventListener('input', () => {
       if (msg.classList.contains('is-error')) {
         msg.textContent = '';
