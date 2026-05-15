@@ -9,13 +9,11 @@ const Story = () => (
     </div>
 
     <div className="jl-story-grid">
-      <image-slot
-        id="story-photo"
-        shape="rounded"
-        radius="14"
-        placeholder="Foto von Lisa & Julian"
-        style={{ width: '100%', aspectRatio: '4 / 5' }}
-      ></image-slot>
+      <img
+        src="assets/Forte.png"
+        alt="Foto von Lisa & Julian"
+        style={{ width: '100%', aspectRatio: '4 / 5', objectFit: 'cover', borderRadius: '14px' }}
+      />
 
       <div className="jl-prose">
         <p>

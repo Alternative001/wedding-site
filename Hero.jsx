@@ -22,7 +22,7 @@ const Hero = () => (
       </div>
 
       <div className="jl-hero-illustration">
-        <img src={(window.__resources && window.__resources.heroIllustration) || "assets/Forte.png"} alt="Lisa and Julian kissing at sunset on Lago di Garda — yellow line illustration" />
+        <img src={(window.__resources && window.__resources.heroIllustration) || "assets/illustration-save-the-date.jpeg"} alt="Lisa and Julian kissing at sunset on Lago di Garda — yellow line illustration" />
       </div>
 
       <p className="jl-hero-tag">
