@@ -1,0 +1,281 @@
+/* =========================================================
+   Lisa & Julian Wedding — Design Tokens
+   "La Dolce Vita" on Lago di Garda
+   ========================================================= */
+
+/* ---------- Fonts (Google Fonts substitutions) ----------
+   NOTE: No source font files were provided with the inspo.
+   These are closest-match Google Fonts. Flag to user — swap
+   for licensed wedding-stationery fonts if you have them.
+
+   Allura            ↔ brush-script display ("Save the Date", "La Dolce Vita")
+   Cormorant Garamond↔ classic high-contrast serif (names, large display)
+   DM Sans           ↔ clean friendly body sans (paragraphs, UI)
+*/
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+
+:root {
+  /* =========================================================
+     COLORS — Pastel Mediterranean palette
+     ========================================================= */
+
+  /* Yellows — sunny, pastel, lemon */
+  --color-lemon-50:  #FFFBEC;  /* near-cream wash, default page bg */
+  --color-lemon-100: #FFF4C9;  /* pale pastel yellow — stripes light */
+  --color-lemon-200: #FCE789;  /* soft butter yellow — stripes mid */
+  --color-lemon-300: #F8D34A;  /* sunny lemon — accent buttons */
+  --color-lemon-400: #F2B81E;  /* deep ripe lemon — illustration fill */
+  --color-lemon-500: #D89A05;  /* amber accent for hover */
+
+  /* Blues — sky, cobalt, ink */
+  --color-sky-50:    #F1F6FC;  /* faintest sky wash */
+  --color-sky-100:   #DCE9F8;  /* pastel sky for stripes / cards */
+  --color-sky-200:   #B8D2F1;  /* mid sky for chips, hover */
+  --color-sky-300:   #87B0E0;  /* clear-day sky */
+  --color-sky-400:   #5187CC;  /* mid cobalt */
+  --color-cobalt:    #1E47B5;  /* primary brand blue — links, buttons, ink */
+  --color-ink:       #0E2A6B;  /* deepest ink blue — display headings */
+
+  /* Neutrals — warm whites, off-white linen, soft sage tints */
+  --color-cream:     #FFFBF2;  /* soft cream paper */
+  --color-paper:     #F8F2E2;  /* warmer paper, used for cards */
+  --color-linen:     #EFE8D4;  /* linen surface */
+  --color-sage-100:  #DFE5D3;  /* greenery muted */
+  --color-sage-300:  #88A176;  /* lemon-leaf green for illustrations */
+  --color-charcoal:  #2A2620;  /* warm body text */
+  --color-muted:     #6F695A;  /* secondary text */
+
+  /* Semantic ------------------------------------------------ */
+  --bg-page:        var(--color-cream);
+  --bg-surface:     #FFFFFFEE;
+  --bg-card:        var(--color-paper);
+  --bg-inset:       var(--color-lemon-50);
+
+  --fg-default:     var(--color-charcoal);
+  --fg-muted:       var(--color-muted);
+  --fg-display:     var(--color-ink);          /* names, display headings */
+  --fg-script:      var(--color-cobalt);       /* brush-script highlights */
+  --fg-on-blue:     var(--color-lemon-50);
+  --fg-on-yellow:   var(--color-cobalt);
+
+  --accent-primary:   var(--color-cobalt);
+  --accent-secondary: var(--color-lemon-300);
+  --accent-soft:      var(--color-sky-100);
+
+  --border-soft:   #E7DEC6;
+  --border-mid:    #C9BE9E;
+  --border-strong: var(--color-cobalt);
+
+  --link:          var(--color-cobalt);
+  --link-hover:    var(--color-ink);
+
+  /* =========================================================
+     TYPOGRAPHY — three voices: script, serif, sans
+     ========================================================= */
+  --font-script:   'Allura', 'Snell Roundhand', 'Apple Chancery', cursive;
+  --font-serif:    'Cormorant Garamond', 'Garamond', 'Iowan Old Style', serif;
+  --font-sans:     'DM Sans', -apple-system, 'Helvetica Neue', sans-serif;
+
+  /* Type scale (1.25 ratio, gently exaggerated at the top) */
+  --fs-50:  12px;
+  --fs-75:  14px;
+  --fs-100: 16px;   /* body */
+  --fs-200: 18px;
+  --fs-300: 22px;
+  --fs-400: 28px;
+  --fs-500: 36px;
+  --fs-600: 48px;
+  --fs-700: 64px;
+  --fs-800: 88px;
+  --fs-900: 120px;  /* hero script */
+
+  --lh-tight:   1.08;
+  --lh-snug:    1.2;
+  --lh-normal:  1.45;
+  --lh-relaxed: 1.65;
+
+  --tracking-wide:    0.18em;   /* eyebrow caps */
+  --tracking-display: 0.04em;   /* big serif names */
+  --tracking-normal:  0;
+
+  /* =========================================================
+     SPACING — 4 px base
+     ========================================================= */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+  --space-9:  96px;
+  --space-10: 128px;
+
+  /* =========================================================
+     RADII — gently rounded; arches at the top
+     ========================================================= */
+  --radius-xs:    4px;
+  --radius-sm:    8px;
+  --radius-md:    14px;
+  --radius-lg:    22px;
+  --radius-pill:  999px;
+  --radius-arch:  50% 50% 8px 8px / 60% 60% 8px 8px;  /* invitation arch */
+
+  /* =========================================================
+     SHADOWS — soft, paper-on-linen
+     ========================================================= */
+  --shadow-xs: 0 1px 2px rgba(14, 42, 107, 0.06);
+  --shadow-sm: 0 2px 8px rgba(14, 42, 107, 0.08);
+  --shadow-md: 0 10px 24px -8px rgba(14, 42, 107, 0.18), 0 2px 6px rgba(14, 42, 107, 0.08);
+  --shadow-lg: 0 24px 48px -20px rgba(14, 42, 107, 0.28), 0 4px 14px rgba(14, 42, 107, 0.10);
+
+  /* =========================================================
+     MOTION
+     ========================================================= */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft:  cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:   140ms;
+  --dur-base:   240ms;
+  --dur-slow:   420ms;
+
+  /* =========================================================
+     SIGNATURE PATTERN — yellow stripes
+     The visual DNA of this brand.
+     ========================================================= */
+  --pattern-stripes-yellow:
+    repeating-linear-gradient(
+      90deg,
+      var(--color-lemon-100) 0 22px,
+      var(--color-cream)     22px 44px
+    );
+  --pattern-stripes-yellow-fine:
+    repeating-linear-gradient(
+      90deg,
+      var(--color-lemon-200) 0 10px,
+      var(--color-cream)     10px 22px
+    );
+  --pattern-stripes-blue:
+    repeating-linear-gradient(
+      90deg,
+      var(--color-sky-100) 0 22px,
+      #FFFFFF              22px 44px
+    );
+}
+
+/* =========================================================
+   SEMANTIC TYPE — apply on bare HTML
+   ========================================================= */
+html {
+  font-size: 16px;
+  color: var(--fg-default);
+  background: var(--bg-page);
+}
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-100);
+  line-height: var(--lh-relaxed);
+  color: var(--fg-default);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Display / hero — brush script (rare, BIG, used for hero moments) */
+.t-hero-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(72px, 12vw, var(--fs-900));
+  line-height: 0.95;
+  color: var(--accent-primary);
+  letter-spacing: 0;
+}
+
+/* Names / monumental — wide-letterspaced classic serif */
+h1, .t-display {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--fs-700);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  color: var(--fg-display);
+  margin: 0;
+}
+
+h2, .t-h2 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--fs-500);
+  line-height: var(--lh-snug);
+  color: var(--fg-display);
+  margin: 0;
+}
+
+h3, .t-h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: var(--fs-400);
+  line-height: var(--lh-snug);
+  color: var(--fg-display);
+  margin: 0;
+}
+
+/* Eyebrow caps — small all-caps sans, wide tracked. Used a lot. */
+.t-eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--fs-75);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--accent-primary);
+}
+
+/* Script accent — small or mid-sized cursive ("the", "and", "Save") */
+.t-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  color: var(--accent-primary);
+  font-size: var(--fs-500);
+  line-height: 1;
+}
+
+p, .t-body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-100);
+  line-height: var(--lh-relaxed);
+  color: var(--fg-default);
+  margin: 0 0 var(--space-4);
+  text-wrap: pretty;
+}
+
+.t-lead {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--fs-300);
+  line-height: var(--lh-normal);
+  color: var(--fg-muted);
+}
+
+.t-caption {
+  font-family: var(--font-sans);
+  font-size: var(--fs-75);
+  color: var(--fg-muted);
+}
+
+a {
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+a:hover { color: var(--link-hover); }
+
+/* =========================================================
+   UTILITIES — small, used everywhere
+   ========================================================= */
+.bg-stripes-yellow { background: var(--pattern-stripes-yellow); }
+.bg-stripes-blue   { background: var(--pattern-stripes-blue); }
+.bg-paper          { background: var(--bg-card); }
+.bg-cream          { background: var(--bg-page); }
+.bg-cobalt         { background: var(--color-cobalt); color: var(--fg-on-blue); }
