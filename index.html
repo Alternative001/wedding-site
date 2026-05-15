@@ -3,75 +3,354 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lisa &amp; Julian · Lago di Garda · 24.07.2027</title>
+  <title>Lisa &amp; Julian · private Einladung</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo-monogram.svg" />
-  <link rel="stylesheet" href="site.css?v=4" />
+  <link rel="stylesheet" href="colors_and_type.css" />
 
-  <!-- Resources referenced as STRINGS in JSX — lifted for standalone bundling -->
-  <meta name="ext-resource-dependency" content="assets/logo-monogram.svg" data-resource-id="monogramSvg" />
-  <meta name="ext-resource-dependency" content="assets/illustration-hero-picture.png" data-resource-id="heroIllustration" />
+  <!-- Resources referenced as STRINGS — lifted for standalone bundling -->
+  <meta name="ext-resource-dependency" content="assets/lemon.png" data-resource-id="lemonHero" />
 
   <!-- Standalone splash / no-JS fallback -->
   <template id="__bundler_thumbnail" data-bg-color="#FFFBF2">
     <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-      <!-- pastel yellow vertical stripes -->
       <defs>
-        <pattern id="stripe" patternUnits="userSpaceOnUse" width="44" height="44" x="0" y="0">
+        <pattern id="stripe" patternUnits="userSpaceOnUse" width="44" height="44">
           <rect width="22" height="44" fill="#FFF4C9" />
           <rect x="22" width="22" height="44" fill="#FFFBF2" />
         </pattern>
       </defs>
-      <rect width="1200" height="800" fill="url(#stripe)" />
-      <!-- soft radial center wash -->
-      <radialGradient id="wash" cx="50%" cy="50%" r="55%">
-        <stop offset="0%" stop-color="#FFFBF2" stop-opacity="0.92" />
-        <stop offset="100%" stop-color="#FFFBF2" stop-opacity="0" />
-      </radialGradient>
-      <rect width="1200" height="800" fill="url(#wash)" />
-
-      <!-- big serif L &amp; J -->
-      <g transform="translate(600, 380)" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" fill="#0E2A6B" font-weight="500">
-        <text font-size="220" letter-spacing="20">LISA</text>
-        <text y="160" font-family="cursive" font-size="180" fill="#1E47B5">&amp;</text>
-        <text y="320" font-size="220" letter-spacing="20">JULIAN</text>
-      </g>
-      <!-- date strip -->
-      <g transform="translate(600, 740)" text-anchor="middle" font-family="DM Sans, sans-serif" fill="#1E47B5">
-        <text font-size="28" letter-spacing="8">24 · 07 · 2027  ·  LAGO DI GARDA</text>
-      </g>
+      <rect width="1200" height="800" fill="#FFFBF2" />
+      <rect x="350" y="120" width="500" height="500" rx="250" fill="url(#stripe)" stroke="#1E47B5" stroke-width="6" />
+      <!-- simple stylized lemon -->
+      <ellipse cx="600" cy="370" rx="120" ry="100" fill="none" stroke="#1E47B5" stroke-width="14" />
+      <path d="M540 290 Q540 230 600 240 Q660 230 660 290" fill="none" stroke="#1E47B5" stroke-width="12" stroke-linecap="round" />
+      <text x="600" y="720" text-anchor="middle" font-family="serif" font-size="64" letter-spacing="14" fill="#0E2A6B" font-weight="500">LISA &amp; JULIAN</text>
     </svg>
   </template>
 
-  <!-- React + Babel -->
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg-page);
+      font-family: var(--font-sans);
+      color: var(--fg-default);
+      display: grid;
+      place-items: center;
+      padding: var(--space-5);
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
 
-  <!-- Lucide icons (CDN substitution — flagged in README) -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+    /* Soft yellow-stripe wash behind everything, gently masked */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: var(--pattern-stripes-yellow);
+      opacity: 0.45;
+      z-index: 0;
+      -webkit-mask-image: radial-gradient(ellipse 70% 70% at center, black 25%, transparent 75%);
+              mask-image: radial-gradient(ellipse 70% 70% at center, black 25%, transparent 75%);
+      pointer-events: none;
+    }
 
-  <!-- image-slot custom element -->
-  <script src="image-slot.js"></script>
+    .gate {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+      animation: rise 700ms var(--ease-out) both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tiny top mark — guests immediately know they are on the right page */
+    .gate-mark {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      font: 500 13px/1 var(--font-sans);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-cobalt);
+      background: rgba(255, 251, 242, 0.8);
+      border: 1px solid var(--border-soft);
+      padding: 8px 16px;
+      border-radius: 999px;
+      box-shadow: var(--shadow-xs);
+    }
+    .gate-mark .amp {
+      font-family: var(--font-script);
+      font-weight: 400;
+      font-size: 22px;
+      letter-spacing: 0;
+      color: var(--color-cobalt);
+      text-transform: none;
+      line-height: 0;
+      vertical-align: -3px;
+    }
+
+    /* Lemon hero — transparent illustration, floats free */
+    .gate-lemon {
+      width: 260px;
+      max-width: 60vw;
+      animation: lemonSway 8s ease-in-out infinite alternate;
+      transform-origin: 50% 90%;
+    }
+    .gate-lemon img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 18px 24px rgba(14, 42, 107, 0.18));
+    }
+    @keyframes lemonSway {
+      from { transform: rotate(-3deg); }
+      to   { transform: rotate(3deg); }
+    }
+
+    /* Wordmark */
+    .gate-names {
+      font-family: var(--font-serif);
+      font-weight: 500;
+      font-size: clamp(40px, 8vw, 56px);
+      line-height: 1;
+      letter-spacing: 0.16em;
+      color: var(--color-ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: var(--space-2) 0 0;
+    }
+    .gate-amp {
+      font-family: var(--font-script);
+      font-weight: 400;
+      color: var(--color-cobalt);
+      font-size: 0.95em;
+      letter-spacing: 0;
+      line-height: 0.7;
+      margin: -0.05em 0;
+    }
+    .gate-meta {
+      font: 500 11px/1 var(--font-sans);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--color-cobalt);
+      margin-top: -2px;
+    }
+
+    .gate-subtitle {
+      font: italic 17px/1.5 var(--font-serif);
+      color: var(--color-muted);
+      max-width: 32ch;
+      margin: var(--space-2) 0 var(--space-3);
+    }
+
+    /* Password form */
+    .gate-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .gate-input-row {
+      display: flex;
+      gap: 8px;
+      background: #fff;
+      border: 1.5px solid var(--border-mid);
+      border-radius: 14px;
+      padding: 6px 6px 6px 18px;
+      transition: border-color 160ms, box-shadow 160ms;
+    }
+    .gate-input-row:focus-within {
+      border-color: var(--color-cobalt);
+      box-shadow: 0 0 0 4px rgba(30, 71, 181, 0.14);
+    }
+    .gate-input-row.is-wrong {
+      animation: shake 360ms cubic-bezier(.36,.07,.19,.97);
+      border-color: #C8543A;
+      box-shadow: 0 0 0 4px rgba(200, 84, 58, 0.16);
+    }
+    @keyframes shake {
+      10%, 90% { transform: translateX(-2px); }
+      20%, 80% { transform: translateX(4px); }
+      30%, 50%, 70% { transform: translateX(-6px); }
+      40%, 60% { transform: translateX(6px); }
+    }
+    .gate-input {
+      flex: 1;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font: 400 17px/1 var(--font-sans);
+      letter-spacing: 0.04em;
+      color: var(--color-charcoal);
+      padding: 12px 0;
+    }
+    .gate-input::placeholder {
+      color: var(--color-muted);
+      opacity: 0.7;
+      font-style: italic;
+      font-family: var(--font-serif);
+    }
+    .gate-submit {
+      border: 0;
+      background: var(--color-cobalt);
+      color: var(--color-cream);
+      font: 500 14px/1 var(--font-sans);
+      letter-spacing: 0.04em;
+      padding: 0 22px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 140ms;
+      white-space: nowrap;
+    }
+    .gate-submit:hover { background: var(--color-ink); }
+    .gate-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .gate-msg {
+      font: 14px/1.4 var(--font-sans);
+      color: var(--color-muted);
+      min-height: 1.4em;
+      transition: color 140ms;
+    }
+    .gate-msg.is-error { color: #8a2f1c; }
+
+    /* Hint disclosure */
+    .gate-hint {
+      margin-top: var(--space-3);
+      font: 13px/1.4 var(--font-sans);
+      color: var(--color-muted);
+    }
+    .gate-hint-btn {
+      background: none;
+      border: 0;
+      color: var(--color-cobalt);
+      font: 500 13px var(--font-sans);
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .gate-hint-text {
+      display: none;
+      font: italic 13px/1.5 var(--font-serif);
+      color: var(--color-muted);
+      margin-top: 6px;
+      max-width: 36ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .gate-hint-text.is-open { display: block; }
+
+    /* Tiny script flourish at top */
+    .gate-private {
+      font-family: var(--font-script);
+      font-weight: 400;
+      color: var(--color-cobalt);
+      font-size: 38px;
+      line-height: 1;
+      margin: var(--space-1) 0;
+    }
+  </style>
 </head>
 <body>
-  <div id="root"></div>
+  <main class="gate" role="main">
+    <div class="gate-lemon" aria-hidden="true">
+      <img src="assets/lemon.png" alt="" data-comment-anchor="57f0ed4e25-img" />
+    </div>
 
-  <!-- Components (load order matters: leaves first, App last) -->
-  <script type="text/babel" src="Nav.jsx"></script>
-  <script type="text/babel" src="Hero.jsx"></script>
-  <script type="text/babel" src="Story.jsx"></script>
-  <script type="text/babel" src="Schedule.jsx"></script>
-  <script type="text/babel" src="Venue.jsx"></script>
-  <script type="text/babel" src="FAQ.jsx"></script>
-  <script type="text/babel" src="RSVP.jsx"></script>
-  <script type="text/babel" src="Footer.jsx"></script>
-  <script type="text/babel" src="App.jsx"></script>
+    <span class="gate-private">private</span>
+
+    <h1 class="gate-names">
+      <span>LISA</span>
+      <span class="gate-amp">&amp;</span>
+      <span>JULIAN</span>
+    </h1>
+    <form class="gate-form" id="gateForm" autocomplete="off">
+      <div class="gate-input-row" id="inputRow">
+        <input
+          class="gate-input"
+          id="gatePassword"
+          type="password"
+          placeholder="password · Passwort"
+          aria-label="Password"
+          required
+          autofocus
+        />
+        <button type="submit" class="gate-submit">
+          Enter →
+        </button>
+      </div>
+      <div class="gate-msg" id="gateMsg" role="status" aria-live="polite"></div>
+    </form>
+
+    <div class="gate-hint">
+      <button type="button" class="gate-hint-btn" id="hintBtn" data-comment-anchor="795e91020e-button">
+        Passwort vergessen / Don't know the password?
+      </button>
+      <div class="gate-hint-text" id="hintText">
+        Schreibt uns kurz an <a href="mailto:hallo@lisa-und-julian.de">hallo@lisa-und-julian.de</a>
+        — wir helfen sofort weiter 🍋
+      </div>
+    </div>
+  </main>
 
   <script>
-    // initial icon paint (App also re-paints on every render)
-    window.addEventListener('load', () => {
-      if (window.lucide && window.lucide.createIcons) {
-        setTimeout(() => window.lucide.createIcons(), 100);
+    // "lemon"   → English site
+    // "zitrone" → German site
+    const PASSWORDS = {
+      'lemon':   'index-en.html',
+      'zitrone': 'index-de.html',
+    };
+
+    const form  = document.getElementById('gateForm');
+    const input = document.getElementById('gatePassword');
+    const row   = document.getElementById('inputRow');
+    const msg   = document.getElementById('gateMsg');
+
+    // Already unlocked? Send straight to the stored destination.
+    const saved = sessionStorage.getItem('jl-gate-redirect');
+    if (saved) location.replace(saved);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v    = (input.value || '').trim().toLowerCase();
+      const dest = PASSWORDS[v];
+      if (dest) {
+        msg.textContent = v === 'zitrone'
+          ? 'Willkommen — wir leiten Dich weiter ✨'
+          : 'Welcome — taking you there ✨';
+        msg.classList.remove('is-error');
+        sessionStorage.setItem('jl-gate-redirect', dest);
+        setTimeout(() => { location.href = dest; }, 600);
+      } else {
+        msg.textContent = 'Not quite — try again. · Nicht ganz — versuch es nochmal.';
+        msg.classList.add('is-error');
+        row.classList.remove('is-wrong');
+        void row.offsetWidth; // force reflow so shake replays
+        row.classList.add('is-wrong');
+        input.select();
+      }
+    });
+
+    document.getElementById('hintBtn').addEventListener('click', () => {
+      document.getElementById('hintText').classList.toggle('is-open');
+    });
+
+    input.addEventListener('input', () => {
+      if (msg.classList.contains('is-error')) {
+        msg.textContent = '';
+        msg.classList.remove('is-error');
+        row.classList.remove('is-wrong');
       }
     });
   </script>
