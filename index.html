@@ -261,7 +261,7 @@
       margin: var(--space-1) 0;
     }
 
-    /* ---- Lemon burst ---- */
+    /* ---- Lemon burst + confetti ---- */
     .burst-stage {
       position: fixed; inset: 0;
       z-index: 9999;
@@ -281,10 +281,10 @@
       filter: drop-shadow(0 18px 24px rgba(14, 42, 107, 0.22));
     }
     @keyframes burstPop {
-      0%   { transform: translate(-50%, -50%) scale(1)   rotate(0deg);  opacity: 1; }
-      55%  { transform: translate(-50%, -50%) scale(1.9) rotate(-6deg); opacity: 1; }
-      80%  { transform: translate(-50%, -50%) scale(2.5) rotate(4deg);  opacity: 0.5; }
-      100% { transform: translate(-50%, -50%) scale(2.7) rotate(-2deg); opacity: 0; }
+      0%   { transform: translate(-50%,-50%) scale(1)   rotate(0deg);  opacity: 1; }
+      55%  { transform: translate(-50%,-50%) scale(1.9) rotate(-6deg); opacity: 1; }
+      80%  { transform: translate(-50%,-50%) scale(2.5) rotate(4deg);  opacity: 0.5; }
+      100% { transform: translate(-50%,-50%) scale(2.7) rotate(-2deg); opacity: 0; }
     }
 
     .burst-flash {
@@ -292,39 +292,49 @@
       background: #F8D34A;
       z-index: 9998;
       opacity: 0;
-      animation: burstFlash 750ms 320ms ease-out forwards;
+      animation: burstFlash 700ms 300ms ease-out forwards;
     }
     @keyframes burstFlash {
       0%   { opacity: 0; }
-      12%  { opacity: 0.88; }
+      10%  { opacity: 0.82; }
       100% { opacity: 0; }
     }
 
-    .burst-particle {
+    /* Confetti strips + dots */
+    .burst-confetti {
       position: fixed;
       top: 50%; left: 50%;
-      border-radius: 50%;
-      animation: burstFly var(--dur) var(--delay) cubic-bezier(0.15, 0.8, 0.3, 1) forwards;
+      animation: confettiFly var(--dur) var(--delay) cubic-bezier(0.12, 0.8, 0.4, 1) forwards;
     }
-    @keyframes burstFly {
-      0%   { transform: translate(-50%,-50%) translate(0,0)               scale(1);   opacity: 1; }
-      70%  {                                                                           opacity: 0.8; }
-      100% { transform: translate(-50%,-50%) translate(var(--tx),var(--ty)) scale(0.15); opacity: 0; }
+    @keyframes confettiFly {
+      0%   { transform: translate(-50%,-50%) translate(0,0)                        rotate(0deg)        scale(1);   opacity: 1; }
+      75%  {                                                                                                        opacity: 1; }
+      100% { transform: translate(-50%,-50%) translate(var(--tx),var(--ty)) rotate(var(--spin)) scale(0.5); opacity: 0; }
     }
 
-    .burst-spray {
+    /* "La Dolce Vita" script pop */
+    .burst-text {
       position: fixed;
       top: 50%; left: 50%;
-      height: 2px;
-      background: linear-gradient(to right, #F2B81E, transparent);
-      transform-origin: left center;
+      z-index: 10001;
+      pointer-events: none;
+      white-space: nowrap;
+      font-family: 'Allura', 'Snell Roundhand', cursive;
+      font-size: clamp(52px, 11vw, 96px);
+      color: #1E47B5;
+      text-shadow: 0 4px 24px rgba(14, 42, 107, 0.18);
       opacity: 0;
-      animation: burstSpray 520ms var(--delay) ease-out forwards;
+      animation:
+        ldvPop  600ms 360ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+        ldvFade 500ms 1200ms ease-in forwards;
     }
-    @keyframes burstSpray {
-      0%   { opacity: 0.9; width: 0; }
-      35%  { opacity: 0.7; width: var(--len); }
-      100% { opacity: 0;   width: var(--len); }
+    @keyframes ldvPop {
+      0%   { transform: translate(-50%,-50%) scale(0.4) rotate(-4deg); opacity: 0; }
+      100% { transform: translate(-50%,-50%) scale(1)   rotate(-2deg); opacity: 1; }
+    }
+    @keyframes ldvFade {
+      0%   { opacity: 1; }
+      100% { opacity: 0; }
     }
   </style>
 </head>
@@ -389,18 +399,18 @@
 
     function triggerBurst(dest) {
       // Fade the gate out
-      document.querySelector('.gate').style.cssText = 'opacity:0; transition:opacity 200ms;';
+      document.querySelector('.gate').style.cssText = 'opacity:0; transition:opacity 180ms;';
 
-      // Full-screen yellow flash
+      // Full-screen yellow flash (behind everything)
       const flash = document.createElement('div');
       flash.className = 'burst-flash';
       document.body.appendChild(flash);
 
-      // Stage holds the lemon clone + particles
+      // Stage holds lemon clone + all confetti
       const stage = document.createElement('div');
       stage.className = 'burst-stage';
 
-      // Lemon clone that grows and pops
+      // Lemon clone that swells and pops
       const clone = document.createElement('div');
       clone.className = 'burst-lemon-clone';
       const img = document.createElement('img');
@@ -409,43 +419,57 @@
       stage.appendChild(clone);
       document.body.appendChild(stage);
 
-      // At the pop point, spawn particles and spray lines
+      // "La Dolce Vita" text — appears after burst
+      const ldv = document.createElement('div');
+      ldv.className = 'burst-text';
+      ldv.textContent = 'La Dolce Vita';
+      document.body.appendChild(ldv);
+
+      // At pop point: shower of confetti
       setTimeout(() => {
-        const COLORS = ['#F8D34A', '#FCE789', '#FFF4C9', '#F2B81E', '#FFFDE0'];
-        const count = 24;
+        // Design-palette colours: cobalt, lemon shades, cream, sky blue
+        const COLORS = [
+          '#1E47B5', '#1E47B5',          // cobalt (weighted)
+          '#F8D34A', '#F8D34A', '#FCE789', // lemons (weighted)
+          '#DCE9F8',                       // pastel sky
+          '#FFFBF2',                       // cream
+          '#F2B81E',                       // deep lemon
+          '#0E2A6B',                       // ink
+        ];
+
+        const count = 60;
         for (let i = 0; i < count; i++) {
-          const p = document.createElement('div');
-          p.className = 'burst-particle';
-          const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-          const dist  = 90 + Math.random() * 240;
-          const size  = 6 + Math.random() * 38;
-          p.style.cssText = [
-            `width:${size}px`,
-            `height:${size}px`,
-            `background:${COLORS[i % COLORS.length]}`,
-            `--tx:${Math.round(Math.cos(angle) * dist)}px`,
-            `--ty:${Math.round(Math.sin(angle) * dist)}px`,
-            `--delay:${Math.round(Math.random() * 70)}ms`,
-            `--dur:${500 + Math.round(Math.random() * 420)}ms`,
-          ].join(';');
-          stage.appendChild(p);
-        }
+          const c = document.createElement('div');
+          c.className = 'burst-confetti';
 
-        for (let i = 0; i < 14; i++) {
-          const s = document.createElement('div');
-          s.className = 'burst-spray';
-          const angle = (i / 14) * 360;
-          const len   = 55 + Math.round(Math.random() * 110);
-          s.style.cssText = [
-            `transform:translate(-50%,-50%) rotate(${angle}deg)`,
-            `--len:${len}px`,
+          const angle  = Math.random() * Math.PI * 2;
+          const dist   = 60 + Math.random() * Math.min(window.innerWidth, window.innerHeight) * 0.6;
+          const tx     = Math.cos(angle) * dist;
+          const ty     = Math.sin(angle) * dist;
+          const spin   = (Math.random() - 0.5) * 900;  // tumble up to 2.5 full rotations
+          const color  = COLORS[Math.floor(Math.random() * COLORS.length)];
+
+          // Mix of rectangles (confetti strips) and small circles (dots)
+          const isStrip = Math.random() > 0.35;
+          const w = isStrip ? (4 + Math.random() * 7)  : (5 + Math.random() * 10);
+          const h = isStrip ? (10 + Math.random() * 18) : w;
+          const radius = isStrip ? '2px' : '50%';
+
+          c.style.cssText = [
+            `width:${w}px`, `height:${h}px`,
+            `background:${color}`,
+            `border-radius:${radius}`,
+            `--tx:${Math.round(tx)}px`,
+            `--ty:${Math.round(ty)}px`,
+            `--spin:${Math.round(spin)}deg`,
             `--delay:${Math.round(Math.random() * 80)}ms`,
+            `--dur:${700 + Math.round(Math.random() * 700)}ms`,
           ].join(';');
-          stage.appendChild(s);
+          stage.appendChild(c);
         }
-      }, 320);
+      }, 300);
 
-      setTimeout(() => { location.href = dest; }, 1500);
+      setTimeout(() => { location.href = dest; }, 1900);
     }
 
     form.addEventListener('submit', (e) => {
