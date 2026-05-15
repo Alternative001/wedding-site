@@ -260,6 +260,72 @@
       line-height: 1;
       margin: var(--space-1) 0;
     }
+
+    /* ---- Lemon burst ---- */
+    .burst-stage {
+      position: fixed; inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .burst-lemon-clone {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 260px;
+      max-width: 60vw;
+      transform-origin: center;
+      animation: burstPop 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .burst-lemon-clone img {
+      width: 100%; height: auto; display: block;
+      filter: drop-shadow(0 18px 24px rgba(14, 42, 107, 0.22));
+    }
+    @keyframes burstPop {
+      0%   { transform: translate(-50%, -50%) scale(1)   rotate(0deg);  opacity: 1; }
+      55%  { transform: translate(-50%, -50%) scale(1.9) rotate(-6deg); opacity: 1; }
+      80%  { transform: translate(-50%, -50%) scale(2.5) rotate(4deg);  opacity: 0.5; }
+      100% { transform: translate(-50%, -50%) scale(2.7) rotate(-2deg); opacity: 0; }
+    }
+
+    .burst-flash {
+      position: fixed; inset: 0;
+      background: #F8D34A;
+      z-index: 9998;
+      opacity: 0;
+      animation: burstFlash 750ms 320ms ease-out forwards;
+    }
+    @keyframes burstFlash {
+      0%   { opacity: 0; }
+      12%  { opacity: 0.88; }
+      100% { opacity: 0; }
+    }
+
+    .burst-particle {
+      position: fixed;
+      top: 50%; left: 50%;
+      border-radius: 50%;
+      animation: burstFly var(--dur) var(--delay) cubic-bezier(0.15, 0.8, 0.3, 1) forwards;
+    }
+    @keyframes burstFly {
+      0%   { transform: translate(-50%,-50%) translate(0,0)               scale(1);   opacity: 1; }
+      70%  {                                                                           opacity: 0.8; }
+      100% { transform: translate(-50%,-50%) translate(var(--tx),var(--ty)) scale(0.15); opacity: 0; }
+    }
+
+    .burst-spray {
+      position: fixed;
+      top: 50%; left: 50%;
+      height: 2px;
+      background: linear-gradient(to right, #F2B81E, transparent);
+      transform-origin: left center;
+      opacity: 0;
+      animation: burstSpray 520ms var(--delay) ease-out forwards;
+    }
+    @keyframes burstSpray {
+      0%   { opacity: 0.9; width: 0; }
+      35%  { opacity: 0.7; width: var(--len); }
+      100% { opacity: 0;   width: var(--len); }
+    }
   </style>
 </head>
 <body>
@@ -321,6 +387,67 @@
     const saved = sessionStorage.getItem('jl-gate-redirect');
     if (saved) location.replace(saved);
 
+    function triggerBurst(dest) {
+      // Fade the gate out
+      document.querySelector('.gate').style.cssText = 'opacity:0; transition:opacity 200ms;';
+
+      // Full-screen yellow flash
+      const flash = document.createElement('div');
+      flash.className = 'burst-flash';
+      document.body.appendChild(flash);
+
+      // Stage holds the lemon clone + particles
+      const stage = document.createElement('div');
+      stage.className = 'burst-stage';
+
+      // Lemon clone that grows and pops
+      const clone = document.createElement('div');
+      clone.className = 'burst-lemon-clone';
+      const img = document.createElement('img');
+      img.src = 'assets/lemon.png';
+      clone.appendChild(img);
+      stage.appendChild(clone);
+      document.body.appendChild(stage);
+
+      // At the pop point, spawn particles and spray lines
+      setTimeout(() => {
+        const COLORS = ['#F8D34A', '#FCE789', '#FFF4C9', '#F2B81E', '#FFFDE0'];
+        const count = 24;
+        for (let i = 0; i < count; i++) {
+          const p = document.createElement('div');
+          p.className = 'burst-particle';
+          const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+          const dist  = 90 + Math.random() * 240;
+          const size  = 6 + Math.random() * 38;
+          p.style.cssText = [
+            `width:${size}px`,
+            `height:${size}px`,
+            `background:${COLORS[i % COLORS.length]}`,
+            `--tx:${Math.round(Math.cos(angle) * dist)}px`,
+            `--ty:${Math.round(Math.sin(angle) * dist)}px`,
+            `--delay:${Math.round(Math.random() * 70)}ms`,
+            `--dur:${500 + Math.round(Math.random() * 420)}ms`,
+          ].join(';');
+          stage.appendChild(p);
+        }
+
+        for (let i = 0; i < 14; i++) {
+          const s = document.createElement('div');
+          s.className = 'burst-spray';
+          const angle = (i / 14) * 360;
+          const len   = 55 + Math.round(Math.random() * 110);
+          s.style.cssText = [
+            `transform:translate(-50%,-50%) rotate(${angle}deg)`,
+            `--len:${len}px`,
+            `--delay:${Math.round(Math.random() * 80)}ms`,
+          ].join(';');
+          stage.appendChild(s);
+        }
+      }, 320);
+
+      setTimeout(() => { location.href = dest; }, 1500);
+    }
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const v    = (input.value || '').trim().toLowerCase();
@@ -331,12 +458,12 @@
           : 'Welcome — taking you there ✨';
         msg.classList.remove('is-error');
         sessionStorage.setItem('jl-gate-redirect', dest);
-        setTimeout(() => { location.href = dest; }, 600);
+        triggerBurst(dest);
       } else {
         msg.textContent = 'Not quite — try again. · Nicht ganz — versuch es nochmal.';
         msg.classList.add('is-error');
         row.classList.remove('is-wrong');
-        void row.offsetWidth; // force reflow so shake replays
+        void row.offsetWidth;
         row.classList.add('is-wrong');
         input.select();
       }
