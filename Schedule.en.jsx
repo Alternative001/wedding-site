@@ -33,6 +33,18 @@ const SCHEDULE = [
 
 const Schedule = () => {
   const [activeDay, setActiveDay] = React.useState(1);
+  const [switching, setSwitching] = React.useState(false);
+
+  const switchDay = (i) => {
+    if (i === activeDay || switching) return;
+    setSwitching(true);
+    setTimeout(() => {
+      setActiveDay(i);
+      setSwitching(false);
+      if (window.jlRefreshReveal) setTimeout(window.jlRefreshReveal, 50);
+    }, 200);
+  };
+
   const day = SCHEDULE[activeDay];
 
   return (
@@ -42,21 +54,24 @@ const Schedule = () => {
         <h2 className="jl-h2">The <em>Programme</em></h2>
       </div>
 
+      <div className="jl-day-tabs-hint">3 days · Fri to Sun · tap a day to explore ↓</div>
+
       <div className="jl-day-tabs">
         {SCHEDULE.map((d, i) => (
           <button
             key={d.day}
             className={`jl-day-tab ${i === activeDay ? 'is-active' : ''} ${d.featured ? 'is-featured' : ''}`}
-            onClick={() => setActiveDay(i)}
+            onClick={() => switchDay(i)}
+            aria-pressed={i === activeDay}
           >
             <span className="jl-day-tab-day">{d.day}</span>
             <span className="jl-day-tab-date">{d.date}</span>
-            <span className="jl-day-tab-label">{d.label}</span>
+            <span className="jl-day-tab-label">{d.featured ? '★ ' : ''}{d.label}</span>
           </button>
         ))}
       </div>
 
-      <div className={`jl-schedule-card ${day.featured ? 'is-featured' : ''}`}>
+      <div className={`jl-schedule-card ${day.featured ? 'is-featured' : ''} ${switching ? 'is-switching' : ''}`}>
         {day.featured && (
           <div className="jl-schedule-flag">
             <span className="jl-script-md">the big day</span>

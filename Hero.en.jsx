@@ -21,13 +21,11 @@ const Hero = () => (
         </div>
       </div>
 
-      <div className="jl-hero-illustration">
-        <img src={(window.__resources && window.__resources.heroIllustration) || "assets/illustration-hero-picture.png"} alt="Lisa and Julian kissing at sunset on Lago di Garda — yellow line illustration" />
-      </div>
 
       <p className="jl-hero-tag">
-        <span className="jl-script-md">La Dolce Vita —</span>
-        come hungry, leave happy 🍋
+        🍋 come and spend a day of
+        <span className="jl-script-md">La Dolce Vita</span>
+        with us 🍋
       </p>
 
       <div className="jl-hero-cta-row">

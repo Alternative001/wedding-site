@@ -232,7 +232,7 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   width: 100%;
   max-width: 420px;
   justify-self: end;
-  animation: heroSway 8s ease-in-out infinite alternate;
+  animation: heroFadeUp 0.65s var(--ease-out) 0.2s both, heroSway 8s ease-in-out 0.9s infinite alternate;
   transform-origin: 50% 95%;
 }
 @media (max-width: 820px) { .jl-hero-illustration { justify-self: center; max-width: 320px; } }
@@ -616,3 +616,112 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 .jl-footer-meta a:hover { text-decoration: underline; }
 .jl-footer-meta span { opacity: 0.4; }
 .jl-footer-fine { font: 13px var(--font-sans); color: var(--color-muted); margin-top: 6px; }
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+/* ── Scroll progress bar ──────────────────────────────────────────────────── */
+#jl-progress {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-cobalt) 0%, var(--color-lemon-300) 100%);
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ── Scroll reveals ───────────────────────────────────────────────────────── */
+.jl-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
+  will-change: opacity, transform;
+}
+.jl-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Hero entrance (CSS-driven, not IO) ───────────────────────────────────── */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.jl-hero-eyebrow  { animation: heroFadeUp 0.65s var(--ease-out) 0.15s both; }
+.jl-hero-wordmark { animation: heroFadeUp 0.65s var(--ease-out) 0.30s both; }
+.jl-hero-tag      { animation: heroFadeUp 0.65s var(--ease-out) 0.50s both; }
+.jl-hero-cta-row  { animation: heroFadeUp 0.65s var(--ease-out) 0.65s both; }
+
+/* ── Cursor trail ─────────────────────────────────────────────────────────── */
+.jl-trail {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  font-size: 16px;
+  line-height: 1;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition: transform 0.75s ease, opacity 0.75s ease;
+  user-select: none;
+}
+.jl-trail.is-gone {
+  transform: translate(-50%, -220%) scale(0.35);
+  opacity: 0;
+}
+
+/* ── Confetti ─────────────────────────────────────────────────────────────── */
+.jl-confetti {
+  position: fixed;
+  top: -28px;
+  display: block;
+  pointer-events: none;
+  z-index: 10001;
+  animation: jlConfettiFall linear forwards;
+}
+@keyframes jlConfettiFall {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(100vh) rotate(900deg) scale(0.4); opacity: 0; }
+}
+
+/* ── Schedule tab enhancements ───────────────────────────────────────────── */
+.jl-day-tabs-hint {
+  text-align: center;
+  font: italic 13px/1 var(--font-serif);
+  color: var(--color-muted);
+  margin-bottom: var(--space-3);
+  letter-spacing: 0.03em;
+}
+/* Pulse the featured tab until it's been clicked */
+.jl-day-tab.is-featured:not(.is-active) {
+  border-color: var(--color-cobalt);
+  animation: tabPulse 2s ease-in-out 1.6s 3;
+}
+@keyframes tabPulse {
+  0%, 100% { box-shadow: none; }
+  50% { box-shadow: 0 0 0 5px rgba(30, 71, 181, 0.18); }
+}
+/* Card fade on day switch */
+.jl-schedule-card {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.jl-schedule-card.is-switching {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* ── Travel Map ───────────────────────────────────────────────────────────── */
+.jl-venue-map {
+  grid-column: 1 / -1;
+  background: var(--color-cream);
+  border: 1px solid var(--border-soft);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.jl-venue-map svg { width: 100%; height: auto; display: block; }
+

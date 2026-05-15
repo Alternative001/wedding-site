@@ -1,16 +1,16 @@
-// RSVP.jsx — yes/no, per-adult name fields, kids count, Saturday shuttle, fake submit
+// RSVP.jsx — yes/no, arrival day, per-adult name fields, kids count, shuttle, confetti on submit
 const initial = () => ({
   email: '',
   attending: '',          // 'yes' | 'no'
+  arrivalDay: '',         // 'friday' | 'saturday'
   adultCount: 1,
-  adultNames: [''],       // length === adultCount
+  adultNames: [''],
   kidsCount: 0,
   diet: '',
   shuttle: false,
   message: '',
 });
 
-// Small stepper +/- control
 const Stepper = ({ label, value, onChange, min = 0, max = 10, note }) => (
   <div className="jl-stepper">
     <div className="jl-stepper-head">
@@ -60,7 +60,18 @@ const RSVP = () => {
   const canSubmit =
     form.attending &&
     form.email &&
-    (form.attending === 'no' || form.adultNames.every((n) => n.trim().length > 0));
+    (form.attending === 'no' || (
+      form.adultNames.every((n) => n.trim().length > 0) &&
+      form.arrivalDay !== ''
+    ));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    if (form.attending === 'yes' && window.triggerConfetti) {
+      window.triggerConfetti();
+    }
+  };
 
   if (submitted) {
     const total = form.attending === 'yes' ? form.adultCount + form.kidsCount : 0;
@@ -98,7 +109,7 @@ const RSVP = () => {
         <p className="jl-rsvp-deadline">bis spätestens 1. Mai 2027</p>
       </div>
 
-      <form className="jl-rsvp" onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
+      <form className="jl-rsvp" onSubmit={handleSubmit}>
         <div className="jl-field jl-field-full">
           <label>E-Mail für die Bestätigung</label>
           <input required type="email" value={form.email} onChange={(e) => set('email', e.target.value)} placeholder="anna@beispiel.de" />
@@ -125,6 +136,25 @@ const RSVP = () => {
 
         {form.attending === 'yes' && (
           <>
+            <div className="jl-field jl-field-full">
+              <label>Wann kommt Ihr an?</label>
+              <div className="jl-radio-row">
+                {[
+                  ['friday',   'Freitag — Pool, Pizza & ankommen 🏊'],
+                  ['saturday', 'Samstag — direkt zum großen Tag 💍'],
+                ].map(([v, l]) => (
+                  <button
+                    type="button"
+                    key={v}
+                    className={`jl-radio-btn ${form.arrivalDay === v ? 'is-active' : ''}`}
+                    onClick={() => set('arrivalDay', v)}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="jl-field jl-field-half">
               <Stepper
                 label="Erwachsene"

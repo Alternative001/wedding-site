@@ -1,7 +1,8 @@
-// RSVP.en.jsx — English RSVP form
+// RSVP.en.jsx — English RSVP form with arrival day selector and confetti
 const initial = () => ({
   email: '',
   attending: '',
+  arrivalDay: '',         // 'friday' | 'saturday'
   adultCount: 1,
   adultNames: [''],
   kidsCount: 0,
@@ -59,7 +60,18 @@ const RSVP = () => {
   const canSubmit =
     form.attending &&
     form.email &&
-    (form.attending === 'no' || form.adultNames.every((n) => n.trim().length > 0));
+    (form.attending === 'no' || (
+      form.adultNames.every((n) => n.trim().length > 0) &&
+      form.arrivalDay !== ''
+    ));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    if (form.attending === 'yes' && window.triggerConfetti) {
+      window.triggerConfetti();
+    }
+  };
 
   if (submitted) {
     const total = form.attending === 'yes' ? form.adultCount + form.kidsCount : 0;
@@ -97,7 +109,7 @@ const RSVP = () => {
         <p className="jl-rsvp-deadline">by 1 May 2027 at the latest</p>
       </div>
 
-      <form className="jl-rsvp" onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
+      <form className="jl-rsvp" onSubmit={handleSubmit}>
         <div className="jl-field jl-field-full">
           <label>Email for your confirmation</label>
           <input required type="email" value={form.email} onChange={(e) => set('email', e.target.value)} placeholder="you@example.com" />
@@ -124,6 +136,25 @@ const RSVP = () => {
 
         {form.attending === 'yes' && (
           <>
+            <div className="jl-field jl-field-full">
+              <label>When will you arrive?</label>
+              <div className="jl-radio-row">
+                {[
+                  ['friday',   'Friday — pool, pizza & settling in 🏊'],
+                  ['saturday', 'Saturday — just for the big day 💍'],
+                ].map(([v, l]) => (
+                  <button
+                    type="button"
+                    key={v}
+                    className={`jl-radio-btn ${form.arrivalDay === v ? 'is-active' : ''}`}
+                    onClick={() => set('arrivalDay', v)}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="jl-field jl-field-half">
               <Stepper
                 label="Adults"
