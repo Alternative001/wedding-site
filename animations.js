@@ -57,6 +57,20 @@
     });
   }
 
+  // React mounts after window.load (in-browser Babel compile), so watch #root
+  // for new nodes and (re)run setupReveal whenever the tree changes.
+  function attachReactWatcher() {
+    var rootEl = document.getElementById('root');
+    if (!rootEl) { setTimeout(attachReactWatcher, 100); return; }
+    setupReveal();
+    var mo = new MutationObserver(function () { setupReveal(); });
+    mo.observe(rootEl, { childList: true, subtree: true });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachReactWatcher);
+  } else {
+    attachReactWatcher();
+  }
   window.addEventListener('load', function () { setTimeout(setupReveal, 150); });
   // Re-run after React re-renders (e.g. schedule tab switches reveal new timeline rows)
   window.jlRefreshReveal = setupReveal;
