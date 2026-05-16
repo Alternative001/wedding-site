@@ -2,11 +2,21 @@
 (function () {
   'use strict';
 
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else { fn(); }
+  }
+
   // ── Scroll Progress Bar ────────────────────────────────────────────────────
-  const bar = document.createElement('div');
-  bar.id = 'jl-progress';
-  document.body.prepend(bar);
+  var bar;
+  ready(function () {
+    bar = document.createElement('div');
+    bar.id = 'jl-progress';
+    document.body.prepend(bar);
+  });
   window.addEventListener('scroll', function () {
+    if (!bar) return;
     const h = document.documentElement;
     const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) || 0;
     bar.style.transform = 'scaleX(' + pct + ')';
