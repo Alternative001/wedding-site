@@ -2,27 +2,27 @@
 const FAQ_ITEMS = [
   {
     q: 'Are children welcome?',
-    a: 'Absolutely! There's a small play area in the garden and a babysitter on-site. Please let us know in your RSVP so we can plan accordingly.',
+    a: 'Sure, bring em along! Please let us know in your RSVP so we can plan accordingly.',
   },
   {
     q: 'Is there a gift registry or wish list?',
-    a: 'Your presence is the greatest gift. If you'd still like to contribute: we're collecting towards our honeymoon in Puglia — you'll find the link in the footer below.',
+    a: 'Your presence is the greatest gift. If you would still like to contribute: please consider we have to fly back to Dubai, so small gifts are much appreciated.',
   },
   {
-    q: 'What's the weather like in late July at Lago di Garda?',
+    q: 'What is the weather like in late July at Lago di Garda?',
     a: 'Reliably warm — 28–32 °C during the day, mild around 22 °C in the evening. Sunglasses and a light wrap for later in the night are a good idea.',
   },
   {
     q: 'Can you help with hotel bookings?',
-    a: 'Of course — just drop a quick email to hallo@lisa-und-julian.de and Lisa's mum Christina will sort it out (she's a travel agent).',
+    a: 'Of course — check the accomodation section, we have listed a few options.',
   },
   {
     q: 'When do we need to RSVP by?',
-    a: 'By Sunday 1 May 2027. After that we submit the final guest list to catering and Villa Limone.',
+    a: 'By Sunday 1 Oct 2026. After that we submit the final guest list to catering and the location.',
   },
   {
     q: 'Are there dietary options at dinner?',
-    a: 'Yes — vegan, vegetarian, and gluten-free are all possible. There's a field for this in the RSVP form and we'll pass everything on to the chef.',
+    a: 'Yes, there will be vegetarian options. If you have any special restrictions, let us know in the RSVP form.',
   },
 ];
 

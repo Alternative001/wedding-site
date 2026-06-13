@@ -14,16 +14,14 @@ const Footer = () => (
       </div>
 
       <div className="jl-footer-meta">
-        <a href="mailto:hallo@lisa-und-julian.de">hallo@lisa-und-julian.de</a>
+        <a href="mailto:wedding@lemon-spark.com">wedding@lemon-spark.com</a>
         <span>·</span>
         <a href="#">Wunschliste</a>
-        <span>·</span>
-        <a href="#">Impressum</a>
         <span>·</span>
         <a href="#">Datenschutz</a>
       </div>
       <div className="jl-footer-fine">
-        Mit viel Liebe gemacht · Made with 💛 in München
+        Mit viel 💛 gemacht in Dubai
       </div>
     </div>
   </footer>

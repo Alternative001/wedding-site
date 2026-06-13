@@ -2,27 +2,27 @@
 const FAQ_ITEMS = [
   {
     q: 'Sind Kinder willkommen?',
-    a: 'Sehr gerne! Es gibt einen kleinen Spielbereich im Garten und eine Babysitterin vor Ort. Bitte gebt uns im RSVP Bescheid, damit wir entsprechend planen können.',
+    a: 'Klaro! Bitte gebt uns im RSVP Bescheid, damit wir entsprechend planen können.',
   },
   {
     q: 'Gibt es ein Geschenketisch oder eine Wunschliste?',
-    a: 'Eure Anwesenheit ist das schönste Geschenk. Falls Ihr trotzdem etwas beitragen möchtet: Wir sammeln für unsere Flitterwochen in Apulien — den Link findet Ihr unten im Footer.',
+    a: 'Ja! Eure Anwesenheit ist das schönste Geschenk. Falls Ihr trotzdem etwas beitragen möchtet: bedenkt bitte, dass wir nach Dubai zurück fliegen. Also keine großen Geschenke bitte.',
   },
   {
     q: 'Wie ist das Wetter Ende Juli am Gardasee?',
-    a: 'Erwartbar warm — 28-32 °C tagsüber, abends mild um die 22 °C. Sonnenbrille und ein leichter Schal für später am Abend schaden nicht.',
+    a: 'Erwartbar warm — 28-32 °C tagsüber, abends mild um die 22 °C. Sonnenbrille und vielleicht ein leichter Schal für später am Abend und ihr seid top vorbereitet.',
   },
   {
-    q: 'Bekomme ich Hilfe bei der Hotelbuchung?',
-    a: 'Klar — schreibt einfach eine kurze Mail an hallo@lisa-und-julian.de und Lisas Mama Christina kümmert sich (sie ist Reise­agentin).',
+    q: 'Wie sieht es aus mit der Hotelbuchung?',
+    a: 'Schaut oben auf dieser Seite, da stehen vorschläge zur Unterkunft.',
   },
   {
     q: 'Wann müssen wir spätestens zusagen?',
-    a: 'Bis Sonntag, den 1. Mai 2027. Danach geben wir die finale Gästeliste an das Catering und an Villa Limone weiter.',
+    a: 'Bis Donnerstag, den 1. Oktober 2027. Danach geben wir die finale Gästeliste an das Catering und die Location weiter.',
   },
   {
-    q: 'Gibt es Allergien-Optionen beim Essen?',
-    a: 'Ja, vegan/vegetarisch/glutenfrei alles möglich. Im RSVP-Formular gibt es ein Feld dafür — wir leiten alles an die Köchin weiter.',
+    q: 'Gibt es Optionen beim Essen?',
+    a: 'Ja, wir haben vegetarische Optionen. Solltet ihr diätetische Einschränkung haben, gebt das bitte im RSVP-Formular an.',
   },
 ];
 
