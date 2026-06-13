@@ -47,8 +47,62 @@
 
   <!-- animations: scroll reveals, parallax, cursor trail, confetti -->
   <script src="animations.js"></script>
+
+  <!-- Curtain entry animation: stripe slats open from centre outward -->
+  <style>
+    #jl-curtain {
+      position: fixed; inset: 0; z-index: 9000;
+      display: flex;
+      pointer-events: none;
+      background: #FFF4C9;
+    }
+    .jl-curtain-slat {
+      flex: 1; height: 100%;
+      transform-origin: center;
+      will-change: transform;
+    }
+  </style>
 </head>
 <body>
+  <div id="jl-curtain"></div>
+  <script>
+    (function () {
+      var N = 16;
+      var curtain = document.getElementById('jl-curtain');
+      for (var i = 0; i < N; i++) {
+        var s = document.createElement('div');
+        s.className = 'jl-curtain-slat';
+        s.style.background = i % 2 === 0 ? '#FFF4C9' : '#FFFBF2';
+        curtain.appendChild(s);
+      }
+      function openCurtain() {
+        var slats = curtain.querySelectorAll('.jl-curtain-slat');
+        var center = (N - 1) / 2;
+        slats.forEach(function (slat, i) {
+          slat.style.transition = 'transform 520ms cubic-bezier(0.4,0,0.2,1) ' + Math.round(Math.abs(i - center) * 55) + 'ms';
+        });
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            slats.forEach(function (slat) { slat.style.transform = 'scaleX(0)'; });
+            setTimeout(function () { curtain.remove(); }, 520 + Math.ceil(N / 2) * 55 + 60);
+          });
+        });
+      }
+      var attempts = 0;
+      function waitForReact() {
+        var root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+          setTimeout(openCurtain, 80);
+        } else if (++attempts < 100) {
+          setTimeout(waitForReact, 100);
+        } else {
+          openCurtain();
+        }
+      }
+      document.addEventListener('DOMContentLoaded', function () { setTimeout(waitForReact, 50); });
+    })();
+  </script>
+
   <div id="root"></div>
 
   <!-- English components (load order matters: leaves first, App last) -->
