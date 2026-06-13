@@ -54,12 +54,14 @@
       position: fixed; inset: 0; z-index: 9000;
       display: flex;
       pointer-events: none;
-      background: #FFF4C9;
+      background: #FCE789;
+      perspective: 1200px;
     }
     .jl-curtain-slat {
       flex: 1; height: 100%;
       transform-origin: center;
       will-change: transform;
+      box-shadow: inset -1px 0 0 rgba(14,42,107,0.10), 2px 0 8px rgba(14,42,107,0.08);
     }
   </style>
 </head>
@@ -69,22 +71,30 @@
     (function () {
       var N = 16;
       var curtain = document.getElementById('jl-curtain');
+      // Bolder lemon tones so the curtain reads as a distinct layer over the page.
       for (var i = 0; i < N; i++) {
         var s = document.createElement('div');
         s.className = 'jl-curtain-slat';
-        s.style.background = i % 2 === 0 ? '#FFF4C9' : '#FFFBF2';
+        s.style.background = i % 2 === 0
+          ? 'linear-gradient(90deg, #F2B81E, #F8D34A)'
+          : 'linear-gradient(90deg, #FCE789, #FFF4C9)';
         curtain.appendChild(s);
       }
       function openCurtain() {
         var slats = curtain.querySelectorAll('.jl-curtain-slat');
         var center = (N - 1) / 2;
         slats.forEach(function (slat, i) {
-          slat.style.transition = 'transform 520ms cubic-bezier(0.4,0,0.2,1) ' + Math.round(Math.abs(i - center) * 55) + 'ms';
+          // Slats from the middle lead; outer ones follow — curtain parts from centre.
+          slat.style.transition = 'transform 620ms cubic-bezier(0.65,0,0.35,1) ' + Math.round(Math.abs(i - center) * 60) + 'ms';
         });
         requestAnimationFrame(function () {
           requestAnimationFrame(function () {
-            slats.forEach(function (slat) { slat.style.transform = 'scaleX(0)'; });
-            setTimeout(function () { curtain.remove(); }, 520 + Math.ceil(N / 2) * 55 + 60);
+            slats.forEach(function (slat, i) {
+              // Tilt each slat away as it shrinks for a real venetian-blind feel.
+              var dir = i < center ? -1 : 1;
+              slat.style.transform = 'scaleX(0) rotateY(' + (dir * 70) + 'deg)';
+            });
+            setTimeout(function () { curtain.remove(); }, 620 + Math.ceil(N / 2) * 60 + 80);
           });
         });
       }
@@ -92,7 +102,7 @@
       function waitForReact() {
         var root = document.getElementById('root');
         if (root && root.children.length > 0) {
-          setTimeout(openCurtain, 80);
+          setTimeout(openCurtain, 250);
         } else if (++attempts < 100) {
           setTimeout(waitForReact, 100);
         } else {
