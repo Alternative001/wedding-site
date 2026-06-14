@@ -70,42 +70,40 @@
   <div id="jl-curtain"></div>
   <script>
     (function () {
-      var N = 14;
-      var curtain = document.getElementById('jl-curtain');
-      if (!curtain) return;
+      var N = 14, DUR = 600, STAGGER = 55, EASE = 'cubic-bezier(0.7,0,0.3,1)';
+      var el = document.getElementById('jl-curtain');
+      if (!el) return;
+      var center = (N - 1) / 2;
       var slats = [];
       for (var i = 0; i < N; i++) {
         var s = document.createElement('div');
         s.className = 'jl-curtain-slat';
-        curtain.appendChild(s);
+        el.appendChild(s);
         slats.push(s);
       }
-      var center = (N - 1) / 2;
-      function openCurtain() {
+      // Apply the seam-fix + outer-edge origin now, so the cover is seamless
+      // while React/Babel compile behind it.
+      slats.forEach(function (s, i) {
+        s.style.backgroundPositionX = (-s.offsetLeft) + 'px';
+        s.style.transformOrigin = (i < center) ? 'left center' : 'right center';
+      });
+      function open() {
         slats.forEach(function (s, i) {
-          // Keep the stripe pattern continuous across all slats (no visible seams).
-          s.style.backgroundPositionX = (-s.offsetLeft) + 'px';
-          // Collapse each slat toward its outer edge so the gap opens from the middle.
-          s.style.transformOrigin = (i < center) ? 'left center' : 'right center';
-          s.style.transition = 'transform 600ms cubic-bezier(0.7,0,0.3,1) ' +
-            Math.round(Math.abs(i - center) * 55) + 'ms';
+          s.style.transition = 'transform ' + DUR + 'ms ' + EASE + ' ' +
+            Math.round(Math.abs(i - center) * STAGGER) + 'ms';   // centre leads
         });
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            slats.forEach(function (s) { s.style.transform = 'scaleX(0)'; });
-            setTimeout(function () { curtain.remove(); },
-              600 + Math.ceil(N / 2) * 55 + 120);
-          });
-        });
+        requestAnimationFrame(function () { requestAnimationFrame(function () {
+          slats.forEach(function (s) { s.style.transform = 'scaleX(0)'; });
+          setTimeout(function () { el.remove(); }, DUR + Math.ceil(N / 2) * STAGGER + 100);
+        }); });
       }
-      // Gate page has no #root; destination pages wait for React to mount.
+      // Continue the gate's closing curtain: open as soon as React has mounted.
       var root = document.getElementById('root');
-      if (!root) { setTimeout(openCurtain, 350); return; }
       var attempts = 0;
       (function waitForReact() {
-        if (root.children.length > 0) { setTimeout(openCurtain, 250); }
+        if (root && root.children.length > 0) { setTimeout(open, 120); }
         else if (++attempts < 100) { setTimeout(waitForReact, 100); }
-        else { openCurtain(); }
+        else { open(); }
       })();
     })();
   </script>
