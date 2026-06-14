@@ -16,6 +16,7 @@
     document.body.prepend(bar);
   });
   window.addEventListener('scroll', function () {
+    window.__jlScrolled = true;   // after first scroll, reveal new content on scroll (not instantly)
     if (!bar) return;
     const h = document.documentElement;
     const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) || 0;
@@ -45,12 +46,23 @@
       '.jl-schedule-card',
       '.jl-venue-map',
     ];
+    var vh = window.innerHeight || 800;
     selectors.forEach(function (sel) {
       document.querySelectorAll(sel).forEach(function (el) {
         if (el.dataset.rvDone) return;
         el.dataset.rvDone = '1';
         el.classList.add('jl-reveal');
-        revealIO.observe(el);
+        // First load, above the fold: show immediately with no fade, so the
+        // entry curtain parts straight onto finished content. Everything else
+        // (below the fold, or anything added after the user starts scrolling)
+        // reveals on scroll as before.
+        var r = el.getBoundingClientRect();
+        if (!window.__jlScrolled && r.top < vh && r.bottom > 0) {
+          el.style.transition = 'none';
+          el.classList.add('is-visible');
+        } else {
+          revealIO.observe(el);
+        }
       });
     });
     // Stagger timeline rows within each card

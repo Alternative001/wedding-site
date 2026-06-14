@@ -88,6 +88,7 @@
         s.style.transformOrigin = (i < center) ? 'left center' : 'right center';
       });
       function open() {
+        el.style.background = 'transparent';                     // gaps reveal the live page, not the cream cover
         slats.forEach(function (s, i) {
           s.style.transition = 'transform ' + DUR + 'ms ' + EASE + ' ' +
             Math.round(Math.abs(i - center) * STAGGER) + 'ms';   // centre leads
@@ -96,14 +97,33 @@
         slats.forEach(function (s) { s.style.transform = 'scaleX(0)'; });
         setTimeout(function () { el.remove(); }, DUR + Math.ceil(N / 2) * STAGGER + 120);
       }
-      // Continue the gate's closing curtain: open as soon as React has mounted.
+      function reveal() {
+        // Snap the above-the-fold content to visible BEHIND the cover, so the
+        // curtain parts straight onto the finished page — no blank flash, no
+        // fade-in afterwards. Below-the-fold elements still reveal on scroll.
+        var vh = window.innerHeight || 800;
+        document.querySelectorAll('.jl-reveal').forEach(function (node) {
+          var r = node.getBoundingClientRect();
+          if (r.top < vh && r.bottom > 0) {
+            node.style.transition = 'none';
+            node.classList.add('is-visible');
+          }
+        });
+        void document.body.offsetWidth;                          // commit the painted state before parting
+        open();
+      }
+      // Continue the gate's closing curtain: open as soon as React has mounted
+      // AND fonts are ready (so text doesn't reflow after the reveal).
       // NB: this script runs before #root is parsed, so re-query it each poll.
       var attempts = 0;
       (function waitForReact() {
         var root = document.getElementById('root');
-        if (root && root.children.length > 0) { setTimeout(open, 80); }
+        if (root && root.children.length > 0) {
+          if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { setTimeout(reveal, 40); }); }
+          else { setTimeout(reveal, 40); }
+        }
         else if (++attempts < 150) { setTimeout(waitForReact, 60); }
-        else { open(); }
+        else { reveal(); }
       })();
     })();
   </script>
