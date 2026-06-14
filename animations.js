@@ -85,85 +85,9 @@
   // Re-run after React re-renders (e.g. schedule tab switches reveal new timeline rows)
   window.jlRefreshReveal = setupReveal;
 
-  // ── Hero scroll-takeover scrub ────────────────────────────────────────────
-  // The hero is wrapped in .jl-hero-scroll-wrap (height: 220vh) with a sticky
-  // .jl-hero-stage inside. Compute progress 0→1 across the scrub range and
-  // write it as --p; CSS in site.css maps that to the illustration zoom and
-  // the text fade. Skipped under prefers-reduced-motion.
-  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var heroWrap = null;
-  var heroStage = null;
-  var heroIll = null;
-  var heroScrubTicking = false;
-
-  function findHero() {
-    heroWrap = document.querySelector('.jl-hero-scroll-wrap');
-    heroStage = heroWrap && heroWrap.querySelector('.jl-hero-stage');
-    heroIll = heroWrap && heroWrap.querySelector('.jl-hero-illustration');
-  }
-
-  // Measure how far the illustration's centre is from the viewport (= stage)
-  // centre and expose it as --dx / --dy. CSS then translates the illustration
-  // by (dx*p, dy*p) while scaling around its own centre — keeping the scaled
-  // image centred in the viewport. Runs on mount and resize; values are stable
-  // while scrolling because the stage is sticky.
-  function updateHeroOrigin() {
-    if (!heroWrap || !heroStage || !heroIll || prefersReducedMotion) return;
-    var prevTransform = heroIll.style.transform;
-    heroIll.style.transform = 'none';
-    var stageRect = heroStage.getBoundingClientRect();
-    var illRect = heroIll.getBoundingClientRect();
-    heroIll.style.transform = prevTransform;
-    var illCenterX = illRect.left + illRect.width / 2;
-    var illCenterY = illRect.top + illRect.height / 2;
-    var stageCenterX = stageRect.left + stageRect.width / 2;
-    var stageCenterY = stageRect.top + stageRect.height / 2;
-    var dx = stageCenterX - illCenterX;
-    var dy = stageCenterY - illCenterY;
-    heroWrap.style.setProperty('--dx', dx.toFixed(2) + 'px');
-    heroWrap.style.setProperty('--dy', dy.toFixed(2) + 'px');
-  }
-
-  function updateHeroScrub() {
-    heroScrubTicking = false;
-    if (!heroWrap || prefersReducedMotion) return;
-    var rect = heroWrap.getBoundingClientRect();
-    var range = rect.height - window.innerHeight;
-    if (range <= 0) return;
-    var p = -rect.top / range;
-    if (p < 0) p = 0; else if (p > 1) p = 1;
-    heroWrap.style.setProperty('--p', p.toFixed(4));
-    if (p > 0.9) heroWrap.classList.add('is-faded');
-    else heroWrap.classList.remove('is-faded');
-  }
-
-  function onHeroScroll() {
-    if (heroScrubTicking) return;
-    heroScrubTicking = true;
-    requestAnimationFrame(updateHeroScrub);
-  }
-
-  function onHeroResize() {
-    updateHeroOrigin();
-    onHeroScroll();
-  }
-
-  ready(function () {
-    findHero();
-    updateHeroOrigin();
-    updateHeroScrub();
-  });
-  // The wrap is rendered by React after window.load — re-bind once it appears.
-  var heroBindAttempts = 0;
-  function bindHeroWhenReady() {
-    if (heroWrap) return;
-    findHero();
-    if (heroWrap) { updateHeroOrigin(); updateHeroScrub(); return; }
-    if (heroBindAttempts++ < 40) setTimeout(bindHeroWhenReady, 100);
-  }
-  bindHeroWhenReady();
-  window.addEventListener('scroll', onHeroScroll, { passive: true });
-  window.addEventListener('resize', onHeroResize, { passive: true });
+  // ── Hero ───────────────────────────────────────────────────────────────────
+  // The scroll-zoom takeover (illustration grew + text faded as you scrolled)
+  // was removed — the hero is now a plain static section. See site.css.
 
   // ── Confetti ───────────────────────────────────────────────────────────────
   window.triggerConfetti = function () {

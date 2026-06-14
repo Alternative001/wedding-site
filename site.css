@@ -263,32 +263,24 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 }
 .jl-btn-ghost:hover { background: var(--color-sky-50); }
 
-/* ---------- Hero scroll-takeover ----------
-   The hero is wrapped in a tall scroll-wrap (220vh). The stage inside is
-   position:sticky so it pins for ~120vh of scroll. During that scrub,
-   animations.js writes --p (0 → 1) on the wrap; the CSS below maps --p to
-   the illustration scale and the text fade.                                  */
+/* ---------- Hero ----------
+   Plain static hero section. (The old scroll-zoom takeover — illustration
+   grew and text faded as you scrolled — was removed.)                        */
 .jl-hero-scroll-wrap {
   position: relative;
-  height: 220vh;
-  --p: 0;
 }
 .jl-hero-stage {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Leave room for the sticky nav at the top */
-  padding-top: 64px;
+  padding: 96px 0 72px;
   box-sizing: border-box;
 }
 .jl-hero-stage .jl-hero-stripes {
   position: absolute; inset: 0;
   background: var(--pattern-stripes-yellow);
-  opacity: calc(0.45 * (1 - var(--p) * 0.6));
+  opacity: 0.45;
   z-index: 0;
   -webkit-mask-image: radial-gradient(ellipse 80% 90% at center, black 35%, transparent 75%);
           mask-image: radial-gradient(ellipse 80% 90% at center, black 35%, transparent 75%);
@@ -301,75 +293,13 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   overflow: visible;
   text-align: center;
 }
-.jl-hero-scroll-wrap.is-faded .jl-hero { pointer-events: none; }
-
-/* Text stays at full opacity until p≈0.75, then fades out by p≈0.95 so the
-   wordmark sticks around almost to the end of the scrub. */
-.jl-hero-scroll-wrap .jl-hero-eyebrow,
-.jl-hero-scroll-wrap .jl-hero-wordmark,
-.jl-hero-scroll-wrap .jl-hero-tag,
-.jl-hero-scroll-wrap .jl-hero-cta-row {
-  opacity: clamp(0, calc((0.95 - var(--p)) * 5), 1);
-  transition: none;
-}
-
-/* Illustration grows in place AND translates toward the viewport centre.
-   --dx / --dy are written by animations.js (offset from the illustration's
-   natural centre to the stage centre). Multiplying by --p moves the centre
-   into the middle of the screen by the end of the scrub, while scale() blows
-   it up symmetrically around its own centre — so it never falls off-screen. */
 .jl-hero-scroll-wrap .jl-hero-illustration {
   position: relative;
   z-index: 3;
-  transform-origin: 50% 50%;
-  transform:
-    translate(calc(var(--dx, 0px) * var(--p)), calc(var(--dy, 0px) * var(--p)))
-    scale(calc(1 + var(--p) * 1.6));
-  transition: none;
-  will-change: transform;
 }
 
-/* Subtle scroll-cue, only at the start, fades out as soon as you scroll */
-.jl-hero-scroll-hint {
-  position: absolute;
-  bottom: 22px; left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  display: flex; flex-direction: column; align-items: center;
-  gap: 6px;
-  font: 500 11px/1 var(--font-sans);
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--color-cobalt);
-  opacity: clamp(0, calc(1 - var(--p) * 5), 1);
-  pointer-events: none;
-}
-.jl-hero-scroll-arrow {
-  font-size: 18px;
-  letter-spacing: 0;
-  animation: heroScrollNudge 1.6s var(--ease-out) infinite;
-}
-@keyframes heroScrollNudge {
-  0%, 100% { transform: translateY(0);   opacity: 0.65; }
-  50%      { transform: translateY(6px); opacity: 1; }
-}
-
-@media (max-width: 820px) {
-  /* Less scrub distance on small screens */
-  .jl-hero-scroll-wrap { height: 200vh; }
-}
-
-/* Respect reduced-motion: skip the takeover entirely, render hero normally. */
-@media (prefers-reduced-motion: reduce) {
-  .jl-hero-scroll-wrap { height: auto; }
-  .jl-hero-stage {
-    position: static;
-    height: auto;
-    padding-top: 0;
-  }
-  .jl-hero-scroll-wrap .jl-hero-illustration { transform: none; }
-  .jl-hero-scroll-hint { display: none; }
-}
+/* Scroll hint is no longer meaningful without the takeover. */
+.jl-hero-scroll-hint { display: none; }
 
 /* ---------- Story ---------- */
 .jl-story-grid {
