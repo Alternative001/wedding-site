@@ -7,6 +7,15 @@
   <link rel="icon" type="image/svg+xml" href="assets/logo-monogram.svg" />
   <link rel="stylesheet" href="colors_and_type.css" />
 
+  <!-- Warm the cache for the unlocked pages while the guest reads/types on the
+       gate, so the next page paints almost instantly instead of cold-loading
+       React + Babel (the slow "looks broken" wait behind the curtain). -->
+  <link rel="prefetch" as="script" crossorigin="anonymous" href="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" />
+  <link rel="prefetch" as="script" crossorigin="anonymous" href="https://unpkg.com/react@18.3.1/umd/react.production.min.js" />
+  <link rel="prefetch" as="script" crossorigin="anonymous" href="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" />
+  <link rel="prefetch" as="script" crossorigin="anonymous" href="https://unpkg.com/lucide@latest" />
+  <link rel="prefetch" href="site.css?v=5" />
+
   <!-- Resources referenced as STRINGS — lifted for standalone bundling -->
   <meta name="ext-resource-dependency" content="assets/lemon.png" data-resource-id="lemonHero" />
 
@@ -388,26 +397,25 @@
           s.style.transition = 'transform ' + DUR + 'ms ' + EASE + ' ' +
             Math.round(Math.abs(i - center) * STAGGER) + 'ms';   // centre leads
         });
-        requestAnimationFrame(function () { requestAnimationFrame(function () {
-          slats.forEach(function (s) { s.style.transform = 'scaleX(0)'; });
-          setTimeout(function () { el.style.display = 'none'; if (done) done(); },
-            DUR + Math.ceil(N / 2) * STAGGER + 80);
-        }); });
+        void el.offsetWidth;                                     // register covered start state (no rAF dependency)
+        slats.forEach(function (s) { s.style.transform = 'scaleX(0)'; });
+        setTimeout(function () { el.style.display = 'none'; if (done) done(); },
+          DUR + Math.ceil(N / 2) * STAGGER + 80);
       }
       function close(done) {
-        build();
+        build();                       // slats default to scaleX(1) = closed
         el.style.display = 'flex';
-        el.style.zIndex = '10050';   // ride above the lemon burst
+        el.style.zIndex = '10050';     // ride above the lemon burst
+        // Start parted (open) with no transition, paint it, then sweep shut.
+        slats.forEach(function (s) { s.style.transition = 'none'; s.style.transform = 'scaleX(0)'; });
+        void el.offsetWidth;
         slats.forEach(function (s, i) {
-          s.style.transform = 'scaleX(0)';
           s.style.transition = 'transform ' + DUR + 'ms ' + EASE + ' ' +
             Math.round((center - Math.abs(i - center)) * STAGGER) + 'ms'; // edges lead, centre seals last
+          s.style.transform = 'scaleX(1)';
         });
-        requestAnimationFrame(function () { requestAnimationFrame(function () {
-          slats.forEach(function (s) { s.style.transform = 'scaleX(1)'; });
-          setTimeout(function () { if (done) done(); },
-            DUR + Math.ceil(N / 2) * STAGGER + 40);
-        }); });
+        setTimeout(function () { if (done) done(); },
+          DUR + Math.ceil(N / 2) * STAGGER + 60);
       }
       return { open: open, close: close };
     })();
