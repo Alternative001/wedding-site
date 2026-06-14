@@ -370,9 +370,12 @@
     // the centre. The gate opens it on load and closes it again over the lemon
     // burst, so the hand-off to the next page reads as one continuous motion.
     window.jlCurtain = (function () {
-      var N = 14, DUR = 600, STAGGER = 55, EASE = 'cubic-bezier(0.7,0,0.3,1)';
+      var STRIPE = 22, DUR = 520, SPAN = 460, EASE = 'cubic-bezier(0.7,0,0.3,1)';
       var el = document.getElementById('jl-curtain');
+      // One slat per signature stripe, so every stripe moves on its own.
+      var N = Math.max(8, Math.ceil(window.innerWidth / STRIPE));
       var center = (N - 1) / 2;
+      var STAGGER = SPAN / Math.ceil(N / 2);   // keep the total sweep ~constant despite many slats
       var slats = [];
       function build() {
         el.innerHTML = '';
@@ -380,15 +383,12 @@
         for (var i = 0; i < N; i++) {
           var s = document.createElement('div');
           s.className = 'jl-curtain-slat';
+          s.style.flex = '0 0 ' + STRIPE + 'px';
+          s.style.background = (i % 2 === 0) ? '#FFF4C9' : '#FFFBF2';   // alternating stripe colours
+          s.style.transformOrigin = (i < center) ? 'left center' : 'right center';
           el.appendChild(s);
           slats.push(s);
         }
-        slats.forEach(function (s, i) {
-          // Keep the stripe pattern continuous across all slats (no seams), and
-          // anchor each slat to its outer edge so the seam lives at the centre.
-          s.style.backgroundPositionX = (-s.offsetLeft) + 'px';
-          s.style.transformOrigin = (i < center) ? 'left center' : 'right center';
-        });
       }
       build();   // cover the screen immediately, seamlessly
       function open(done) {

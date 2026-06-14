@@ -70,23 +70,23 @@
   <div id="jl-curtain"></div>
   <script>
     (function () {
-      var N = 14, DUR = 600, STAGGER = 55, EASE = 'cubic-bezier(0.7,0,0.3,1)';
+      var STRIPE = 22, DUR = 520, SPAN = 460, EASE = 'cubic-bezier(0.7,0,0.3,1)';
       var el = document.getElementById('jl-curtain');
       if (!el) return;
+      // One slat per signature stripe, so every stripe moves on its own.
+      var N = Math.max(8, Math.ceil(window.innerWidth / STRIPE));
       var center = (N - 1) / 2;
+      var STAGGER = SPAN / Math.ceil(N / 2);   // keep the total sweep ~constant despite many slats
       var slats = [];
       for (var i = 0; i < N; i++) {
         var s = document.createElement('div');
         s.className = 'jl-curtain-slat';
+        s.style.flex = '0 0 ' + STRIPE + 'px';
+        s.style.background = (i % 2 === 0) ? '#FFF4C9' : '#FFFBF2';   // alternating stripe colours
+        s.style.transformOrigin = (i < center) ? 'left center' : 'right center';
         el.appendChild(s);
         slats.push(s);
       }
-      // Apply the seam-fix + outer-edge origin now, so the cover is seamless
-      // while React/Babel compile behind it.
-      slats.forEach(function (s, i) {
-        s.style.backgroundPositionX = (-s.offsetLeft) + 'px';
-        s.style.transformOrigin = (i < center) ? 'left center' : 'right center';
-      });
       function open() {
         el.style.background = 'transparent';                     // gaps reveal the live page, not the cream cover
         slats.forEach(function (s, i) {
