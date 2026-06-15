@@ -38,6 +38,7 @@
       '.jl-section-head',
       '.jl-prose p',
       '.jl-story-grid > img',
+      '.jl-story-media',
       '.jl-info-card',
       '.jl-timeline-row',
       '.jl-faq-item',

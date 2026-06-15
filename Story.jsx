@@ -9,11 +9,15 @@ const Story = () => (
     </div>
 
     <div className="jl-story-grid">
-      <img
-        src="assets/Forte.png"
+      <tilt-card
+        class="jl-story-media"
+        bg="assets/3d%20picture/3d-bg.jpg"
+        layer1="assets/3d%20picture/3d-subject-1.png"
+        layer2="assets/3d%20picture/3d-subject-2.png"
+        ratio="1448 / 1086"
+        radius="14"
         alt="Foto von Lisa & Julian"
-        style={{ width: '100%', aspectRatio: '4 / 5', objectFit: 'cover', borderRadius: '14px' }}
-      />
+      ></tilt-card>
 
       <div className="jl-prose">
         <p>
