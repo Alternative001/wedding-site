@@ -29,20 +29,21 @@
  * TUNING — tweak these to dial the effect in after seeing it live.
  * ────────────────────────────────────────────────────────────────────────── */
 
-// Peak rotation (degrees) applied at the very edge of the card, before each
-// layer's own multiplier. Keep it small — 5–10 is the subtle range.
-const MAX_TILT_DEG = 8;
+// Peak rotation (degrees) at full cursor/tilt deflection, before each layer's
+// own multiplier. Keep it small — 5–10 is the subtle range.
+const MAX_TILT_DEG = 6;
 
-// Peak parallax shift (px) at the edge, before each layer's own multiplier.
-const MAX_SHIFT_PX = 16;
+// Peak parallax shift (px) at full deflection, before each layer's multiplier.
+const MAX_SHIFT_PX = 9;
 
 // Per-layer intensity. `rot` scales the rotation, `shift` scales the parallax
-// translate. Background moves least, the front subject moves most. THESE are
-// the knobs to play with per layer.
+// translate. Background moves least. The two foreground subjects sit close
+// together in the photo, so layer1 and layer2 are kept CLOSE to each other —
+// a big gap makes them visibly slide apart. THESE are the knobs to tune.
 const LAYERS = [
-  { key: 'bg',     rot: 0.12, shift: 0.10 },   // background — barely moves
-  { key: 'layer1', rot: 0.55, shift: 0.50 },   // mid subject
-  { key: 'layer2', rot: 1.00, shift: 1.00 },   // front subject — moves most
+  { key: 'bg',     rot: 0.10, shift: 0.05 },   // background — barely moves
+  { key: 'layer1', rot: 0.70, shift: 0.66 },   // foreground subject
+  { key: 'layer2', rot: 0.82, shift: 0.78 },   // front subject — only a touch more than layer1
 ];
 
 // Slight constant zoom so rotation/shift never exposes the card edges.
@@ -62,6 +63,8 @@ const ORIENT_RANGE_DEG = 28;
 (() => {
   const reduceMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const clamp = (v) => Math.max(-1, Math.min(1, v));
 
   const layerTransform = (cfg, nx, ny) => {
     // nx, ny are normalized cursor/tilt offsets in [-1, 1] (0,0 = centre).
@@ -112,7 +115,9 @@ const ORIENT_RANGE_DEG = 28;
       };
       this._btn = root.querySelector('.enable');
       this._raf = 0;
-      this._target = { nx: 0, ny: 0 };
+      this._mode = 'norm';           // 'ptr' (cursor) or 'norm' (orientation / reset)
+      this._nx = 0; this._ny = 0;    // normalized target for 'norm' mode
+      this._px = 0; this._py = 0;    // last cursor viewport coords for 'ptr' mode
       this._base = null;             // orientation baseline (first reading)
       // Bound once so connect/disconnect stay symmetric across React remounts.
       this._onMove = this._onMove.bind(this);
@@ -127,9 +132,11 @@ const ORIENT_RANGE_DEG = 28;
       this._render();
       if (reduceMotion) return;     // static composite — honour the OS setting
 
-      // Desktop pointer: harmless on touch (rarely fires there).
-      this._scene.addEventListener('mousemove', this._onMove);
-      this._scene.addEventListener('mouseleave', this._onLeave);
+      // Desktop pointer: listen on the whole window so the card follows the
+      // cursor anywhere on the page, not just while hovering the picture.
+      window.addEventListener('mousemove', this._onMove);
+      // Ease back to neutral when the cursor leaves the document entirely.
+      document.documentElement.addEventListener('mouseleave', this._onLeave);
 
       // Mobile motion.
       const DOE = window.DeviceOrientationEvent;
@@ -146,8 +153,8 @@ const ORIENT_RANGE_DEG = 28;
     }
 
     disconnectedCallback() {
-      this._scene.removeEventListener('mousemove', this._onMove);
-      this._scene.removeEventListener('mouseleave', this._onLeave);
+      window.removeEventListener('mousemove', this._onMove);
+      document.documentElement.removeEventListener('mouseleave', this._onLeave);
       this._btn.removeEventListener('click', this._onEnable);
       window.removeEventListener('deviceorientation', this._onOrient);
       if (this._raf) cancelAnimationFrame(this._raf);
@@ -172,15 +179,18 @@ const ORIENT_RANGE_DEG = 28;
     }
 
     // ── Desktop ────────────────────────────────────────────────────────────
+    // The cursor can be anywhere on the page; its offset from the card centre
+    // (relative to the viewport) becomes the tilt, so the picture turns toward
+    // the cursor wherever it is. The card-centre read happens in the rAF below
+    // so there's at most one layout read per frame.
     _onMove(e) {
-      const rect = this._scene.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-      this._schedule(nx, ny);
+      this._px = e.clientX;
+      this._py = e.clientY;
+      this._mode = 'ptr';
+      this._schedule();
     }
 
-    _onLeave() { this._schedule(0, 0); }
+    _onLeave() { this._mode = 'norm'; this._nx = 0; this._ny = 0; this._schedule(); }
 
     // ── Mobile ─────────────────────────────────────────────────────────────
     _onEnable() {
@@ -199,20 +209,27 @@ const ORIENT_RANGE_DEG = 28;
       // First reading becomes neutral, so the effect is relative to however
       // the phone is being held rather than absolute level.
       if (!this._base) this._base = { beta: e.beta, gamma: e.gamma };
-      const clamp = (v) => Math.max(-1, Math.min(1, v));
-      const nx = clamp((e.gamma - this._base.gamma) / ORIENT_RANGE_DEG); // left/right
-      const ny = clamp((e.beta - this._base.beta) / ORIENT_RANGE_DEG);   // front/back
-      this._schedule(nx, ny);
+      this._nx = clamp((e.gamma - this._base.gamma) / ORIENT_RANGE_DEG); // left/right
+      this._ny = clamp((e.beta - this._base.beta) / ORIENT_RANGE_DEG);   // front/back
+      this._mode = 'norm';
+      this._schedule();
     }
 
-    // ── Apply (rAF-throttled) ────────────────────────────────────────────────
-    _schedule(nx, ny) {
-      this._target.nx = nx;
-      this._target.ny = ny;
+    // ── Apply (rAF-throttled; one layout read per frame) ─────────────────────
+    _schedule() {
       if (this._raf) return;
       this._raf = requestAnimationFrame(() => {
         this._raf = 0;
-        const { nx, ny } = this._target;
+        let nx, ny;
+        if (this._mode === 'ptr') {
+          const r = this._scene.getBoundingClientRect();
+          if (!r.width || !r.height) return;
+          nx = clamp((this._px - (r.left + r.width / 2)) / (window.innerWidth / 2));
+          ny = clamp((this._py - (r.top + r.height / 2)) / (window.innerHeight / 2));
+        } else {
+          nx = this._nx;
+          ny = this._ny;
+        }
         for (const cfg of LAYERS) {
           this._imgs[cfg.key].style.transform = layerTransform(cfg, nx, ny);
         }
