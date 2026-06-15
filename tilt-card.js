@@ -29,31 +29,35 @@
  * TUNING — tweak these to dial the effect in after seeing it live.
  * ────────────────────────────────────────────────────────────────────────── */
 
-// Peak rotation (degrees) at full cursor/tilt deflection, before each layer's
-// own multiplier. Keep it small — 5–10 is the subtle range.
-const MAX_TILT_DEG = 6;
+// Peak rotation (degrees) at full deflection, before each layer's own
+// multiplier. Kept small on purpose — the depth now comes mostly from
+// parallax + Z-offset, not a card-flip tilt. Set to 0 for pure parallax.
+const MAX_TILT_DEG = 2.5;
 
 // Peak parallax shift (px) at full deflection, before each layer's multiplier.
-const MAX_SHIFT_PX = 9;
+// This is the lead actor now that rotation is dialed back.
+const MAX_SHIFT_PX = 13;
 
-// Per-layer intensity. `rot` scales the rotation, `shift` scales the parallax
-// translate. Background moves least. The two foreground subjects sit close
-// together in the photo, so layer1 and layer2 are kept CLOSE to each other —
-// a big gap makes them visibly slide apart. THESE are the knobs to tune.
+// Per-layer setup. `shift` = parallax multiplier, `rot` = rotation multiplier,
+// `depth` = static translateZ in px (gives real 3D separation under the
+// perspective), `scale` = base zoom (front a touch larger = nearer), `shadow`
+// = a soft contact shadow so the subject reads as *in front of* the bg rather
+// than a flat sticker. Background barely moves; the two foreground subjects sit
+// close together in the photo, so layer1/layer2 stay CLOSE. THESE are the knobs.
 const LAYERS = [
-  { key: 'bg',     rot: 0.10, shift: 0.05 },   // background — barely moves
-  { key: 'layer1', rot: 0.70, shift: 0.66 },   // foreground subject
-  { key: 'layer2', rot: 0.82, shift: 0.78 },   // front subject — only a touch more than layer1
+  { key: 'bg',     shift: 0.04, rot: 0.08, depth: -30, scale: 1.05, shadow: 'none' },
+  { key: 'layer1', shift: 0.62, rot: 0.55, depth: 18,  scale: 1.06, shadow: 'drop-shadow(0 7px 14px rgba(15,23,42,0.20))' },
+  { key: 'layer2', shift: 0.74, rot: 0.66, depth: 38,  scale: 1.075, shadow: 'drop-shadow(0 13px 26px rgba(15,23,42,0.28))' },
 ];
 
-// Slight constant zoom so rotation/shift never exposes the card edges.
-const OVERSCALE = 1.06;
-
 // Depth of the CSS perspective (px). Smaller = stronger 3D.
-const PERSPECTIVE_PX = 900;
+const PERSPECTIVE_PX = 850;
 
-// Smoothing of layer motion + ease-back to neutral (ms).
-const EASE_MS = 220;
+// Motion smoothing: snappy while moving (low lag), gentle on the way back to
+// neutral. The old single 220ms was the "jelly" feel.
+const EASE_MOVE_MS = 80;
+const EASE_RESET_MS = 600;
+const EASE_CURVE = 'cubic-bezier(.22,.61,.36,1)';
 
 // How many degrees of phone tilt map to the full effect (mobile).
 const ORIENT_RANGE_DEG = 28;
@@ -72,8 +76,11 @@ const ORIENT_RANGE_DEG = 28;
     const ry = ( nx * MAX_TILT_DEG * cfg.rot).toFixed(2);   // tilt left/right
     const tx = ( nx * MAX_SHIFT_PX * cfg.shift).toFixed(1);
     const ty = ( ny * MAX_SHIFT_PX * cfg.shift).toFixed(1);
+    // Static translateZ + per-layer scale give genuine depth under the
+    // perspective; the dynamic parallax rides on top of it.
     return 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) ' +
-           'translate3d(' + tx + 'px,' + ty + 'px,0) scale(' + OVERSCALE + ')';
+           'translate3d(' + tx + 'px,' + ty + 'px,' + cfg.depth + 'px) ' +
+           'scale(' + cfg.scale + ')';
   };
 
   const styles =
@@ -82,9 +89,9 @@ const ORIENT_RANGE_DEG = 28;
     '  perspective:' + PERSPECTIVE_PX + 'px;perspective-origin:50% 50%;' +
     '  background:var(--color-cream,#FFFBF2)}' +
     '.layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;' +
-    '  transform:scale(' + OVERSCALE + ');transform-origin:50% 50%;' +
+    '  transform:scale(1.06);transform-origin:50% 50%;' +
     '  backface-visibility:hidden;will-change:transform;' +
-    '  transition:transform ' + EASE_MS + 'ms cubic-bezier(.2,.6,.2,1);' +
+    '  transition:transform ' + EASE_MOVE_MS + 'ms ' + EASE_CURVE + ';' +
     '  -webkit-user-drag:none;user-select:none;pointer-events:none}' +
     '.enable{position:absolute;right:10px;bottom:10px;display:none;' +
     '  appearance:none;border:0;border-radius:999px;cursor:pointer;' +
@@ -118,6 +125,7 @@ const ORIENT_RANGE_DEG = 28;
       this._mode = 'norm';           // 'ptr' (cursor) or 'norm' (orientation / reset)
       this._nx = 0; this._ny = 0;    // normalized target for 'norm' mode
       this._px = 0; this._py = 0;    // last cursor viewport coords for 'ptr' mode
+      this._resetting = false;       // true while easing back to neutral (slower ease)
       this._base = null;             // orientation baseline (first reading)
       // Bound once so connect/disconnect stay symmetric across React remounts.
       this._onMove = this._onMove.bind(this);
@@ -171,6 +179,14 @@ const ORIENT_RANGE_DEG = 28;
       this._setSrc('bg', this.getAttribute('bg'));
       this._setSrc('layer1', this.getAttribute('layer1'));
       this._setSrc('layer2', this.getAttribute('layer2'));
+      // Static per-layer contact shadow + resting depth/scale, applied now so
+      // the card shows its 3D separation immediately (no wait for first input,
+      // and a sensible state even if rAF never runs).
+      for (const cfg of LAYERS) {
+        const img = this._imgs[cfg.key];
+        img.style.filter = cfg.shadow;
+        img.style.transform = layerTransform(cfg, 0, 0);
+      }
     }
 
     _setSrc(key, url) {
@@ -187,10 +203,15 @@ const ORIENT_RANGE_DEG = 28;
       this._px = e.clientX;
       this._py = e.clientY;
       this._mode = 'ptr';
+      this._resetting = false;
       this._schedule();
     }
 
-    _onLeave() { this._mode = 'norm'; this._nx = 0; this._ny = 0; this._schedule(); }
+    _onLeave() {
+      this._mode = 'norm'; this._nx = 0; this._ny = 0;
+      this._resetting = true;     // ease gently back to neutral
+      this._schedule();
+    }
 
     // ── Mobile ─────────────────────────────────────────────────────────────
     _onEnable() {
@@ -212,6 +233,7 @@ const ORIENT_RANGE_DEG = 28;
       this._nx = clamp((e.gamma - this._base.gamma) / ORIENT_RANGE_DEG); // left/right
       this._ny = clamp((e.beta - this._base.beta) / ORIENT_RANGE_DEG);   // front/back
       this._mode = 'norm';
+      this._resetting = false;
       this._schedule();
     }
 
@@ -230,8 +252,12 @@ const ORIENT_RANGE_DEG = 28;
           nx = this._nx;
           ny = this._ny;
         }
+        const trans = 'transform ' + (this._resetting ? EASE_RESET_MS : EASE_MOVE_MS) +
+          'ms ' + EASE_CURVE;
         for (const cfg of LAYERS) {
-          this._imgs[cfg.key].style.transform = layerTransform(cfg, nx, ny);
+          const img = this._imgs[cfg.key];
+          img.style.transition = trans;
+          img.style.transform = layerTransform(cfg, nx, ny);
         }
       });
     }
