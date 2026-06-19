@@ -1,8 +1,17 @@
 // App.jsx — top-level shell wiring components
-const { Nav, Hero, Story, Schedule, Venue, FAQ, RSVP, Footer } = window;
+const { Nav, Hero, Story, Schedule, Venue, FAQ, RSVP, Footer, RoomsModal } = window;
 
 const App = () => {
   const [active, setActive] = React.useState('hero');
+  const [roomsOpen, setRoomsOpen] = React.useState(false);
+
+  // Expose a global opener so the Venue card and the RSVP room tick can open
+  // the shared rooms pop-up (same pattern as window.triggerConfetti).
+  React.useEffect(() => {
+    window.jlOpenRooms = () => setRoomsOpen(true);
+    window.jlCloseRooms = () => setRoomsOpen(false);
+    return () => { delete window.jlOpenRooms; delete window.jlCloseRooms; };
+  }, []);
 
   const goTo = (id) => {
     setActive(id);
@@ -44,6 +53,7 @@ const App = () => {
       <FAQ />
       <RSVP />
       <Footer />
+      {RoomsModal && <RoomsModal open={roomsOpen} onClose={() => setRoomsOpen(false)} />}
     </div>
   );
 };

@@ -105,9 +105,9 @@ const Venue = () => (
           <strong>From €600</strong> for two nights (standard double, 2 people).
           If you'd like to stay there, just let us know — first come, first served.
         </p>
-        <a className="jl-link" href="mailto:hallo@lisa-und-julian.de?subject=Room%20at%20Forte%20Benedek">
-          Request a room →
-        </a>
+        <button type="button" className="jl-link" onClick={() => window.jlOpenRooms && window.jlOpenRooms()}>
+          See the rooms →
+        </button>
       </div>
 
       <div className="jl-info-card">

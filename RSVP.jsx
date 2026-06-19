@@ -7,7 +7,8 @@ const initial = () => ({
   adultNames: [''],
   kidsCount: 0,
   diet: '',
-  shuttle: false,
+  wantRoom: false,
+  room: '',
   message: '',
 });
 
@@ -199,10 +200,35 @@ const RSVP = () => {
 
             <div className="jl-field jl-field-full">
               <label className="jl-check">
-                <input type="checkbox" checked={form.shuttle} onChange={(e) => set('shuttle', e.target.checked)} />
-                <span>Wir nutzen den Shuttle <strong>am Samstagabend</strong> zurück zum Hotel</span>
+                <input type="checkbox" checked={form.wantRoom} onChange={(e) => set('wantRoom', e.target.checked)} />
+                <span>Wir möchten ein Zimmer <strong>am</strong> Forte</span>
               </label>
             </div>
+
+            {form.wantRoom && (
+              <div className="jl-field jl-field-full jl-room-pick">
+                <label>Welches Zimmer?</label>
+                <div className="jl-radio-row">
+                  {(window.JL_ROOMS || []).map((r) => (
+                    <button
+                      type="button"
+                      key={r.id}
+                      className={`jl-radio-btn ${form.room === r.name ? 'is-active' : ''}`}
+                      onClick={() => set('room', r.name)}
+                    >
+                      {r.name}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  className="jl-link jl-room-pick-link"
+                  onClick={() => window.jlOpenRooms && window.jlOpenRooms()}
+                >
+                  Zimmer &amp; Preise ansehen →
+                </button>
+              </div>
+            )}
           </>
         )}
 
