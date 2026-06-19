@@ -761,11 +761,25 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 }
 
 /* ── Travel Map ───────────────────────────────────────────────────────────── */
+/* Venue becomes a full-width band: the heading and info cards stay in the
+   980px column (their own padding), but the map spans edge to edge. The
+   section drops its side padding so the map can reach the viewport edges. */
+#venue.jl-section {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+#venue > .jl-section-head,
+#venue > .jl-venue-grid {
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-5);
+  padding-right: var(--space-5);
+  box-sizing: border-box;
+}
 .jl-venue-map {
-  grid-column: 1 / -1;
-  /* No card chrome: the embedded map carries its own panel (.map-frame),
-     so the outer wrapper stays transparent and blends into the page —
-     no card-in-a-card "embed" look. */
+  margin: var(--space-6) 0 var(--space-7);   /* full width of the section = edge to edge */
 }
 .jl-venue-map svg { width: 100%; height: auto; display: block; }
 .jl-venue-map iframe {

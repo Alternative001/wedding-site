@@ -73,9 +73,9 @@ const Venue = () => (
       </h2>
     </div>
 
-    <div className="jl-venue-grid">
-      <TravelMap />
+    <TravelMap />
 
+    <div className="jl-venue-grid">
       <div className="jl-info-card">
         <div className="jl-info-card-eyebrow">
           <i data-lucide="map-pin" width="14" height="14"></i>
