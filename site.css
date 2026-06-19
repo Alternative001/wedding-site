@@ -763,11 +763,9 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 /* ── Travel Map ───────────────────────────────────────────────────────────── */
 .jl-venue-map {
   grid-column: 1 / -1;
-  background: var(--color-cream);
-  border: 1px solid var(--border-soft);
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  /* No card chrome: the embedded map carries its own panel (.map-frame),
+     so the outer wrapper stays transparent and blends into the page —
+     no card-in-a-card "embed" look. */
 }
 .jl-venue-map svg { width: 100%; height: auto; display: block; }
 .jl-venue-map iframe {
