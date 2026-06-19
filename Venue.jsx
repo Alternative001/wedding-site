@@ -1,92 +1,65 @@
 // Venue.jsx — Forte Benedek + travel map + venue rooms + Saturday-night shuttle
 
 const TravelMap = () => {
-  const mapRef = React.useRef(null);
+  const ref = React.useRef(null);
 
   React.useEffect(() => {
-    if (!mapRef.current) return;
-    const paths = mapRef.current.querySelectorAll('.jl-map-line');
+    const iframe = ref.current;
+    if (!iframe) return;
+    let settleTimer = null, pollId = null;
 
-    paths.forEach(function (p) {
-      const len = p.getTotalLength();
-      p.style.strokeDasharray = len;
-      p.style.strokeDashoffset = len;
-    });
+    // The embedded map reflows to a different height at every width (and is
+    // taller than any fixed box), so size the iframe to its real content.
+    // Collapse to 0 first: the page's body min-height:100vh equals the iframe's
+    // own height, which would otherwise pin the measurement and block shrinking.
+    function measure() {
+      const doc = iframe.contentDocument;
+      if (!doc || !doc.body) return;
+      iframe.style.height = '0px';
+      const h = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+      iframe.style.height = (h || 200) + 'px';
+    }
 
-    const io = new IntersectionObserver(function (entries) {
-      if (!entries[0].isIntersecting) return;
-      paths.forEach(function (p, i) {
-        p.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1) ' + (i * 0.4) + 's';
-        p.style.strokeDashoffset = 0;
-      });
-      io.disconnect();
-    }, { threshold: 0.35 });
+    // It self-extracts and swaps its document async after load, so one measure
+    // isn't enough — poll until the height stops changing.
+    function poll() {
+      let last = -1, stable = 0;
+      clearInterval(pollId);
+      pollId = setInterval(function () {
+        const doc = iframe.contentDocument;
+        const h = doc && doc.body
+          ? Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight) : 0;
+        measure();
+        if (h === last) { if (++stable > 3) clearInterval(pollId); }
+        else { last = h; stable = 0; }
+      }, 200);
+      setTimeout(function () { clearInterval(pollId); }, 6000);
+    }
 
-    io.observe(mapRef.current);
-    return () => io.disconnect();
+    function onLoad() { measure(); poll(); }
+    iframe.addEventListener('load', onLoad);
+    if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') onLoad();
+
+    function onResize() { clearTimeout(settleTimer); settleTimer = setTimeout(measure, 150); }
+    window.addEventListener('resize', onResize);
+
+    return function () {
+      iframe.removeEventListener('load', onLoad);
+      window.removeEventListener('resize', onResize);
+      clearInterval(pollId);
+      clearTimeout(settleTimer);
+    };
   }, []);
 
   return (
-    <div ref={mapRef} className="jl-venue-map" aria-label="Anreisekarte">
-      <svg viewBox="0 0 640 258" xmlns="http://www.w3.org/2000/svg">
-        {/* Cream base */}
-        <rect width="640" height="258" fill="#FFFBF2"/>
-
-        {/* Subtle map grid */}
-        {[65, 130, 195].map(y => (
-          <line key={'h'+y} x1="0" y1={y} x2="640" y2={y} stroke="#E7DEC6" strokeWidth="0.5"/>
-        ))}
-        {[128, 256, 384, 512].map(x => (
-          <line key={'v'+x} x1={x} y1="0" x2={x} y2="258" stroke="#E7DEC6" strokeWidth="0.5"/>
-        ))}
-
-        {/* Mediterranean sea suggestion */}
-        <path d="M 0,210 Q 132,196 264,210 Q 382,224 524,208 L 640,214 L 640,258 L 0,258 Z" fill="#DCE9F8" opacity="0.55"/>
-
-        {/* Alpine silhouette + fill */}
-        <path d="M 75,148 L 100,120 L 120,140 L 143,108 L 165,134 L 186,114 L 210,138 L 232,110 L 257,138 L 280,114 L 304,138 L 328,112 L 352,138" fill="none" stroke="#B8D2F1" strokeWidth="1.5"/>
-        <path d="M 75,148 L 100,120 L 120,140 L 143,108 L 165,134 L 186,114 L 210,138 L 232,110 L 257,138 L 280,114 L 304,138 L 328,112 L 352,138 L 352,148 Z" fill="#DCE9F8" opacity="0.38"/>
-
-        {/* Germany tint (north of Alps) */}
-        <rect x="0" y="0" width="438" height="146" fill="#EFF5FF" opacity="0.28"/>
-
-        {/* Italy tint (south of Alps) */}
-        <path d="M 148,148 L 382,148 L 382,218 Q 312,242 264,235 Q 200,230 148,210 Z" fill="#FFF4E0" opacity="0.32"/>
-
-        {/* Map label */}
-        <text x="544" y="20" textAnchor="middle" fontFamily="DM Sans, sans-serif" fontSize="9" fontWeight="500" fill="#6F695A" letterSpacing="0.22em" opacity="0.55">ANREISE</text>
-
-        {/* ── Travel lines (animated via JS) ── */}
-        {/* Karlsdorf-Neuthard → Garda */}
-        <path className="jl-map-line" d="M 114,78 C 148,40 216,86 264,160" stroke="#1E47B5" strokeWidth="2" fill="none" strokeLinecap="round"/>
-        {/* Landshut → Garda */}
-        <path className="jl-map-line" d="M 374,74 C 344,38 303,83 264,160" stroke="#1E47B5" strokeWidth="2" fill="none" strokeLinecap="round"/>
-        {/* Dubai → Garda (longer arc for the flight) */}
-        <path className="jl-map-line" d="M 572,230 C 494,88 376,108 264,160" stroke="#1E47B5" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-
-        {/* ── Origin: Karlsdorf-Neuthard ── */}
-        <circle cx="114" cy="78" r="9" fill="none" stroke="#1E47B5" strokeWidth="1" opacity="0.28"/>
-        <circle cx="114" cy="78" r="5" fill="#1E47B5"/>
-        <text x="114" y="63" textAnchor="middle" fontFamily="DM Sans, sans-serif" fontSize="9.5" fontWeight="600" fill="#0E2A6B" letterSpacing="0.1em">KARLSDORF</text>
-        <text x="114" y="52" textAnchor="middle" fontFamily="DM Sans, sans-serif" fontSize="9.5" fontWeight="600" fill="#0E2A6B" letterSpacing="0.1em">NEUTHARD</text>
-
-        {/* ── Origin: Landshut ── */}
-        <circle cx="374" cy="74" r="9" fill="none" stroke="#1E47B5" strokeWidth="1" opacity="0.28"/>
-        <circle cx="374" cy="74" r="5" fill="#1E47B5"/>
-        <text x="374" y="60" textAnchor="middle" fontFamily="DM Sans, sans-serif" fontSize="9.5" fontWeight="600" fill="#0E2A6B" letterSpacing="0.1em">LANDSHUT</text>
-
-        {/* ── Origin: Dubai ── */}
-        <circle cx="572" cy="230" r="9" fill="none" stroke="#1E47B5" strokeWidth="1" opacity="0.28"/>
-        <circle cx="572" cy="230" r="5" fill="#1E47B5"/>
-        <text x="572" y="216" textAnchor="middle" fontFamily="DM Sans, sans-serif" fontSize="9.5" fontWeight="600" fill="#0E2A6B" letterSpacing="0.1em">DUBAI</text>
-        <text x="572" y="205" textAnchor="middle" fontFamily="DM Sans, sans-serif" fontSize="9" fill="#1E47B5" opacity="0.72">✈  6 h</text>
-
-        {/* ── Destination: Lago di Garda ── */}
-        <circle cx="264" cy="160" r="14" fill="#F8D34A" stroke="#1E47B5" strokeWidth="2"/>
-        <circle cx="264" cy="160" r="4" fill="#0E2A6B"/>
-        <text x="264" y="186" textAnchor="middle" fontFamily="Cormorant Garamond, serif" fontSize="11.5" fontWeight="500" fill="#0E2A6B" letterSpacing="0.1em">LAGO DI GARDA</text>
-        <text x="264" y="198" textAnchor="middle" fontFamily="Cormorant Garamond, serif" fontSize="10.5" fontStyle="italic" fill="#1E47B5">Juli 2027</text>
-      </svg>
+    <div className="jl-venue-map" aria-label="Anreisekarte">
+      <iframe
+        ref={ref}
+        src="assets/map-standalone.html"
+        title="Anreisekarte zum Lago di Garda"
+        loading="lazy"
+        scrolling="no"
+      ></iframe>
     </div>
   );
 };

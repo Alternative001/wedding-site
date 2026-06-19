@@ -770,4 +770,10 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   box-shadow: var(--shadow-sm);
 }
 .jl-venue-map svg { width: 100%; height: auto; display: block; }
+.jl-venue-map iframe {
+  width: 100%;
+  aspect-ratio: 1500 / 689;   /* native ratio of the embedded D3 map */
+  display: block;
+  border: 0;
+}
 
