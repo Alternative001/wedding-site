@@ -1,16 +1,22 @@
 // App.jsx — top-level shell wiring components
-const { Nav, Hero, Story, Schedule, Venue, FAQ, RSVP, Footer, RoomsModal } = window;
+const { Nav, Hero, Story, Schedule, Venue, FAQ, RSVP, Footer, RoomsModal, StaysModal } = window;
 
 const App = () => {
   const [active, setActive] = React.useState('hero');
   const [roomsOpen, setRoomsOpen] = React.useState(false);
+  const [staysOpen, setStaysOpen] = React.useState(false);
 
-  // Expose a global opener so the Venue card and the RSVP room tick can open
-  // the shared rooms pop-up (same pattern as window.triggerConfetti).
+  // Expose global openers so the Venue cards / RSVP can open the shared pop-ups
+  // (same pattern as window.triggerConfetti).
   React.useEffect(() => {
     window.jlOpenRooms = () => setRoomsOpen(true);
     window.jlCloseRooms = () => setRoomsOpen(false);
-    return () => { delete window.jlOpenRooms; delete window.jlCloseRooms; };
+    window.jlOpenStays = () => setStaysOpen(true);
+    window.jlCloseStays = () => setStaysOpen(false);
+    return () => {
+      delete window.jlOpenRooms; delete window.jlCloseRooms;
+      delete window.jlOpenStays; delete window.jlCloseStays;
+    };
   }, []);
 
   const goTo = (id) => {
@@ -54,6 +60,7 @@ const App = () => {
       <RSVP />
       <Footer />
       {RoomsModal && <RoomsModal open={roomsOpen} onClose={() => setRoomsOpen(false)} />}
+      {StaysModal && <StaysModal open={staysOpen} onClose={() => setStaysOpen(false)} />}
     </div>
   );
 };

@@ -129,45 +129,13 @@ const Venue = () => (
           Other places to stay
         </div>
         <h3 className="jl-h3">Sleeping nearby</h3>
-        <p>Prefer your own place? These are just a few steps from the Forte.</p>
-
-        <a
-          className="jl-walkmap"
-          href="https://www.google.com/maps/dir/?api=1&origin=Relais+Forte+Benedek,+Via+Morsella+12,+Pastrengo&destination=Agriturismo+Sambuco,+Via+Sambuco+1,+Pastrengo&travelmode=walking"
-          target="_blank"
-          rel="noopener"
-          aria-label="Open the walking route from the Forte to Agriturismo Sambuco on Google Maps"
-        >
-          <svg viewBox="0 0 300 104" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M 46,66 C 120,66 168,36 252,46" stroke="#1E47B5" strokeWidth="2" fill="none" strokeLinecap="round" strokeDasharray="1.5 7" />
-            <circle cx="46" cy="66" r="6.5" fill="#F8D34A" stroke="#1E47B5" strokeWidth="2" />
-            <circle cx="46" cy="66" r="2" fill="#0E2A6B" />
-            <text x="46" y="88" textAnchor="middle" fontFamily="DM Sans, sans-serif" fontSize="9.5" fontWeight="600" fill="#0E2A6B">FORTE</text>
-            <circle cx="252" cy="46" r="5" fill="#1E47B5" />
-            <text x="252" y="30" textAnchor="middle" fontFamily="DM Sans, sans-serif" fontSize="9.5" fontWeight="600" fill="#0E2A6B">SAMBUCO</text>
-            <text x="150" y="42" textAnchor="middle" fontSize="15">🚶</text>
-            <text x="150" y="74" textAnchor="middle" fontFamily="Cormorant Garamond, serif" fontSize="14" fontStyle="italic" fill="#1E47B5">≈ 7 min on foot</text>
-          </svg>
-        </a>
-
-        <ul className="jl-stay-list">
-          <li>
-            <strong>Agriturismo Sambuco</strong> — farmhouse with pool &amp; vineyards, ≈ 7 min on foot ·{' '}
-            <a href="https://www.agriturismosambuco.it/" target="_blank" rel="noopener">Website →</a>
-          </li>
-          <li>
-            <strong>Appartamenti Miralago</strong> — apartments, same street as the Forte ·{' '}
-            <a href="https://guias-viajes.com/italy/pastrengo/appartamenti-miralago/" target="_blank" rel="noopener">View →</a>
-          </li>
-        </ul>
-
-        <p className="jl-fine jl-stay-more">
-          More in Pastrengo:{' '}
-          <a href="https://www.agriturismocamparella.it/" target="_blank" rel="noopener">Camparella</a>,{' '}
-          <a href="https://www.booking.com/hotel/it/agriturismo-serena-pastrengo.html" target="_blank" rel="noopener">Serena</a>{' '}
-          or{' '}
-          <a href="https://www.booking.com/bed-and-breakfast/city/it/pastrengo.html" target="_blank" rel="noopener">all stays in Pastrengo</a>.
+        <p>
+          Didn’t grab a room at the Forte? Three places in Pastrengo are just a few minutes
+          away — with distance, details and booking links.
         </p>
+        <button type="button" className="jl-link" onClick={() => window.jlOpenStays && window.jlOpenStays()}>
+          See the places →
+        </button>
       </div>
     </div>
   </section>
