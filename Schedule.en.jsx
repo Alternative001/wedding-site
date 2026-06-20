@@ -4,10 +4,21 @@ const SCHEDULE = [
     day: 'Friday',
     date: '23 July',
     label: 'Arrive',
+    arrival: true,
     items: [
-      { time: 'from noon', title: 'Pool day', note: 'Come by whenever suits you — sun loungers, Spritz, bring your swimsuit' },
-      { time: '19:30', title: 'Pizza night', note: 'for everyone already there — tables under the olive trees' },
+      { time: 'all day', title: 'Pool day', note: 'Sun loungers, Spritz, swimwear — the whole day belongs to the pool.' },
+      { time: '18:00', title: 'Pizza night', note: 'Tables under the olive trees. Pizza and two hours of wine are on us 🍕🍷' },
     ],
+    dress: {
+      title: 'All in White',
+      text: 'For Friday we’re asking you in white or beige — airy, bright and light.',
+      swatches: [
+        { name: 'White', hex: '#FFFFFF' },
+        { name: 'Cream', hex: '#FBF6EC' },
+        { name: 'Beige', hex: '#E7D6BC' },
+        { name: 'Sand', hex: '#D8C49E' },
+      ],
+    },
   },
   {
     day: 'Saturday',
@@ -21,6 +32,18 @@ const SCHEDULE = [
       { time: '18:00', title: 'Dinner', note: '7-course menu, long tables, blue-and-yellow stripes' },
       { time: '21:00', title: 'First dance · Party', note: 'until the sun comes up' },
     ],
+    dress: {
+      title: 'Blue · Green · Yellow',
+      text: 'On the big day it gets colourful: pick a shade of blue, green or yellow. A few examples:',
+      swatches: [
+        { name: 'Cobalt', hex: '#1E47B5' },
+        { name: 'Sky', hex: '#87B0E0' },
+        { name: 'Sage', hex: '#88A176' },
+        { name: 'Olive', hex: '#A7B98C' },
+        { name: 'Lemon', hex: '#F8D34A' },
+        { name: 'Butter', hex: '#FCE789' },
+      ],
+    },
   },
   {
     day: 'Sunday',
@@ -78,6 +101,20 @@ const Schedule = () => {
           </div>
         )}
 
+        {day.arrival && (
+          <div className="jl-arrival">
+            <svg className="jl-arrival-svg" viewBox="0 0 620 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path className="jl-arrival-path" pathLength="1" d="M 12,44 C 130,44 150,18 260,24 S 440,52 600,20" stroke="#1E47B5" strokeWidth="2.5" strokeLinecap="round" />
+              <circle className="jl-arrival-start" cx="12" cy="44" r="4" fill="#1E47B5" />
+              <circle className="jl-arrival-sun" cx="600" cy="20" r="8" fill="#F8D34A" stroke="#1E47B5" strokeWidth="1.5" />
+            </svg>
+            <div className="jl-arrival-label">
+              <strong>Arrive whenever you like</strong>
+              <span>No set time — drift in across the day, however it suits you.</span>
+            </div>
+          </div>
+        )}
+
         {day.open ? (
           <div className="jl-schedule-open">
             <div className="jl-script-md" style={{ fontSize: 44, marginBottom: 8 }}>Open End</div>
@@ -106,13 +143,23 @@ const Schedule = () => {
         )}
       </div>
 
-      <div className="jl-dresscode">
-        <div className="jl-eyebrow">Dress code</div>
-        <div className="jl-dresscode-body">
-          <strong>Smart summer.</strong> Light colours, light fabrics — think Italian Riviera,
-          not office formal. Comfortable shoes are a good idea; we're celebrating on grass and stone.
+      {day.dress && (
+        <div className="jl-dresscode">
+          <div className="jl-eyebrow">Dress code · {day.day}</div>
+          <div className="jl-dresscode-head">{day.dress.title}</div>
+          <div className="jl-dresscode-body">{day.dress.text}</div>
+          {day.dress.swatches && (
+            <div className="jl-swatches">
+              {day.dress.swatches.map((s) => (
+                <div className="jl-swatch" key={s.name}>
+                  <span className="jl-swatch-dot" style={{ background: s.hex }}></span>
+                  <span className="jl-swatch-name">{s.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
+      )}
     </section>
   );
 };

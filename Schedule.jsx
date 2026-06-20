@@ -4,10 +4,21 @@ const SCHEDULE = [
     day: 'Freitag',
     date: '23. Juli',
     label: 'Ankommen',
+    arrival: true,
     items: [
-      { time: 'ab Mittag', title: 'Pooltag', note: 'Kommt vorbei, wann es Euch passt — Liegestühle, Spritz, Badesachen einpacken' },
-      { time: '19:30', title: 'Pizzanacht', note: 'für alle, die schon da sind — Tische unter den Olivenbäumen' },
+      { time: 'den ganzen Tag', title: 'Pooltag', note: 'Liegestühle, Spritz, Badesachen — der ganze Tag gehört dem Pool.' },
+      { time: '18:00', title: 'Pizzanacht', note: 'Tische unter den Olivenbäumen. Pizza und zwei Stunden Wein gehen aufs Haus 🍕🍷' },
     ],
+    dress: {
+      title: 'Ganz in Weiß',
+      text: 'Für den Freitag bitten wir Euch in Weiß oder Beige — luftig, hell und leicht.',
+      swatches: [
+        { name: 'Weiß', hex: '#FFFFFF' },
+        { name: 'Creme', hex: '#FBF6EC' },
+        { name: 'Beige', hex: '#E7D6BC' },
+        { name: 'Sand', hex: '#D8C49E' },
+      ],
+    },
   },
   {
     day: 'Samstag',
@@ -21,6 +32,18 @@ const SCHEDULE = [
       { time: '18:00', title: 'Abendessen', note: '7-Gang-Menü, lange Tafel, blau-gelbe Streifen' },
       { time: '21:00', title: 'Eröffnungstanz · Party', note: 'bis die Sonne aufgeht' },
     ],
+    dress: {
+      title: 'Blau · Grün · Gelb',
+      text: 'Am großen Tag wird es farbig: wählt einen Ton in Blau, Grün oder Gelb. Ein paar Beispiele:',
+      swatches: [
+        { name: 'Kobalt', hex: '#1E47B5' },
+        { name: 'Himmelblau', hex: '#87B0E0' },
+        { name: 'Salbei', hex: '#88A176' },
+        { name: 'Olive', hex: '#A7B98C' },
+        { name: 'Zitrone', hex: '#F8D34A' },
+        { name: 'Butter', hex: '#FCE789' },
+      ],
+    },
   },
   {
     day: 'Sonntag',
@@ -79,6 +102,20 @@ const Schedule = () => {
           </div>
         )}
 
+        {day.arrival && (
+          <div className="jl-arrival">
+            <svg className="jl-arrival-svg" viewBox="0 0 620 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path className="jl-arrival-path" pathLength="1" d="M 12,44 C 130,44 150,18 260,24 S 440,52 600,20" stroke="#1E47B5" strokeWidth="2.5" strokeLinecap="round" />
+              <circle className="jl-arrival-start" cx="12" cy="44" r="4" fill="#1E47B5" />
+              <circle className="jl-arrival-sun" cx="600" cy="20" r="8" fill="#F8D34A" stroke="#1E47B5" strokeWidth="1.5" />
+            </svg>
+            <div className="jl-arrival-label">
+              <strong>Ankommen, wann Ihr möchtet</strong>
+              <span>Kein fester Zeitpunkt — kommt über den Tag verteilt, ganz wie es passt.</span>
+            </div>
+          </div>
+        )}
+
         {day.open ? (
           <div className="jl-schedule-open">
             <div className="jl-script-md" style={{ fontSize: 44, marginBottom: 8 }}>Open End</div>
@@ -107,13 +144,23 @@ const Schedule = () => {
         )}
       </div>
 
-      <div className="jl-dresscode">
-        <div className="jl-eyebrow">Dresscode</div>
-        <div className="jl-dresscode-body">
-          <strong>Sommerlich-fein.</strong> Helle Farben, leichte Stoffe — denkt Italian Riviera,
-          nicht Münchner Standesamt. Bequeme Schuhe sind eine gute Idee, wir feiern auf Gras und Stein.
+      {day.dress && (
+        <div className="jl-dresscode">
+          <div className="jl-eyebrow">Dresscode · {day.day}</div>
+          <div className="jl-dresscode-head">{day.dress.title}</div>
+          <div className="jl-dresscode-body">{day.dress.text}</div>
+          {day.dress.swatches && (
+            <div className="jl-swatches">
+              {day.dress.swatches.map((s) => (
+                <div className="jl-swatch" key={s.name}>
+                  <span className="jl-swatch-dot" style={{ background: s.hex }}></span>
+                  <span className="jl-swatch-name">{s.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
+      )}
     </section>
   );
 };

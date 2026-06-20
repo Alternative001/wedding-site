@@ -460,7 +460,35 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   border-radius: 14px;
   padding: 18px 22px;
 }
+.jl-dresscode-head { font-family: var(--font-serif); font-weight: 500; font-size: 21px; color: var(--fg-display); margin-top: 2px; }
 .jl-dresscode-body { font: 15px/1.55 var(--font-sans); color: var(--color-charcoal); margin-top: 6px; }
+
+/* Dress-code colour swatches */
+.jl-swatches { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
+.jl-swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 54px; }
+.jl-swatch-dot {
+  width: 34px; height: 34px; border-radius: 999px;
+  border: 1px solid rgba(14, 42, 107, 0.18); box-shadow: var(--shadow-xs);
+}
+.jl-swatch-name { font: 500 11px/1 var(--font-sans); color: var(--color-muted); text-align: center; }
+
+/* Friday "arrive anytime" illustrated line */
+.jl-arrival { margin: 2px 0 var(--space-5); text-align: center; }
+.jl-arrival-svg { width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto 8px; overflow: visible; }
+.jl-arrival-path {
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: jl-arrival-draw 2s var(--ease-out) 0.15s forwards;
+}
+@keyframes jl-arrival-draw { to { stroke-dashoffset: 0; } }
+.jl-arrival-start { opacity: 0; animation: jl-arrival-fade 0.4s ease 0.15s forwards; }
+.jl-arrival-sun   { opacity: 0; animation: jl-arrival-fade 0.5s var(--ease-out) 1.9s forwards; }
+@keyframes jl-arrival-fade { to { opacity: 1; } }
+.jl-arrival-label strong { display: block; font-family: var(--font-serif); font-weight: 500; font-size: 21px; line-height: 1.2; color: var(--fg-display); }
+.jl-arrival-label span { font: 14px/1.5 var(--font-sans); color: var(--color-muted); }
+@media (prefers-reduced-motion: reduce) {
+  .jl-arrival-path { animation: none; stroke-dashoffset: 0; }
+  .jl-arrival-start, .jl-arrival-sun { animation: none; opacity: 1; }
+}
 
 /* ---------- Venue ---------- */
 .jl-venue-grid {
