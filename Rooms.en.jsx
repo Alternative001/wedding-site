@@ -72,12 +72,33 @@ const roomMailto = (room) =>
     ' — at Forte Benedek.\n\nName:\nArrival:\nDeparture:\n\nThank you!'
   );
 
-const RoomCard = ({ room }) => (
+const RoomCard = ({ room }) => {
+  const [idx, setIdx] = React.useState(0);
+  const count = room.images.length;
+  const onScroll = (e) => {
+    const el = e.currentTarget;
+    const stride = el.scrollWidth / count;
+    const i = stride ? Math.min(count - 1, Math.round(el.scrollLeft / stride)) : 0;
+    setIdx((p) => (p === i ? p : i));
+  };
+  return (
   <div className="jl-room-card">
-    <div className="jl-room-gallery">
-      {room.images.map((src, i) => (
-        <img key={i} src={src} alt={room.title + ' (' + (i + 1) + ')'} loading="lazy" />
-      ))}
+    <div className="jl-room-gallery-wrap">
+      <div className="jl-room-gallery" onScroll={onScroll}>
+        {room.images.map((src, i) => (
+          <img key={i} src={src} alt={room.title + ' (' + (i + 1) + ')'} loading="lazy" />
+        ))}
+      </div>
+      {count > 1 && (
+        <span className="jl-room-count" aria-hidden="true">{idx + 1} / {count}</span>
+      )}
+      {count > 1 && (
+        <div className="jl-room-dots" aria-hidden="true">
+          {room.images.map((_, i) => (
+            <span key={i} className={'jl-room-dot' + (i === idx ? ' is-active' : '')} />
+          ))}
+        </div>
+      )}
     </div>
     <div className="jl-room-body">
       <div className="jl-room-kicker">{room.name}</div>
@@ -100,7 +121,8 @@ const RoomCard = ({ room }) => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
 const RoomsModal = ({ open, onClose }) => {
   React.useEffect(() => {
