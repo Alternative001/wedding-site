@@ -1,4 +1,5 @@
-// RSVP.jsx — yes/no, arrival day, per-adult name fields, kids count, shuttle, confetti on submit
+// RSVP.jsx — yes/no, arrival day, per-adult names, kids + ages, room request,
+// a (very persuasive) decline flow, and confetti on a "yes".
 const initial = () => ({
   email: '',
   attending: '',          // 'yes' | 'no'
@@ -6,10 +7,13 @@ const initial = () => ({
   adultCount: 1,
   adultNames: [''],
   kidsCount: 0,
+  kidsAges: [],
   diet: '',
   wantRoom: false,
   room: '',
   message: '',
+  noStage: 0,             // decline funnel: 0 → 1 → 2 (timer) → 3 (reason)
+  noReason: '',
 });
 
 const Stepper = ({ label, value, onChange, min = 0, max = 10, note }) => (
@@ -41,7 +45,11 @@ const Stepper = ({ label, value, onChange, min = 0, max = 10, note }) => (
 const RSVP = () => {
   const [form, setForm] = React.useState(initial);
   const [submitted, setSubmitted] = React.useState(false);
+  const [seconds, setSeconds] = React.useState(8);
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  const setAttending = (v) =>
+    setForm((f) => ({ ...f, attending: v, noStage: 0, noReason: '' }));
 
   const setAdultCount = (n) => {
     setForm((f) => {
@@ -57,14 +65,38 @@ const RSVP = () => {
       return { ...f, adultNames: names };
     });
   };
+  const setKidsCount = (n) => {
+    setForm((f) => {
+      const ages = f.kidsAges.slice(0, n);
+      while (ages.length < n) ages.push('');
+      return { ...f, kidsCount: n, kidsAges: ages };
+    });
+  };
+  const setKidAge = (i, v) => {
+    setForm((f) => {
+      const ages = [...f.kidsAges];
+      ages[i] = v;
+      return { ...f, kidsAges: ages };
+    });
+  };
+
+  // Decline funnel countdown: once they insist (stage 2), tick 8 → 0, then
+  // reveal the "why" field (stage 3).
+  React.useEffect(() => {
+    if (form.noStage !== 2) return;
+    if (seconds <= 0) { set('noStage', 3); return; }
+    const t = setTimeout(() => setSeconds((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [form.noStage, seconds]);
 
   const canSubmit =
     form.attending &&
     form.email &&
-    (form.attending === 'no' || (
-      form.adultNames.every((n) => n.trim().length > 0) &&
-      form.arrivalDay !== ''
-    ));
+    (form.attending === 'no'
+      ? (form.noStage >= 3 && form.noReason.trim().length > 0)
+      : (form.adultNames.every((n) => n.trim().length > 0) &&
+         form.arrivalDay !== '' &&
+         (form.kidsCount === 0 || form.kidsAges.every((a) => String(a).trim().length > 0))));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -127,13 +159,49 @@ const RSVP = () => {
                 type="button"
                 key={v}
                 className={`jl-radio-btn ${form.attending === v ? 'is-active' : ''}`}
-                onClick={() => set('attending', v)}
+                onClick={() => setAttending(v)}
               >
                 {l}
               </button>
             ))}
           </div>
         </div>
+
+        {form.attending === 'no' && (
+          <div className="jl-field jl-field-full jl-decline">
+            <p className="jl-decline-line">Absagen sind leider nicht erlaubt. 🙈</p>
+
+            {form.noStage === 0 && (
+              <button type="button" className="jl-btn jl-btn-secondary jl-btn-sm"
+                onClick={() => set('noStage', 1)}>
+                Ich kann wirklich, wirklich nicht kommen
+              </button>
+            )}
+
+            {form.noStage >= 1 && (
+              <p className="jl-decline-line">Aber wir wollen Euch unbedingt dabei haben! 💛</p>
+            )}
+            {form.noStage === 1 && (
+              <button type="button" className="jl-btn jl-btn-secondary jl-btn-sm"
+                onClick={() => { setSeconds(8); set('noStage', 2); }}>
+                Meine Meinung steht fest. Ich werde nicht kommen.
+              </button>
+            )}
+
+            {form.noStage === 2 && (
+              <p className="jl-decline-line">
+                Wir geben Euch etwas Zeit zum Überlegen … <strong>{seconds}s</strong>
+              </p>
+            )}
+
+            {form.noStage >= 3 && (
+              <div className="jl-field jl-field-full">
+                <label>Sag uns, warum Du wirklich nicht kommen kannst</label>
+                <textarea required value={form.noReason} onChange={(e) => set('noReason', e.target.value)} rows="3" placeholder="Der Grund muss schon ziemlich gut sein …" />
+              </div>
+            )}
+          </div>
+        )}
 
         {form.attending === 'yes' && (
           <>
@@ -169,10 +237,9 @@ const RSVP = () => {
               <Stepper
                 label="Kinder / Babys"
                 value={form.kidsCount}
-                onChange={(v) => set('kidsCount', v)}
+                onChange={setKidsCount}
                 min={0}
                 max={6}
-                note="0–14 Jahre"
               />
             </div>
 
@@ -192,6 +259,28 @@ const RSVP = () => {
                 ))}
               </div>
             </div>
+
+            {form.kidsCount > 0 && (
+              <div className="jl-field jl-field-full">
+                <label>Alter der Kinder zur Hochzeit</label>
+                <div className="jl-names-list">
+                  {form.kidsAges.map((age, i) => (
+                    <div key={i} className="jl-named-row">
+                      <span className="jl-named-num">{i + 1}</span>
+                      <input
+                        required
+                        type="number"
+                        min="0"
+                        max="17"
+                        value={age}
+                        onChange={(e) => setKidAge(i, e.target.value)}
+                        placeholder={`Alter Kind ${i + 1}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="jl-field jl-field-full">
               <label>Besondere Wünsche beim Essen?</label>

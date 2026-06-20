@@ -1,60 +1,66 @@
 // Rooms.jsx — room overview pop-up (German). Shared by the Venue card and the
 // RSVP "room at the Forte" tick. Opened via window.jlOpenRooms() (see App.jsx).
 
-// Swap `img` for an asset path (e.g. "assets/rooms/zimmer-1.jpg") to replace the
-// placeholder tile. `name` is the short label (RSVP selector + card kicker),
-// `title` the room type.
+const ROOM_BASE = 'assets/Rooms/';
+const AMENITIES = [
+  'Zimmerservice',
+  'Satellitenfernsehen & professionelles Telefon',
+  'Safe & Minibar',
+  'Holzboden',
+  'Zugang zum K Club',
+  'Privates türkisches Bad',
+];
+const ROOM_DESC =
+  'King-Size-Bett mit Schwebe-Effekt und gemütliches Badezimmer mit extragroßer Dusche, ' +
+  'Regen-Duschkopf und emotionalem Wasserfall. Ausgestattet mit luxuriösen Stoffen und ' +
+  'natürlichen Eichen- und Steinböden. Für die Gäste: Wasserkocher mit Kräutertee-Ecke, ' +
+  'Klimaanlage, Flachbildschirm-TV und WLAN, Kleiderschrank mit Minibar und Safe, weiche ' +
+  'Bademäntel, Hausschuhe und eine Pflegelinie von John Richmond.';
+
 const JL_ROOMS = [
   {
     id: 'zimmer-1',
     name: 'Zimmer 1',
     title: 'King Superior Spa mit Garten oder Balkon',
     price: '1.000 € · 2 Nächte · inkl. Frühstück',
-    img: null,
-    desc:
-      'Design-Zimmer mit privatem Garten oder Balkon. King-Size-Bett mit Schwebe-Effekt und ' +
-      'gemütliches Badezimmer mit extragroßer Dusche, Regen-Duschkopf und emotionalem Wasserfall. ' +
-      'Ausgestattet mit luxuriösen Stoffen und natürlichen Eichen- und Steinböden. Für die Gäste: ' +
-      'Wasserkocher mit Kräutertee-Ecke, Klimaanlage, Flachbildschirm-TV und WLAN, Kleiderschrank ' +
-      'mit Minibar und Safe, weiche Bademäntel, Hausschuhe und eine Pflegelinie von John Richmond.',
-    details: [
-      'Zimmerservice',
-      'Satellitenfernsehen & professionelles Telefon',
-      'Safe & Minibar',
-      'Holzboden',
-      'Zugang zum K Club',
-      'Privates türkisches Bad',
-    ],
+    intro: 'Design-Zimmer mit privatem Garten oder Balkon.',
+    desc: ROOM_DESC,
+    details: AMENITIES,
+    images: [ROOM_BASE + 'r1-1.jpg', ROOM_BASE + 'r1-2.jpg', ROOM_BASE + 'r1-3.jpg', ROOM_BASE + 'r1-4.jpg'],
+    layout: ROOM_BASE + 'r1-layout.jpg',
   },
   {
     id: 'zimmer-2',
     name: 'Zimmer 2',
-    title: 'Junior Suite Spa mit Spiegeln und großem Fenster',
-    price: 'Preis auf Anfrage',
-    img: null,
-    desc:
-      'Design-Zimmer mit einem großen Fenster. King-Size-Bett mit Schwebe-Effekt und gemütliches ' +
-      'Badezimmer mit extragroßer Dusche, Regen-Duschkopf und emotionalem Wasserfall. Ausgestattet ' +
-      'mit luxuriösen Stoffen und natürlichen Eichen- und Steinböden. Für die Gäste: Wasserkocher ' +
-      'mit Kräutertee-Ecke, Klimaanlage, Flachbildschirm-TV und WLAN, Kleiderschrank mit Minibar ' +
-      'und Safe, weiche Bademäntel, Hausschuhe und eine Pflegelinie von John Richmond.',
-    details: [
-      'Zimmerservice',
-      'Satellitenfernsehen & professionelles Telefon',
-      'Safe & Minibar',
-      'Holzboden',
-      'Zugang zum K Club',
-      'Privates türkisches Bad',
-    ],
+    title: 'Junior Suite Spa mit großem Fenster',
+    price: '5.000 € · 2 Nächte · inkl. Frühstück',
+    intro: 'Design-Zimmer mit einem großen Fenster.',
+    desc: ROOM_DESC,
+    details: AMENITIES,
+    images: [ROOM_BASE + 'r2-1.jpg', ROOM_BASE + 'r2-2.jpg', ROOM_BASE + 'r2-3.jpg', ROOM_BASE + 'r2-4.jpg', ROOM_BASE + 'r2-5.jpg'],
+    layout: ROOM_BASE + 'r2-layout.jpg',
   },
   {
     id: 'zimmer-3',
     name: 'Zimmer 3',
-    title: 'Weiteres Zimmer',
-    price: 'Preis auf Anfrage',
-    img: null,
-    desc: 'Details folgen in Kürze.',
-    details: [],
+    title: 'Junior Suite Spa mit Garten oder Balkon',
+    price: '10.000 € · 2 Nächte · inkl. Frühstück',
+    intro: 'Design-Zimmer mit privatem Garten oder Balkon.',
+    desc: ROOM_DESC,
+    details: AMENITIES,
+    images: [ROOM_BASE + 'r3-1.jpg', ROOM_BASE + 'r3-2.jpg', ROOM_BASE + 'r3-3.jpg', ROOM_BASE + 'r3-4.jpg'],
+    layout: ROOM_BASE + 'r3-layout.jpg',
+  },
+  {
+    id: 'zimmer-4',
+    name: 'Zimmer 4',
+    title: 'Junior Suite Spa mit privatem Jacuzzi',
+    price: '50.000 € · 2 Nächte · inkl. Frühstück',
+    intro: 'Design-Zimmer mit privatem Garten oder Balkon. Im Zimmer befinden sich Kunstwerke des Veroneser Malers Antonio Amodio.',
+    desc: ROOM_DESC,
+    details: AMENITIES.concat(['Privater Jacuzzi']),
+    images: [ROOM_BASE + 'r4-1.jpg', ROOM_BASE + 'r4-2.jpg', ROOM_BASE + 'r4-3.jpg', ROOM_BASE + 'r4-4.jpg', ROOM_BASE + 'r4-5.jpg'],
+    layout: ROOM_BASE + 'r4-layout.jpg',
   },
 ];
 
@@ -66,6 +72,36 @@ const roomMailto = (room) =>
     'Hallo Lisa & Julian,\n\nwir würden gern ' + room.name + ' — ' + room.title +
     ' — am Forte Benedek anfragen.\n\nName:\nAnreise:\nAbreise:\n\nLiebe Grüße'
   );
+
+const RoomCard = ({ room }) => (
+  <div className="jl-room-card">
+    <div className="jl-room-gallery">
+      {room.images.map((src, i) => (
+        <img key={i} src={src} alt={room.title + ' (' + (i + 1) + ')'} loading="lazy" />
+      ))}
+    </div>
+    <div className="jl-room-body">
+      <div className="jl-room-kicker">{room.name}</div>
+      <h4 className="jl-room-name">{room.title}</h4>
+      <p className="jl-room-desc">{room.intro} {room.desc}</p>
+      <ul className="jl-room-details">
+        {room.details.map((d, i) => <li key={i}>{d}</li>)}
+      </ul>
+      {room.layout && (
+        <figure className="jl-room-layout">
+          <img src={room.layout} alt={'Grundriss ' + room.title} loading="lazy" />
+          <figcaption>Grundriss</figcaption>
+        </figure>
+      )}
+      <div className="jl-room-foot">
+        <span className="jl-room-price">{room.price}</span>
+        <a className="jl-btn jl-btn-primary jl-btn-sm" href={roomMailto(room)}>
+          Dieses Zimmer anfragen
+        </a>
+      </div>
+    </div>
+  </div>
+);
 
 const RoomsModal = ({ open, onClose }) => {
   React.useEffect(() => {
@@ -103,29 +139,7 @@ const RoomsModal = ({ open, onClose }) => {
         </div>
 
         <div className="jl-room-list">
-          {JL_ROOMS.map((r) => (
-            <div key={r.id} className="jl-room-card">
-              <div className="jl-room-photo">
-                {r.img ? <img src={r.img} alt={r.title} /> : <span>Foto folgt</span>}
-              </div>
-              <div className="jl-room-body">
-                <div className="jl-room-kicker">{r.name}</div>
-                <h4 className="jl-room-name">{r.title}</h4>
-                <p className="jl-room-desc">{r.desc}</p>
-                {r.details.length > 0 && (
-                  <ul className="jl-room-details">
-                    {r.details.map((d, i) => <li key={i}>{d}</li>)}
-                  </ul>
-                )}
-                <div className="jl-room-foot">
-                  <span className="jl-room-price">{r.price}</span>
-                  <a className="jl-btn jl-btn-primary jl-btn-sm" href={roomMailto(r)}>
-                    Dieses Zimmer anfragen
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
+          {JL_ROOMS.map((r) => <RoomCard key={r.id} room={r} />)}
         </div>
 
         <p className="jl-modal-note">

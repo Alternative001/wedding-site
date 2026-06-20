@@ -848,15 +848,30 @@ button.jl-link:hover { color: var(--link-hover); border-color: var(--link-hover)
   border-radius: var(--radius-md);
   overflow: hidden;
 }
-.jl-room-photo {
-  aspect-ratio: 16 / 9;
-  background: var(--pattern-stripes-yellow);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--color-cobalt); font: 500 13px/1 var(--font-sans);
-  letter-spacing: 0.04em;
+/* Swipeable photo gallery (CSS scroll-snap, no JS) */
+.jl-room-gallery {
+  display: flex; gap: 4px;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  background: var(--color-paper);
 }
-.jl-room-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.jl-room-gallery img {
+  flex: 0 0 100%; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
+  scroll-snap-align: center; display: block;
+}
 .jl-room-body { padding: var(--space-4) var(--space-5) var(--space-5); }
+/* Floor plan */
+.jl-room-layout { margin: var(--space-4) 0 0; }
+.jl-room-layout img {
+  width: 100%; max-width: 380px; display: block; margin: 0 auto;
+  border: 1px solid var(--border-soft); border-radius: var(--radius-sm);
+  background: #fff;
+}
+.jl-room-layout figcaption {
+  text-align: center; margin-top: 6px;
+  font: 500 11px/1 var(--font-sans); text-transform: uppercase;
+  letter-spacing: var(--tracking-wide); color: var(--color-muted);
+}
 .jl-room-kicker {
   font: 500 12px/1 var(--font-sans); text-transform: uppercase;
   letter-spacing: var(--tracking-wide); color: var(--color-cobalt); margin-bottom: 4px;
@@ -881,6 +896,20 @@ button.jl-link:hover { color: var(--link-hover); border-color: var(--link-hover)
 .jl-btn-sm { padding: 10px 18px; font-size: 13px; }
 
 .jl-room-pick-link { margin-top: 12px; display: inline-block; }
+
+/* ── RSVP decline funnel ──────────────────────────────────────────────────── */
+.jl-decline {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: var(--space-3);
+  background: var(--color-lemon-50);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+.jl-decline-line { margin: 0; font-size: 15px; color: var(--color-charcoal); }
+.jl-decline-line strong { color: var(--color-cobalt); }
+.jl-decline > .jl-field { width: 100%; }
+.jl-decline .jl-btn-sm { align-self: flex-start; }
 
 @media (max-width: 560px) {
   .jl-modal { padding: var(--space-6) var(--space-4) var(--space-5); }
