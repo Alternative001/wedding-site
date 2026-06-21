@@ -386,7 +386,24 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   color: var(--color-cream);
   box-shadow: var(--shadow-md);
 }
-.jl-day-tab.is-featured.is-active { background: var(--color-cobalt); }
+/* Saturday — the big day — is an arched, striped "invitation" tab */
+.jl-day-tab.is-featured {
+  border-radius: var(--radius-arch);
+  background: var(--pattern-stripes-yellow);
+  border: 1.5px solid var(--color-cobalt);
+  color: var(--color-ink);
+  align-items: center;
+  text-align: center;
+  padding-top: 24px;
+}
+.jl-day-tab.is-featured .jl-day-tab-label { color: var(--color-cobalt); }
+.jl-day-tab.is-featured.is-active {
+  background: var(--pattern-stripes-yellow);
+  border-color: var(--color-cobalt);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-md);
+}
+.jl-day-tab.is-featured.is-active .jl-day-tab-label { color: var(--color-cobalt); }
 .jl-day-tab-day { font: 500 14px/1 var(--font-sans); letter-spacing: 0.04em; }
 .jl-day-tab-date { font: 500 22px/1.1 var(--font-serif); }
 .jl-day-tab-label {
