@@ -14,7 +14,7 @@
   <link rel="prefetch" as="script" crossorigin="anonymous" href="https://unpkg.com/react@18.3.1/umd/react.production.min.js" />
   <link rel="prefetch" as="script" crossorigin="anonymous" href="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" />
   <link rel="prefetch" as="script" crossorigin="anonymous" href="https://unpkg.com/lucide@latest" />
-  <link rel="prefetch" href="site.css?v=16" />
+  <link rel="prefetch" href="site.css?v=17" />
 
   <!-- Resources referenced as STRINGS — lifted for standalone bundling -->
   <meta name="ext-resource-dependency" content="assets/lemon.png" data-resource-id="lemonHero" />
@@ -251,14 +251,24 @@
     }
     .gate-hint-text {
       display: none;
-      font: italic 13px/1.5 var(--font-serif);
-      color: var(--color-muted);
-      margin-top: 6px;
-      max-width: 36ch;
-      margin-left: auto;
-      margin-right: auto;
+      font: italic 13.5px/1.55 var(--font-serif);
+      color: var(--color-ink);
+      margin: 10px auto 0;
+      max-width: 34ch;
+      padding: 10px 14px;
+      background: var(--color-lemon-50, #FFFBEC);
+      border: 1px solid var(--color-lemon-200, #FCE789);
+      border-radius: 12px;
     }
-    .gate-hint-text.is-open { display: block; }
+    .gate-hint-text.is-open {
+      display: block;
+      animation: gate-hint-in 0.28s ease;
+    }
+    .gate-hint-text a { color: var(--color-cobalt); font-style: normal; font-weight: 600; }
+    @keyframes gate-hint-in {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
     /* Tiny script flourish at top */
     .gate-private {

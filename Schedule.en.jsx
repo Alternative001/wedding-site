@@ -6,8 +6,10 @@ const SCHEDULE = [
     label: 'Arrive',
     arrival: true,
     items: [
+      { time: 'from 12 noon', title: 'Arrival', note: 'Drift in across the day — whenever it suits you.' },
       { time: 'all day', title: 'Pool day', note: 'Sun loungers, Spritz, swimwear — the whole day belongs to the pool.' },
       { time: '18:00', title: 'Pizza night', note: 'Tables under the olive trees. Pizza and two hours of wine are on us 🍕🍷' },
+      { time: 'later', title: 'Stay as long as you like', note: 'But make sure you’re ready for the big day tomorrow — get your rest in time. 😴' },
     ],
     dress: {
       title: 'All in White',
@@ -15,8 +17,8 @@ const SCHEDULE = [
       swatches: [
         { name: 'White', hex: '#FFFFFF' },
         { name: 'Cream', hex: '#FBF6EC' },
+        { name: 'Champagne', hex: '#F1E7CF' },
         { name: 'Beige', hex: '#E7D6BC' },
-        { name: 'Sand', hex: '#D8C49E' },
       ],
     },
   },
@@ -104,9 +106,20 @@ const Schedule = () => {
         {day.arrival && (
           <div className="jl-arrival">
             <svg className="jl-arrival-svg" viewBox="0 0 620 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path className="jl-arrival-path" pathLength="1" d="M 12,44 C 130,44 150,18 260,24 S 440,52 600,20" stroke="#1E47B5" strokeWidth="2.5" strokeLinecap="round" />
+              <path id="jlArrivalPath" className="jl-arrival-path" pathLength="1" d="M 12,44 C 130,44 150,18 260,24 S 440,52 600,20" stroke="#1E47B5" strokeWidth="2.5" strokeLinecap="round" />
               <circle className="jl-arrival-start" cx="12" cy="44" r="4" fill="#1E47B5" />
               <circle className="jl-arrival-sun" cx="600" cy="20" r="8" fill="#F8D34A" stroke="#1E47B5" strokeWidth="1.5" />
+              <g className="jl-arrival-floatie">
+                <animateMotion dur="11s" begin="0.4s" repeatCount="indefinite" rotate="0" calcMode="linear">
+                  <mpath href="#jlArrivalPath" />
+                </animateMotion>
+                <ellipse cx="0" cy="0" rx="9.5" ry="4.6" fill="#F8D34A" stroke="#1E47B5" strokeWidth="1.3" />
+                <ellipse cx="0" cy="0" rx="4.2" ry="2" fill="#FFFBF2" />
+                <circle cx="-1.2" cy="-3.4" r="2.3" fill="#0E2A6B" />
+                <line x1="1.4" y1="-2.2" x2="6.8" y2="-5.2" stroke="#0E2A6B" strokeWidth="1.3" strokeLinecap="round" />
+                <circle cx="7.4" cy="-5.8" r="1.7" fill="#F2792B" />
+                <line x1="7.4" y1="-7.2" x2="7.4" y2="-9" stroke="#0E2A6B" strokeWidth="0.9" strokeLinecap="round" />
+              </g>
             </svg>
             <div className="jl-arrival-label">
               <strong>Arrive whenever you like</strong>
@@ -144,7 +157,7 @@ const Schedule = () => {
       </div>
 
       {day.dress && (
-        <div className="jl-dresscode">
+        <div className={`jl-dresscode ${switching ? 'is-switching' : ''}`}>
           <div className="jl-eyebrow">Dress code · {day.day}</div>
           <div className="jl-dresscode-head">{day.dress.title}</div>
           <div className="jl-dresscode-body">{day.dress.text}</div>

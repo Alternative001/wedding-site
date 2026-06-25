@@ -440,6 +440,7 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 
 .jl-timeline { list-style: none; padding: 0; margin: 0; }
 .jl-timeline-row {
+  position: relative;
   display: grid;
   grid-template-columns: 92px 24px 1fr;
   gap: var(--space-3);
@@ -448,7 +449,20 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   border-bottom: 1px dashed var(--border-soft);
 }
 .jl-timeline-row:last-child { border-bottom: 0; padding-bottom: 0; }
-.jl-timeline-row:first-child { padding-top: 4px; }
+/* Continuous spine: each row but the last draws the line from its own dot
+   down to the next dot, so it never stops short on a tall (wrapped) row.
+   116px = 92px time col + 12px gap + 12px (half the 24px dot col); 26px = the
+   dot's vertical centre (14px padding + 6px dot margin + 6px half-dot). */
+.jl-timeline-row:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 116px;
+  top: 26px;
+  bottom: -26px;
+  width: 1px;
+  background: var(--border-mid);
+  transform: translateX(-50%);
+}
 .jl-timeline-time {
   font: 500 13px/1.4 var(--font-sans);
   letter-spacing: 0.06em;
@@ -461,13 +475,7 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   border: 2px solid var(--color-cobalt);
   margin: 6px auto 0;
   position: relative;
-}
-.jl-timeline-row:not(:last-child) .jl-timeline-dot::after {
-  content: '';
-  position: absolute; left: 50%; top: 100%;
-  width: 1px; height: 36px;
-  background: var(--border-mid);
-  transform: translateX(-50%);
+  z-index: 1;
 }
 .jl-timeline-title { font: 500 17px/1.3 var(--font-serif); color: var(--color-ink); letter-spacing: 0.01em; }
 .jl-timeline-note { font: 14px/1.45 var(--font-sans); color: var(--color-muted); margin-top: 2px; }
@@ -478,7 +486,9 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   border: 1px solid var(--color-lemon-200);
   border-radius: 14px;
   padding: 18px 22px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
+.jl-dresscode.is-switching { opacity: 0; transform: translateY(8px); }
 .jl-dresscode-head { font-family: var(--font-serif); font-weight: 500; font-size: 21px; color: var(--fg-display); margin-top: 2px; }
 .jl-dresscode-body { font: 15px/1.55 var(--font-sans); color: var(--color-charcoal); margin-top: 6px; }
 
@@ -504,9 +514,13 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 @keyframes jl-arrival-fade { to { opacity: 1; } }
 .jl-arrival-label strong { display: block; font-family: var(--font-serif); font-weight: 500; font-size: 21px; line-height: 1.2; color: var(--fg-display); }
 .jl-arrival-label span { font: 14px/1.5 var(--font-sans); color: var(--color-muted); }
+/* Floatie (person on a pool ring with a Spritz) drifting along the curve.
+   It rides the path via SVG <animateMotion>, so it scales with the graphic. */
+.jl-arrival-floatie { opacity: 0; animation: jl-arrival-fade 0.6s ease 1.6s forwards; }
 @media (prefers-reduced-motion: reduce) {
   .jl-arrival-path { animation: none; stroke-dashoffset: 0; }
-  .jl-arrival-start, .jl-arrival-sun { animation: none; opacity: 1; }
+  .jl-arrival-start, .jl-arrival-sun, .jl-arrival-floatie { animation: none; opacity: 1; }
+  .jl-arrival-floatie { display: none; }
 }
 
 /* ---------- Venue ---------- */
