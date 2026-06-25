@@ -57,7 +57,7 @@ const SCHEDULE = [
 ];
 
 const Schedule = () => {
-  const [activeDay, setActiveDay] = React.useState(1);
+  const [activeDay, setActiveDay] = React.useState(0);
   const [switching, setSwitching] = React.useState(false);
 
   const switchDay = (i) => {

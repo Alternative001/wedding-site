@@ -363,10 +363,11 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 /* ---------- Schedule ---------- */
 .jl-day-tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1.32fr 1fr;
+  align-items: center;
   gap: var(--space-3);
   margin: 0 auto var(--space-6);
-  max-width: 720px;
+  max-width: 760px;
 }
 .jl-day-tab {
   background: var(--bg-surface);
@@ -386,7 +387,9 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   color: var(--color-cream);
   box-shadow: var(--shadow-md);
 }
-/* Saturday — the big day — is an arched, striped "invitation" tab */
+/* Saturday — the big day — is an arched, striped "invitation" tab, and the
+   biggest of the three: a wider grid column + extra padding so the arch rises
+   above and drops below its plainer neighbours. */
 .jl-day-tab.is-featured {
   border-radius: var(--radius-arch);
   background: var(--pattern-stripes-yellow);
@@ -394,9 +397,12 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   color: var(--color-ink);
   align-items: center;
   text-align: center;
-  padding-top: 24px;
+  padding: 34px 22px 24px;
+  gap: 4px;
 }
-.jl-day-tab.is-featured .jl-day-tab-label { color: var(--color-cobalt); }
+.jl-day-tab.is-featured .jl-day-tab-day { font-size: 16px; }
+.jl-day-tab.is-featured .jl-day-tab-date { font-size: 30px; }
+.jl-day-tab.is-featured .jl-day-tab-label { color: var(--color-cobalt); margin-top: 8px; }
 .jl-day-tab.is-featured.is-active {
   background: var(--pattern-stripes-yellow);
   border-color: var(--color-cobalt);
