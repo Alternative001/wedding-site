@@ -520,13 +520,19 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 @keyframes jl-arrival-fade { to { opacity: 1; } }
 .jl-arrival-label strong { display: block; font-family: var(--font-serif); font-weight: 500; font-size: 21px; line-height: 1.2; color: var(--fg-display); }
 .jl-arrival-label span { font: 14px/1.5 var(--font-sans); color: var(--color-muted); }
-/* Floatie (person on a pool ring with a Spritz) drifting along the curve.
-   It rides the path via SVG <animateMotion>, so it scales with the graphic. */
-.jl-arrival-floatie { opacity: 0; animation: jl-arrival-fade 0.6s ease 1.6s forwards; }
+/* A little cast of pool floats drifts along the curve. Each rides the path via
+   SVG <animateMotion> (so it scales with the graphic), bobs on the water, and
+   trails a fading ripple wake. See ArrivalFloaties.jsx for the riders. */
+.jl-arrival-floaties { opacity: 0; animation: jl-arrival-fade 0.6s ease 1.4s forwards; }
+.jl-bob { transform-box: fill-box; animation: jl-bob 2.8s ease-in-out infinite; }
+@keyframes jl-bob { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-3px); } }
+.jl-rip { transform-box: fill-box; transform-origin: center; animation: jl-rip 2s linear infinite; }
+.jl-rip2 { animation-delay: 1s; }
+@keyframes jl-rip { 0% { opacity: 0.5; transform: scale(0.5); } 100% { opacity: 0; transform: scale(1.8); } }
 @media (prefers-reduced-motion: reduce) {
   .jl-arrival-path { animation: none; stroke-dashoffset: 0; }
-  .jl-arrival-start, .jl-arrival-sun, .jl-arrival-floatie { animation: none; opacity: 1; }
-  .jl-arrival-floatie { display: none; }
+  .jl-arrival-start, .jl-arrival-sun, .jl-arrival-floaties { animation: none; opacity: 1; }
+  .jl-bob, .jl-rip { animation: none; }
 }
 
 /* ---------- Venue ---------- */
