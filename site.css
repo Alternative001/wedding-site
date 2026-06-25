@@ -405,9 +405,14 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 .jl-day-tab.is-featured .jl-day-tab-label { color: var(--color-cobalt); margin-top: 8px; }
 .jl-day-tab.is-featured.is-active {
   background: var(--pattern-stripes-yellow);
-  border-color: var(--color-cobalt);
+  border: 2px solid var(--color-cobalt);
   color: var(--color-ink);
-  box-shadow: var(--shadow-md);
+  animation: jl-arch-glow 2.4s ease-in-out infinite;
+}
+/* Selected Saturday gets an evident, gently pulsing golden glow */
+@keyframes jl-arch-glow {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(248, 211, 74, 0.45), 0 3px 12px rgba(216, 154, 5, 0.28); }
+  50%      { box-shadow: 0 0 0 5px rgba(248, 211, 74, 0.7),  0 5px 20px rgba(216, 154, 5, 0.5); }
 }
 .jl-day-tab.is-featured.is-active .jl-day-tab-label { color: var(--color-cobalt); }
 .jl-day-tab-day { font: 500 14px/1 var(--font-sans); letter-spacing: 0.04em; }
@@ -870,7 +875,7 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 .jl-day-tab.is-featured:not(.is-active) {
   filter: saturate(0.28);
   opacity: 0.9;
-  border-color: var(--color-cobalt);
+  border-color: var(--border-mid);
   animation: tabPulse 2s ease-in-out 1.6s 3;
 }
 @keyframes tabPulse {
