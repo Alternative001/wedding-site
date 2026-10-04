@@ -351,6 +351,14 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 @media (max-width: 760px) {
   .jl-story-grid { grid-template-columns: 1fr; }
 }
+.jl-story-media {
+  width: 100%;
+  display: block;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+}
 .jl-prose p {
   font: 17px/1.7 var(--font-sans);
   color: var(--color-charcoal);
@@ -601,9 +609,14 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
 .jl-faq-q i { color: var(--color-cobalt); transition: transform 200ms var(--ease-out); }
 .jl-faq-item.is-open .jl-faq-q i { transform: rotate(90deg); }
 .jl-faq-a { padding: 0 4px 22px; font: 16px/1.65 var(--font-sans); color: var(--color-charcoal); max-width: 60ch; }
+.jl-faq-contacts { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.jl-faq-contacts li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.jl-faq-contacts a { color: var(--color-cobalt); text-decoration: none; border-bottom: 1px solid currentColor; }
 
 /* ---------- RSVP ---------- */
 .jl-rsvp-deadline { font: italic 16px/1 var(--font-serif); color: var(--color-lemon-200); margin-top: 8px; }
+.jl-rsvp-note { font: 14px/1.55 var(--font-sans); color: rgba(255, 251, 242, 0.82); margin: 0; }
+.jl-rsvp-note + .jl-field, .jl-field + .jl-rsvp-note { margin-top: 0; }
 .jl-rsvp {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -909,6 +922,19 @@ body { margin: 0; background: var(--bg-page); font-family: var(--font-sans); col
   padding-right: var(--space-5);
   box-sizing: border-box;
 }
+#venue > .jl-venue-intro {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+  box-sizing: border-box;
+}
+.jl-venue-intro p {
+  font: 17px/1.7 var(--font-sans);
+  color: var(--color-charcoal);
+  margin: 0 0 var(--space-4);
+  text-wrap: pretty;
+}
+.jl-venue-intro p:last-child { margin-bottom: 0; }
 .jl-venue-map {
   margin: var(--space-6) 0 var(--space-7);   /* full width of the section = edge to edge */
 }

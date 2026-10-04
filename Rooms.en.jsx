@@ -155,7 +155,8 @@ const RoomsModal = ({ open, onClose }) => {
           <h3 id="jl-rooms-title" className="jl-h3">Rooms at Forte Benedek</h3>
           <p className="jl-modal-intro">
             We’ve booked the entire estate — there are still <strong>around 10 rooms</strong> right
-            at the venue. First come, first served.
+            at the venue. First come, first served. All prices cover
+            <strong> both nights (Fri–Sun), breakfast included</strong>.
           </p>
         </div>
 

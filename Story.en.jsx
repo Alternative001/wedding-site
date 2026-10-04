@@ -9,19 +9,16 @@ const Story = () => (
     </div>
 
     <div className="jl-story-grid">
-      <tilt-card
-        class="jl-story-media"
-        bg="assets/3d%20picture/3d-bg.jpg"
-        layer1="assets/3d%20picture/3d-subject-1.png"
-        layer2="assets/3d%20picture/3d-subject-2.png"
-        ratio="1448 / 1086"
-        radius="14"
+      <img
+        className="jl-story-media"
+        src="assets/Lisa%20n%20Julian%20Selfie.jpg"
         alt="Lisa and Julian"
-      ></tilt-card>
+        loading="lazy"
+      />
 
       <div className="jl-prose">
         <p>
-          For over five years Dubai has been home — and honestly, we rarely miss
+          For over six years Dubai has been home — and honestly, we rarely miss
           the European summer from there. That's why we decided against a wedding
           closer to home and chose Italy instead: a place where the summer heat
           feels a little like arriving somewhere familiar.

@@ -139,7 +139,7 @@ const RSVP = () => {
         <h2 className="jl-h2" style={{ color: 'var(--color-cream)' }}>
           <span className="jl-script-inline" style={{ color: 'var(--color-lemon-300)' }}>Please</span> let us know
         </h2>
-        <p className="jl-rsvp-deadline">by 1 May 2027 at the latest</p>
+        <p className="jl-rsvp-deadline">by 1 February 2027 at the latest</p>
       </div>
 
       <form className="jl-rsvp" onSubmit={handleSubmit}>
@@ -320,6 +320,13 @@ const RSVP = () => {
             )}
           </>
         )}
+
+        <div className="jl-field jl-field-full">
+          <p className="jl-rsvp-note">
+            Travelling solo and open to sharing a room with another guest? Feel free to
+            mention it in the message box below — we'll try to match you up.
+          </p>
+        </div>
 
         <div className="jl-field jl-field-full">
           <label>A message for us? (optional)</label>

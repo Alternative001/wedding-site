@@ -73,6 +73,28 @@ const Venue = () => (
       </h2>
     </div>
 
+    <div className="jl-venue-intro">
+      <p>
+        Wir möchten nicht nur einen Tag mit Euch feiern, sondern das ganze Wochenende
+        so viel Zeit wie möglich gemeinsam am Lago di Garda verbringen. Deshalb haben wir
+        die Zimmer direkt an unserer Location für Euch reserviert — die ganze Anlage ist
+        für unsere Gäste gebucht.
+      </p>
+      <p>
+        Der Zimmerpreis (die Optionen seht Ihr unten) gilt für beide Nächte von Freitag
+        bis Sonntag inklusive Frühstück. Dazu laden wir Euch herzlich ein: am Freitagabend
+        zur <strong>Pizzanacht</strong> (Getränke inklusive), am Samstag zur
+        <strong> gesamten Feier</strong> und am Sonntag zum
+        <strong> gemeinsamen Frühstück</strong>.
+      </p>
+      <p>
+        Uns ist bewusst, dass eine Hochzeit am Lago Reise- und Übernachtungskosten bedeutet
+        — wir schätzen es von Herzen, dass Ihr den weiten Weg und den Aufwand auf Euch nehmt.
+        Und wer lieber woanders in der Nähe übernachtet, ist dazu natürlich völlig frei;
+        das ist absolut in Ordnung.
+      </p>
+    </div>
+
     <TravelMap />
 
     <div className="jl-venue-grid">

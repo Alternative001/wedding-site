@@ -1,24 +1,53 @@
 // FAQ.en.jsx — English accordion FAQ
+const BRIDESMAIDS = [
+  { name: 'Hanna Nyssen', display: '+971 55 147 6701', tel: '+971551476701' },
+  { name: 'Kristina Nikolendzic', display: '+971 50 886 5709', tel: '+971508865709' },
+  { name: 'Michelle Matuzzi', display: '+971 55 820 3129', tel: '+971558203129' },
+];
+
+const BridesmaidList = () => (
+  <ul className="jl-faq-contacts">
+    {BRIDESMAIDS.map((b) => (
+      <li key={b.tel}>
+        <strong>{b.name}</strong>
+        <a href={`tel:${b.tel}`}>{b.display}</a>
+        <a href={`https://wa.me/${b.tel.replace('+', '')}`} target="_blank" rel="noopener">WhatsApp</a>
+      </li>
+    ))}
+  </ul>
+);
+
 const FAQ_ITEMS = [
+  {
+    q: 'What should we gift you for your wedding?',
+    a: 'The most important thing: nothing. The fact that you’re coming to our wedding at Lago di Garda — taking on the costs, the travel and organising your stay — is more than enough for us. You truly don’t need to bring any gifts, so please don’t feel obliged to bring anything other than yourselves. Especially no physical gifts, please — we have to carry everything back to Dubai. If you nevertheless insist on giving us something, we’d be delighted by a small contribution towards our honeymoon. We’ll set up an easy way for anyone who’d like to — entirely optional. But honestly: you, your time, and being there to celebrate with us is more than enough.',
+  },
   {
     q: 'Are children welcome?',
     a: 'Sure, bring em along! Please let us know in your RSVP so we can plan accordingly.',
   },
   {
-    q: 'Is there a gift registry or wish list?',
-    a: 'Your presence is the greatest gift. If you would still like to contribute: please consider we have to fly back to Dubai, so small gifts are much appreciated.',
+    q: 'Would you like to add something to the programme — e.g. give a speech?',
+    a: (
+      <>
+        We’d love that! Please give our bridesmaids <strong>advance notice</strong> —
+        they coordinate the programme and will give you a time slot (for anything that
+        isn’t embarrassing 😉). All three speak English and German:
+        <BridesmaidList />
+      </>
+    ),
+  },
+  {
+    q: 'Where can we stay?',
+    a: 'We’ve reserved the rooms right at our venue for you — the entire estate is booked out for our guests (you’ll find prices and options above in the “at Lago di Garda” section). But you don’t have to stay with us: if you’d rather sleep somewhere else nearby, that’s completely fine — we’ve linked a few lovely alternatives up there too.',
   },
   {
     q: 'What is the weather like in late July at Lago di Garda?',
     a: 'Reliably warm — 28–32 °C during the day, mild around 22 °C in the evening. Sunglasses and a light wrap for later in the night are a good idea.',
   },
   {
-    q: 'Can you help with hotel bookings?',
-    a: 'Of course — check the accomodation section, we have listed a few options.',
-  },
-  {
     q: 'When do we need to RSVP by?',
-    a: 'By Sunday 1 Oct 2026. After that we submit the final guest list to catering and the location.',
+    a: 'By 1 February 2027. After that we submit the final guest list to catering and the location.',
   },
   {
     q: 'Are there dietary options at dinner?',

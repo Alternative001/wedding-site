@@ -6,9 +6,9 @@ const SCHEDULE = [
     label: 'Arrive',
     arrival: true,
     items: [
-      { time: 'from 12 noon', title: 'Arrival', note: 'Drift in across the day — whenever it suits you.' },
+      { time: 'from 2 pm', title: 'Arrival', note: 'Drift in across the day — whenever it suits you.' },
       { time: 'all day', title: 'Pool day', note: 'Sun loungers, Spritz, swimwear — the whole day belongs to the pool.' },
-      { time: '18:00', title: 'Pizza night', note: 'Tables under the olive trees. Pizza and two hours of wine are on us 🍕🍷' },
+      { time: '18:30', title: 'Pizza night', note: 'Tables under the olive trees. Pizza and two hours of wine are on us 🍕🍷' },
       { time: 'later', title: 'Stay as long as you like', note: 'But make sure you’re ready for the big day tomorrow — get your rest in time. 😴' },
     ],
     dress: {
@@ -29,7 +29,7 @@ const SCHEDULE = [
     featured: true,
     items: [
       { time: '13:30', title: 'Arrive at Forte Benedek', note: 'Aperitif, shade, music' },
-      { time: '14:00', title: 'Ceremony', note: 'under the old olive tree' },
+      { time: '15:00', title: 'Ceremony', note: 'under the old olive tree' },
       { time: '15:30', title: 'Limoncello & Photos', note: 'Prendi un Limoncello 🍋' },
       { time: '18:00', title: 'Dinner', note: '7-course menu, long tables, blue-and-yellow stripes' },
       { time: '21:00', title: 'First dance · Party', note: 'until the sun comes up' },
@@ -42,6 +42,7 @@ const SCHEDULE = [
         { name: 'Sky', hex: '#87B0E0' },
         { name: 'Sage', hex: '#88A176' },
         { name: 'Olive', hex: '#A7B98C' },
+        { name: 'Dark green', hex: '#2F5E3C' },
         { name: 'Lemon', hex: '#F8D34A' },
         { name: 'Butter', hex: '#FCE789' },
       ],
@@ -120,14 +121,15 @@ const Schedule = () => {
 
         {day.open ? (
           <div className="jl-schedule-open">
-            <div className="jl-script-md" style={{ fontSize: 44, marginBottom: 8 }}>Open End</div>
+            <div className="jl-script-md" style={{ fontSize: 44, marginBottom: 8 }}>Breakfast &amp; Open End</div>
             <p>
-              We've deliberately left Sunday unplanned. Sleep in, jump in the lake
-              one more time, or head home relaxed — whatever you feel like.
+              To round things off there's a <strong>shared breakfast</strong> — with no
+              fixed time. When it starts depends on how long we're all still celebrating
+              the night before. 😊
             </p>
             <p className="jl-fine" style={{ marginTop: 12 }}>
-              If a small group spontaneously forms for brunch or a boat trip,
-              we'll let you know on Saturday evening.
+              After that it's open end: sleep in, jump in the lake one more time, or head
+              home relaxed — whatever you feel like.
             </p>
           </div>
         ) : (

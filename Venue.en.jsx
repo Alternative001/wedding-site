@@ -73,6 +73,26 @@ const Venue = () => (
       </h2>
     </div>
 
+    <div className="jl-venue-intro">
+      <p>
+        We don't just want to celebrate for a day — we'd love to spend as much of the
+        whole weekend together at Lago di Garda as possible. That's why we've reserved the
+        rooms right at our venue for you — the entire estate is booked out for our guests.
+      </p>
+      <p>
+        The room price (see the options below) covers both nights, Friday to Sunday,
+        breakfast included. On top of that, you're our guests: Friday evening for
+        <strong> pizza night</strong> (drinks included), Saturday for
+        <strong> the whole celebration</strong>, and Sunday for a
+        <strong> shared breakfast</strong>.
+      </p>
+      <p>
+        We know a destination wedding means travel and accommodation costs — we're deeply
+        grateful that you're taking on the journey and the effort. And if you'd rather stay
+        somewhere else nearby, that's completely fine by us.
+      </p>
+    </div>
+
     <TravelMap />
 
     <div className="jl-venue-grid">
