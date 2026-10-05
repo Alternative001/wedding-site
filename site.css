@@ -1091,3 +1091,136 @@ button.jl-link:hover { color: var(--link-hover); border-color: var(--link-hover)
   .jl-modal { padding: var(--space-6) var(--space-4) var(--space-5); }
 }
 
+/* =========================================================
+   LIQUID GLASS THEME
+   Continuous yellow/cream stripes across the whole page, with
+   frosted "liquid glass" panels and a cursor-follow reflection.
+   Appended last so it wins over the base component rules.
+   ========================================================= */
+:root {
+  --glass-bg:        rgba(255, 252, 244, 0.55);
+  --glass-bg-strong: rgba(255, 252, 244, 0.74);
+  --glass-blur:      saturate(1.4) blur(16px);
+  --glass-brd:       rgba(255, 255, 255, 0.70);
+  --glass-shadow:    0 16px 38px -16px rgba(14, 42, 107, 0.30), 0 2px 8px rgba(14, 42, 107, 0.07);
+}
+
+/* 1 — continuous stripes everywhere; sections just let them show through */
+html { background: var(--pattern-stripes-yellow); }
+body { background: var(--pattern-stripes-yellow); background-attachment: fixed; }
+.jl-section-paper { background: transparent; border-top: 0; border-bottom: 0; }
+.jl-section-cobalt { background: transparent; color: var(--color-ink); }
+.jl-section-head-light { color: var(--color-ink); }
+.jl-hero-stripes { display: none; }
+
+/* 2 — the frosted-glass surface */
+.jl-nav,
+.jl-info-card,
+.jl-schedule-card,
+.jl-rsvp,
+.jl-modal,
+.jl-faq,
+.jl-hero-eyebrow,
+.jl-day-tab:not(.is-active),
+.jl-room-card,
+.jl-stay-card {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-brd);
+  box-shadow: var(--glass-shadow);
+}
+.jl-schedule-card, .jl-rsvp, .jl-modal, .jl-faq { background: var(--glass-bg-strong); }
+
+/* nav → a floating, rounded glass bar */
+.jl-nav {
+  top: 10px;
+  margin: 10px auto 0;
+  width: min(1180px, calc(100% - 24px));
+  border-radius: 26px;
+  padding: 12px max(var(--space-5), 2vw);
+}
+@media (max-width: 760px) {
+  .jl-nav { width: calc(100% - 16px); border-radius: 22px; }
+  .jl-nav-links {
+    left: 8px; right: 8px; border-radius: 0 0 18px 18px;
+    background: var(--glass-bg-strong);
+    -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-brd); border-top: 0;
+  }
+}
+
+/* accent info card: a faint lemon-tinted glass */
+.jl-info-card-accent { background: rgba(255, 244, 201, 0.55); border-color: var(--glass-brd); }
+
+/* day tabs: plain ones glass, active stays solid cobalt, featured = frosted arch */
+.jl-day-tab.is-featured:not(.is-active) {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  filter: none; opacity: 1;
+  border: 1.5px solid var(--border-mid);
+}
+.jl-day-tab.is-featured.is-active {
+  background: var(--glass-bg-strong);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  border: 2px solid var(--color-cobalt);
+}
+
+/* form controls → translucent glass */
+.jl-field input[type="text"],
+.jl-field input[type="email"],
+.jl-field input:not([type]),
+.jl-field textarea,
+.jl-radio-btn,
+.jl-stepper-row {
+  background: rgba(255, 255, 255, 0.58);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+/* glossy blue buttons (primary + nav RSVP) and a lemon-glass secondary */
+.jl-btn-primary, .jl-nav-cta {
+  background: linear-gradient(180deg, #2f5bd0 0%, var(--color-cobalt) 52%, #163d9c 100%);
+  box-shadow: 0 10px 22px -10px rgba(14, 42, 107, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.jl-btn-primary:hover:not(:disabled), .jl-nav-cta:hover {
+  background: linear-gradient(180deg, #3765dd 0%, #214fc0 52%, #173a95 100%);
+}
+.jl-btn-secondary {
+  background: linear-gradient(180deg, #ffe89a 0%, var(--color-lemon-300) 100%);
+  box-shadow: 0 8px 18px -10px rgba(216, 154, 5, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* RSVP deadline + note recoloured for the now-light background */
+.jl-rsvp-deadline { color: var(--color-cobalt); }
+.jl-rsvp-note { color: var(--color-charcoal); }
+
+/* 3 — cursor-follow reflection sheen (over the glass, under the content) */
+.jl-nav-cta, .jl-btn,
+.jl-info-card, .jl-schedule-card, .jl-rsvp, .jl-faq, .jl-hero-eyebrow,
+.jl-day-tab, .jl-room-card, .jl-stay-card {
+  position: relative;
+  isolation: isolate;
+}
+.jl-nav-cta::before, .jl-btn::before,
+.jl-info-card::before, .jl-schedule-card::before, .jl-rsvp::before, .jl-faq::before,
+.jl-hero-eyebrow::before, .jl-day-tab::before, .jl-room-card::before, .jl-stay-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 240ms ease;
+  background: radial-gradient(240px circle at var(--mx, -300px) var(--my, -300px),
+              rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 62%);
+}
+.jl-nav-cta:hover::before, .jl-btn:hover::before,
+.jl-info-card:hover::before, .jl-schedule-card:hover::before, .jl-rsvp:hover::before,
+.jl-faq:hover::before, .jl-hero-eyebrow:hover::before, .jl-day-tab:hover::before,
+.jl-room-card:hover::before, .jl-stay-card:hover::before { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  body { background-attachment: scroll; }
+}
+

@@ -113,13 +113,13 @@ const RSVP = () => {
       <section id="rsvp" className="jl-section jl-section-cobalt" data-screen-label="RSVP-success">
         <div className="jl-rsvp-success">
           <div className="jl-script-xl">Grazie!</div>
-          <div className="jl-eyebrow" style={{ color: 'var(--color-lemon-300)' }}>Your reply has been received</div>
-          <h2 className="jl-h2" style={{ color: 'var(--color-cream)' }}>
+          <div className="jl-eyebrow" style={{ color: 'var(--color-cobalt)' }}>Your reply has been received</div>
+          <h2 className="jl-h2" style={{ color: 'var(--color-ink)' }}>
             {form.attending === 'yes'
               ? <>We're so excited to have you{firstName ? `, ${firstName}` : ''}.</>
               : <>Such a shame — but thank you<br/>for letting us know.</>}
           </h2>
-          <p style={{ color: 'rgba(255,251,242,0.85)', maxWidth: '40ch', margin: '12px auto 24px' }}>
+          <p style={{ color: 'var(--color-charcoal)', maxWidth: '40ch', margin: '12px auto 24px' }}>
             {form.attending === 'yes'
               ? <>We're counting on <strong>{total}</strong> {total === 1 ? 'person' : 'people'}. A confirmation is on its way to <strong>{form.email}</strong>.</>
               : <>We'll miss you — feel free to send a postcard from afar 💛</>}
@@ -134,10 +134,10 @@ const RSVP = () => {
 
   return (
     <section id="rsvp" className="jl-section jl-section-cobalt" data-screen-label="RSVP">
-      <div className="jl-section-head jl-section-head-light">
-        <div className="jl-eyebrow" style={{ color: 'var(--color-lemon-300)' }}>R.S.V.P.</div>
-        <h2 className="jl-h2" style={{ color: 'var(--color-cream)' }}>
-          <span className="jl-script-inline" style={{ color: 'var(--color-lemon-300)' }}>Please</span> let us know
+      <div className="jl-section-head">
+        <div className="jl-eyebrow" style={{ color: 'var(--color-cobalt)' }}>R.S.V.P.</div>
+        <h2 className="jl-h2" style={{ color: 'var(--color-ink)' }}>
+          <span className="jl-script-inline" style={{ color: 'var(--color-cobalt)' }}>Please</span> let us know
         </h2>
         <p className="jl-rsvp-deadline">by 1 February 2027 at the latest</p>
       </div>
