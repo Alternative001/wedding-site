@@ -4,7 +4,7 @@
 // live DOM on every move, so it keeps working across React re-renders.
 (function () {
   var SEL = '.jl-nav-cta, .jl-btn, .jl-info-card, .jl-schedule-card, .jl-rsvp, ' +
-            '.jl-faq, .jl-hero-eyebrow, .jl-day-tab, .jl-room-card, .jl-stay-card';
+            '.jl-faq, .jl-hero-eyebrow, .jl-hero-datebar, .jl-day-tab, .jl-room-card, .jl-stay-card';
   document.addEventListener('pointermove', function (e) {
     var el = e.target && e.target.closest ? e.target.closest(SEL) : null;
     if (!el) return;

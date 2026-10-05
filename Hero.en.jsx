@@ -44,6 +44,15 @@ const Hero = () => (
             </a>
           </div>
         </div>
+
+        <div className="jl-hero-datebar">
+          <div className="jl-datebar-main">
+            <span className="jl-eyebrow">Our big day</span>
+            <div className="jl-datebar-date">24 July 2027</div>
+            <div className="jl-datebar-place">Forte Benedek · Lago di Garda</div>
+          </div>
+          <div className="jl-datebar-mono" aria-hidden="true">L&amp;J</div>
+        </div>
       </div>
 
       <div className="jl-hero-scroll-hint" aria-hidden="true">

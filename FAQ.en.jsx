@@ -56,7 +56,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'What is the weather like in late July at Lago di Garda?',
-    a: 'Reliably warm — 28–32 °C during the day, mild around 22 °C in the evening. Sunglasses and a light wrap for later in the night are a good idea. And don’t worry about the heat: the ceremony is held inside the Forte’s vaults, so you’ll be seated in the cool shade, not in the direct midday sun.',
+    a: 'Reliably warm — 28–32 °C during the day, mild around 22 °C in the evening. Sunglasses and a light wrap for later in the night are a good idea. And don’t worry about the heat: the ceremony is held inside the Forte, so you’ll be seated in the cool shade, not in the direct midday sun.',
   },
   {
     q: 'When do we need to RSVP by?',
