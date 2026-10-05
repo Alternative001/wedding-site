@@ -64,15 +64,6 @@ const JL_ROOMS = [
   },
 ];
 
-const roomMailto = (room) =>
-  'mailto:hallo@lisa-und-julian.de?subject=' +
-  encodeURIComponent('Zimmeranfrage: ' + room.name + ' (' + room.title + ')') +
-  '&body=' +
-  encodeURIComponent(
-    'Hallo Lisa & Julian,\n\nwir würden gern ' + room.name + ' — ' + room.title +
-    ' — am Forte Benedek anfragen.\n\nName:\nAnreise:\nAbreise:\n\nLiebe Grüße'
-  );
-
 const RoomCard = ({ room }) => {
   const [idx, setIdx] = React.useState(0);
   const count = room.images.length;
@@ -116,9 +107,7 @@ const RoomCard = ({ room }) => {
       )}
       <div className="jl-room-foot">
         <span className="jl-room-price">{room.price}</span>
-        <a className="jl-btn jl-btn-primary jl-btn-sm" href={roomMailto(room)}>
-          Dieses Zimmer anfragen
-        </a>
+        <span className="jl-room-pick-hint">Wunschzimmer einfach im RSVP angeben ✨</span>
       </div>
     </div>
   </div>

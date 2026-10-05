@@ -16,7 +16,7 @@ const Footer = () => (
       <div className="jl-footer-meta">
         <a href="mailto:wedding@lemon-spark.com">wedding@lemon-spark.com</a>
         <span>·</span>
-        <a href="#">Wish list</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); window.jlOpenGifts && window.jlOpenGifts(); }}>Wish list</a>
         <span>·</span>
         <a href="#">Privacy</a>
       </div>

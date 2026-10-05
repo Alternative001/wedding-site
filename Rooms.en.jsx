@@ -63,15 +63,6 @@ const JL_ROOMS = [
   },
 ];
 
-const roomMailto = (room) =>
-  'mailto:hallo@lisa-und-julian.de?subject=' +
-  encodeURIComponent('Room request: ' + room.name + ' (' + room.title + ')') +
-  '&body=' +
-  encodeURIComponent(
-    'Hi Lisa & Julian,\n\nwe’d love to request ' + room.name + ' — ' + room.title +
-    ' — at Forte Benedek.\n\nName:\nArrival:\nDeparture:\n\nThank you!'
-  );
-
 const RoomCard = ({ room }) => {
   const [idx, setIdx] = React.useState(0);
   const count = room.images.length;
@@ -115,9 +106,7 @@ const RoomCard = ({ room }) => {
       )}
       <div className="jl-room-foot">
         <span className="jl-room-price">{room.price}</span>
-        <a className="jl-btn jl-btn-primary jl-btn-sm" href={roomMailto(room)}>
-          Request this room
-        </a>
+        <span className="jl-room-pick-hint">Just pick your room in the RSVP ✨</span>
       </div>
     </div>
   </div>

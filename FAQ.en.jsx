@@ -20,7 +20,20 @@ const BridesmaidList = () => (
 const FAQ_ITEMS = [
   {
     q: 'What should we gift you for your wedding?',
-    a: 'The most important thing: nothing. The fact that you’re coming to our wedding at Lago di Garda — taking on the costs, the travel and organising your stay — is more than enough for us. You truly don’t need to bring any gifts, so please don’t feel obliged to bring anything other than yourselves. Especially no physical gifts, please — we have to carry everything back to Dubai. If you nevertheless insist on giving us something, we’d be delighted by a small contribution towards our honeymoon. We’ll set up an easy way for anyone who’d like to — entirely optional. But honestly: you, your time, and being there to celebrate with us is more than enough.',
+    a: (
+      <>
+        The most important thing: nothing. The fact that you’re coming to our wedding at
+        Lago di Garda — taking on the costs, the travel and organising your stay — is more
+        than enough for us. You truly don’t need to bring any gifts, so please don’t feel
+        obliged to bring anything other than yourselves. Especially no physical gifts,
+        please — we have to carry everything back to Dubai.
+        <div className="jl-gift-faq-cta">
+          <button type="button" className="jl-link" onClick={() => window.jlOpenGifts && window.jlOpenGifts()}>
+            What you can give us →
+          </button>
+        </div>
+      </>
+    ),
   },
   {
     q: 'Are children welcome?',
@@ -43,7 +56,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'What is the weather like in late July at Lago di Garda?',
-    a: 'Reliably warm — 28–32 °C during the day, mild around 22 °C in the evening. Sunglasses and a light wrap for later in the night are a good idea.',
+    a: 'Reliably warm — 28–32 °C during the day, mild around 22 °C in the evening. Sunglasses and a light wrap for later in the night are a good idea. And don’t worry about the heat: the ceremony is held inside the Forte’s vaults, so you’ll be seated in the cool shade, not in the direct midday sun.',
   },
   {
     q: 'When do we need to RSVP by?',
@@ -79,6 +92,16 @@ const FAQ = () => {
           </li>
         ))}
       </ul>
+
+      <div className="jl-faq-foot">
+        <button
+          type="button"
+          className="jl-btn jl-btn-secondary jl-btn-sm"
+          onClick={() => window.jlOpenGifts && window.jlOpenGifts()}
+        >
+          What you can give us 🎁
+        </button>
+      </div>
     </section>
   );
 };

@@ -20,7 +20,20 @@ const BridesmaidList = () => (
 const FAQ_ITEMS = [
   {
     q: 'Was sollen wir Euch schenken?',
-    a: 'Das Wichtigste zuerst: nichts. Dass Ihr zu unserer Hochzeit an den Lago di Garda kommt — mit allen Kosten, der Anreise und der Organisation Eures Aufenthalts — ist für uns mehr als genug. Ihr müsst uns wirklich nichts mitbringen, fühlt Euch also bitte zu nichts verpflichtet außer dazu, selbst da zu sein. Vor allem bitte keine Sachgeschenke — wir müssen alles zurück nach Dubai transportieren. Falls Ihr uns trotzdem unbedingt etwas schenken möchtet, freuen wir uns über einen kleinen Beitrag zu unseren Flitterwochen. Dafür richten wir eine einfache Möglichkeit ein — ganz freiwillig. Aber ehrlich: Ihr, Eure Zeit und dass Ihr mit uns feiert, ist mehr als genug.',
+    a: (
+      <>
+        Das Wichtigste zuerst: nichts. Dass Ihr zu unserer Hochzeit an den Lago di Garda
+        kommt — mit allen Kosten, der Anreise und der Organisation Eures Aufenthalts — ist
+        für uns mehr als genug. Ihr müsst uns wirklich nichts mitbringen, fühlt Euch also
+        bitte zu nichts verpflichtet außer dazu, selbst da zu sein. Vor allem bitte keine
+        Sachgeschenke — wir müssen alles zurück nach Dubai transportieren.
+        <div className="jl-gift-faq-cta">
+          <button type="button" className="jl-link" onClick={() => window.jlOpenGifts && window.jlOpenGifts()}>
+            Was wir uns wünschen →
+          </button>
+        </div>
+      </>
+    ),
   },
   {
     q: 'Sind Kinder willkommen?',
@@ -43,7 +56,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Wie ist das Wetter Ende Juli am Gardasee?',
-    a: 'Erwartbar warm — 28-32 °C tagsüber, abends mild um die 22 °C. Sonnenbrille und vielleicht ein leichter Schal für später am Abend und ihr seid top vorbereitet.',
+    a: 'Erwartbar warm — 28-32 °C tagsüber, abends mild um die 22 °C. Sonnenbrille und vielleicht ein leichter Schal für später am Abend und ihr seid top vorbereitet. Und keine Sorge vor der Hitze: Die Trauung findet im Gewölbe des Forte statt — Ihr sitzt also im kühlen Schatten, nicht in der prallen Mittagssonne.',
   },
   {
     q: 'Wann müssen wir spätestens zusagen?',
@@ -79,6 +92,16 @@ const FAQ = () => {
           </li>
         ))}
       </ul>
+
+      <div className="jl-faq-foot">
+        <button
+          type="button"
+          className="jl-btn jl-btn-secondary jl-btn-sm"
+          onClick={() => window.jlOpenGifts && window.jlOpenGifts()}
+        >
+          Was wir uns wünschen 🎁
+        </button>
+      </div>
     </section>
   );
 };

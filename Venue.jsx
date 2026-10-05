@@ -12,9 +12,23 @@ const TravelMap = () => {
     // taller than any fixed box), so size the iframe to its real content.
     // Collapse to 0 first: the page's body min-height:100vh equals the iframe's
     // own height, which would otherwise pin the measurement and block shrinking.
+    // The map's self-extracting bundle rewrites its own document with a cream
+    // background, which breaks the page's continuous stripes. We can't fix that
+    // in the bundle, so (same-origin) we inject a transparent-background style
+    // after it extracts — re-applied on every poll in case the doc is replaced.
+    function injectTransparent() {
+      const doc = iframe.contentDocument;
+      if (!doc || !doc.head || doc.getElementById('jl-map-transparent')) return;
+      const s = doc.createElement('style');
+      s.id = 'jl-map-transparent';
+      s.textContent = 'html,body{background:transparent !important;}';
+      doc.head.appendChild(s);
+    }
+
     function measure() {
       const doc = iframe.contentDocument;
       if (!doc || !doc.body) return;
+      injectTransparent();
       iframe.style.height = '0px';
       const h = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
       iframe.style.height = (h || 200) + 'px';
@@ -55,7 +69,7 @@ const TravelMap = () => {
     <div className="jl-venue-map" aria-label="Anreisekarte">
       <iframe
         ref={ref}
-        src="assets/map-standalone.html"
+        src="assets/map-standalone.html?v=24"
         title="Anreisekarte zum Lago di Garda"
         loading="lazy"
         scrolling="no"

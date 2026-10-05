@@ -1224,3 +1224,52 @@ body { background: var(--pattern-stripes-yellow); background-attachment: fixed; 
   body { background-attachment: scroll; }
 }
 
+
+/* =========================================================
+   WUNSCHLISTE POP-UP, FAQ CTAs, ROOM HINT, MAP BLEND
+   ========================================================= */
+/* Room pop-up: the choice happens in the RSVP, so just a hint (no request button) */
+.jl-room-pick-hint { font: italic 13px/1.35 var(--font-serif); color: var(--color-muted); text-align: right; max-width: 18ch; }
+
+/* FAQ footer button + the CTA inside the gift answer */
+.jl-faq-foot { text-align: center; margin-top: var(--space-6); }
+.jl-gift-faq-cta { margin-top: 14px; }
+
+/* Wunschliste pop-up */
+.jl-gift-modal { text-align: center; max-width: 560px; }
+.jl-gift-hero { margin-bottom: var(--space-4); }
+.jl-gift-big {
+  display: block;
+  font-size: clamp(52px, 10vw, 96px);
+  line-height: 0.92;
+  color: var(--color-cobalt);
+  margin-top: 4px;
+}
+.jl-gift-lead {
+  font: 16px/1.6 var(--font-sans);
+  color: var(--color-charcoal);
+  max-width: 46ch; margin: 0 auto;
+}
+.jl-gift-actions { margin-top: var(--space-5); }
+.jl-gift-step {
+  margin-top: var(--space-5);
+  text-align: left;
+  max-width: 48ch; margin-left: auto; margin-right: auto;
+  display: grid; gap: var(--space-4);
+}
+.jl-gift-ack { align-items: flex-start; }
+.jl-gift-ack span { font-size: 14px; line-height: 1.5; }
+.jl-gift-ack input { margin-top: 2px; }
+.jl-gift-reveal {
+  font: 15px/1.6 var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-lemon-50);
+  border: 1px solid var(--color-lemon-200);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0;
+}
+
+/* Travel map blends into the page stripes (transparent iframe); hidden on mobile */
+.jl-venue-map iframe { background: transparent; }
+@media (max-width: 760px) { #venue .jl-venue-map { display: none; } }

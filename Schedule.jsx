@@ -29,7 +29,7 @@ const SCHEDULE = [
     featured: true,
     items: [
       { time: '13:30', title: 'Eintreffen am Forte Benedek', note: 'Aperitif, Schatten, Musik' },
-      { time: '15:00', title: 'Trauung', note: 'unter dem alten Olivenbaum' },
+      { time: '15:00', title: 'Trauung', note: 'im Gewölbe des Forte — im Schatten, weg von der Mittagssonne' },
       { time: '15:30', title: 'Limoncello & Foto', note: 'Prendi un Limoncello 🍋' },
       { time: '18:00', title: 'Abendessen', note: '7-Gang-Menü, lange Tafel, blau-gelbe Streifen' },
       { time: '21:00', title: 'Eröffnungstanz · Party', note: 'bis die Sonne aufgeht' },
