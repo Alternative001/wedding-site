@@ -154,10 +154,13 @@ const RSVP = () => {
               ? <>Wir freuen uns so sehr<br/>auf Euch{firstName ? `, ${firstName}` : ''}.</>
               : <>Schade — aber danke<br/>für die schnelle Antwort.</>}
           </h2>
-          <p style={{ color: 'var(--color-charcoal)', maxWidth: '40ch', margin: '12px auto 24px' }}>
+          <p style={{ color: 'var(--color-charcoal)', maxWidth: '40ch', margin: '12px auto 10px' }}>
             {form.attending === 'yes'
               ? <>Wir planen mit <strong>{total}</strong> {total === 1 ? 'Person' : 'Personen'}. Eine Bestätigung kommt per Mail an <strong>{form.email}</strong>.</>
               : <>Wir vermissen Euch — schreibt gern eine Postkarte aus der Ferne 💛</>}
+          </p>
+          <p className="jl-rsvp-spam-hint">
+            📬 Kleiner Hinweis: Eure Bestätigungsmail landet evtl. im <strong>Spam-Ordner</strong> — schaut dort gern kurz nach.
           </p>
           <button className="jl-btn jl-btn-secondary" onClick={() => { setSubmitted(false); setStatus('idle'); setForm(initial()); }}>
             Noch jemand zusagen lassen

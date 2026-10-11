@@ -154,10 +154,13 @@ const RSVP = () => {
               ? <>We're so excited to have you{firstName ? `, ${firstName}` : ''}.</>
               : <>Such a shame — but thank you<br/>for letting us know.</>}
           </h2>
-          <p style={{ color: 'var(--color-charcoal)', maxWidth: '40ch', margin: '12px auto 24px' }}>
+          <p style={{ color: 'var(--color-charcoal)', maxWidth: '40ch', margin: '12px auto 10px' }}>
             {form.attending === 'yes'
               ? <>We're counting on <strong>{total}</strong> {total === 1 ? 'person' : 'people'}. A confirmation is on its way to <strong>{form.email}</strong>.</>
               : <>We'll miss you — feel free to send a postcard from afar 💛</>}
+          </p>
+          <p className="jl-rsvp-spam-hint">
+            📬 Heads-up: your confirmation email may land in your <strong>spam folder</strong> — worth a quick look.
           </p>
           <button className="jl-btn jl-btn-secondary" onClick={() => { setSubmitted(false); setStatus('idle'); setForm(initial()); }}>
             Add another guest

@@ -1435,3 +1435,13 @@ body { background: var(--pattern-stripes-yellow); background-attachment: fixed; 
   font: 14px/1.5 var(--font-sans);
 }
 .jl-rsvp-error a { color: #8a2f1c; font-weight: 600; }
+
+/* RSVP thank-you: spam-folder heads-up */
+.jl-rsvp-spam-hint {
+  max-width: 44ch; margin: 0 auto 24px;
+  font: 13.5px/1.5 var(--font-sans); color: var(--color-muted);
+  background: rgba(255, 244, 201, 0.6); border: 1px solid var(--color-lemon-200);
+  border-radius: 12px; padding: 8px 14px;
+}
+/* "Grazie!" was lemon-on-cobalt; on the striped background it needs cobalt */
+.jl-rsvp-success .jl-script-xl { color: var(--color-cobalt); }
