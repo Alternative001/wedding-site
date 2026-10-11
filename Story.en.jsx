@@ -18,10 +18,12 @@ const Story = () => (
 
       <div className="jl-prose">
         <p>
-          For over six years Dubai has been home — and honestly, we rarely miss
-          the European summer from there. That's why we decided against a wedding
-          closer to home and chose Italy instead: a place where the summer heat
-          feels a little like arriving somewhere familiar.
+          For over six years Dubai has been home — and our hearts still live in
+          both places: at home in Germany with our families, and in the UAE with
+          our friends-turned-family. Rather than choosing a side, we decided
+          against a wedding in either home. Instead, we’ll spend an amazing time
+          in Italy, where the summer heat feels like arriving somewhere familiar
+          to both places.
         </p>
         <p>
           There's also this: on <strong>Lago di Garda</strong>, both of us spent

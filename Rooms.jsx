@@ -17,55 +17,70 @@ const ROOM_DESC =
   'Klimaanlage, Flachbildschirm-TV und WLAN, Kleiderschrank mit Minibar und Safe, weiche ' +
   'Bademäntel, Hausschuhe und eine Pflegelinie von John Richmond.';
 
+// Nach Preis sortiert. `name` ist das kurze Label im RSVP-Zimmerwähler;
+// `guests` steuert das Personen-Badge (alle Zimmer 2, die Deluxe Suite 4).
 const JL_ROOMS = [
   {
-    id: 'zimmer-1',
-    name: 'Zimmer 1',
-    title: 'King Superior Spa mit Garten oder Balkon',
-    price: '1.000 € · 2 Nächte · inkl. Frühstück',
-    intro: 'Design-Zimmer mit privatem Garten oder Balkon.',
-    desc: ROOM_DESC,
-    details: AMENITIES,
-    images: [ROOM_BASE + 'r1-1.jpg', ROOM_BASE + 'r1-2.jpg', ROOM_BASE + 'r1-3.jpg', ROOM_BASE + 'r1-4.jpg'],
-    layout: ROOM_BASE + 'r1-layout.jpg',
-  },
-  {
-    id: 'zimmer-2',
-    name: 'Zimmer 2',
+    id: 'junior-window',
+    name: 'Junior Suite · Fenster',
     title: 'Junior Suite Spa mit großem Fenster',
-    price: '5.000 € · 2 Nächte · inkl. Frühstück',
+    price: '570 € · 2 Nächte · inkl. Frühstück',
+    guests: 2,
     intro: 'Design-Zimmer mit einem großen Fenster.',
     desc: ROOM_DESC,
     details: AMENITIES,
     images: [ROOM_BASE + 'r2-1.jpg', ROOM_BASE + 'r2-2.jpg', ROOM_BASE + 'r2-3.jpg', ROOM_BASE + 'r2-4.jpg', ROOM_BASE + 'r2-5.jpg'],
-    layout: ROOM_BASE + 'r2-layout.jpg',
+    layouts: [{ src: ROOM_BASE + 'r2-layout.jpg', caption: 'Grundriss' }],
   },
   {
-    id: 'zimmer-3',
-    name: 'Zimmer 3',
-    title: 'Junior Suite Spa mit Garten oder Balkon',
-    price: '10.000 € · 2 Nächte · inkl. Frühstück',
+    id: 'king-superior',
+    name: 'King Superior',
+    title: 'King Superior Spa mit Garten oder Balkon',
+    price: '620 € · 2 Nächte · inkl. Frühstück',
+    guests: 2,
     intro: 'Design-Zimmer mit privatem Garten oder Balkon.',
     desc: ROOM_DESC,
     details: AMENITIES,
-    images: [ROOM_BASE + 'r3-1.jpg', ROOM_BASE + 'r3-2.jpg', ROOM_BASE + 'r3-3.jpg', ROOM_BASE + 'r3-4.jpg'],
-    layout: ROOM_BASE + 'r3-layout.jpg',
+    images: [ROOM_BASE + 'r1-1.jpg', ROOM_BASE + 'r1-2.jpg', ROOM_BASE + 'r1-3.jpg', ROOM_BASE + 'r1-4.jpg'],
+    layouts: [{ src: ROOM_BASE + 'r1-layout.jpg', caption: 'Grundriss' }],
   },
   {
-    id: 'zimmer-4',
-    name: 'Zimmer 4',
+    id: 'junior-jacuzzi',
+    name: 'Junior Suite · Jacuzzi',
     title: 'Junior Suite Spa mit privatem Jacuzzi',
-    price: '50.000 € · 2 Nächte · inkl. Frühstück',
+    price: '680 € · 2 Nächte · inkl. Frühstück',
+    guests: 2,
     intro: 'Design-Zimmer mit privatem Garten oder Balkon. Im Zimmer befinden sich Kunstwerke des Veroneser Malers Antonio Amodio.',
     desc: ROOM_DESC,
     details: AMENITIES.concat(['Privater Jacuzzi']),
     images: [ROOM_BASE + 'r4-1.jpg', ROOM_BASE + 'r4-2.jpg', ROOM_BASE + 'r4-3.jpg', ROOM_BASE + 'r4-4.jpg', ROOM_BASE + 'r4-5.jpg'],
-    layout: ROOM_BASE + 'r4-layout.jpg',
+    layouts: [{ src: ROOM_BASE + 'r4-layout.jpg', caption: 'Grundriss' }],
+  },
+  {
+    id: 'deluxe-suite',
+    name: 'Deluxe Suite',
+    title: 'Deluxe Spa Suite',
+    price: '790 € · 2 Nächte · inkl. Frühstück',
+    guests: 4,
+    intro: '',
+    desc:
+      'Ein Design-Zimmer auf zwei Ebenen: ein Loft mit King-Size-Bett und ein Wohnzimmer mit ' +
+      'Schlafsofa. Gemütliches Badezimmer mit extragroßer Dusche, Regen-Duschkopf und wohltuendem ' +
+      'Wasserfall. Ausgestattet mit luxuriösen Stoffen und natürlichen Eichen- und Steinböden. Mit ' +
+      'Wasserkocher und Kräutertee-Ecke, Klimaanlage, Flachbildschirm-TV und WLAN; Kleiderschrank ' +
+      'mit Minibar und Safe. Diese Suite bietet Platz für bis zu 4 Personen!',
+    details: ['Zwei Ebenen (Loft)', 'Schlafsofa im Wohnzimmer', 'Klimaanlage & WLAN', 'Minibar & Safe'],
+    images: [ROOM_BASE + 'r5-1.jpg', ROOM_BASE + 'r5-2.jpg', ROOM_BASE + 'r5-3.jpg', ROOM_BASE + 'r5-4.jpg'],
+    layouts: [
+      { src: ROOM_BASE + 'r5-layout-1.jpg', caption: 'Grundriss · Wohnzimmer (unten)' },
+      { src: ROOM_BASE + 'r5-layout-2.jpg', caption: 'Grundriss · Loft-Schlafzimmer (oben)' },
+    ],
   },
 ];
 
 const RoomCard = ({ room }) => {
   const [idx, setIdx] = React.useState(0);
+  const galleryRef = React.useRef(null);
   const count = room.images.length;
   const onScroll = (e) => {
     const el = e.currentTarget;
@@ -73,37 +88,57 @@ const RoomCard = ({ room }) => {
     const i = stride ? Math.min(count - 1, Math.round(el.scrollLeft / stride)) : 0;
     setIdx((p) => (p === i ? p : i));
   };
+  // Pfeil-Buttons: zum vorherigen / nächsten Foto springen.
+  const go = (dir) => {
+    const el = galleryRef.current;
+    if (!el) return;
+    const next = Math.max(0, Math.min(count - 1, idx + dir));
+    el.scrollTo({ left: (el.scrollWidth / count) * next, behavior: 'smooth' });
+  };
   return (
   <div className="jl-room-card">
     <div className="jl-room-gallery-wrap">
-      <div className="jl-room-gallery" onScroll={onScroll}>
+      <div className="jl-room-gallery" ref={galleryRef} onScroll={onScroll}>
         {room.images.map((src, i) => (
           <img key={i} src={src} alt={room.title + ' (' + (i + 1) + ')'} loading="lazy" />
         ))}
       </div>
       {count > 1 && (
-        <span className="jl-room-count" aria-hidden="true">{idx + 1} / {count}</span>
-      )}
-      {count > 1 && (
-        <div className="jl-room-dots" aria-hidden="true">
-          {room.images.map((_, i) => (
-            <span key={i} className={'jl-room-dot' + (i === idx ? ' is-active' : '')} />
-          ))}
-        </div>
+        <>
+          <button type="button" className="jl-room-arrow is-prev" aria-label="Vorheriges Foto"
+            onClick={() => go(-1)} disabled={idx === 0}>‹</button>
+          <button type="button" className="jl-room-arrow is-next" aria-label="Nächstes Foto"
+            onClick={() => go(1)} disabled={idx === count - 1}>›</button>
+          <span className="jl-room-count" aria-hidden="true">{idx + 1} / {count}</span>
+          <div className="jl-room-dots" aria-hidden="true">
+            {room.images.map((_, i) => (
+              <span key={i} className={'jl-room-dot' + (i === idx ? ' is-active' : '')} />
+            ))}
+          </div>
+        </>
       )}
     </div>
     <div className="jl-room-body">
-      <div className="jl-room-kicker">{room.name}</div>
+      <div className="jl-room-kicker-row">
+        <div className="jl-room-kicker">{room.name}</div>
+        <span className={'jl-room-guests' + (room.guests > 2 ? ' is-more' : '')}>
+          👥 {room.guests > 2 ? `bis zu ${room.guests} Personen` : `${room.guests} Personen`}
+        </span>
+      </div>
       <h4 className="jl-room-name">{room.title}</h4>
-      <p className="jl-room-desc">{room.intro} {room.desc}</p>
+      <p className="jl-room-desc">{room.intro ? room.intro + ' ' : ''}{room.desc}</p>
       <ul className="jl-room-details">
         {room.details.map((d, i) => <li key={i}>{d}</li>)}
       </ul>
-      {room.layout && (
-        <figure className="jl-room-layout">
-          <img src={room.layout} alt={'Grundriss ' + room.title} loading="lazy" />
-          <figcaption>Grundriss</figcaption>
-        </figure>
+      {room.layouts && room.layouts.length > 0 && (
+        <div className={'jl-room-layouts' + (room.layouts.length > 1 ? ' is-multi' : '')}>
+          {room.layouts.map((l, i) => (
+            <figure className="jl-room-layout" key={i}>
+              <img src={l.src} alt={l.caption + ' – ' + room.title} loading="lazy" />
+              <figcaption>{l.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
       )}
       <div className="jl-room-foot">
         <span className="jl-room-price">{room.price}</span>
@@ -147,6 +182,10 @@ const RoomsModal = ({ open, onClose }) => {
             Wir haben die ganze Anlage gebucht — es sind noch <strong>etwa 10 Zimmer</strong> direkt
             am Veranstaltungsort frei. First come, first serve. Alle Preise gelten für
             <strong> beide Nächte (Fr.–So.) inklusive Frühstück</strong>.
+          </p>
+          <p className="jl-modal-capacity">
+            👥 Alle Zimmer sind für <strong>2 Personen</strong> — außer der <strong>Deluxe Spa Suite</strong>,
+            die Platz für <strong>bis zu 4</strong> bietet.
           </p>
         </div>
 

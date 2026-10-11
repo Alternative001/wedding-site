@@ -1,8 +1,6 @@
 // FAQ.en.jsx — English accordion FAQ
 const BRIDESMAIDS = [
-  { name: 'Hanna Nyssen', display: '+971 55 147 6701', tel: '+971551476701' },
-  { name: 'Kristina Nikolendzic', display: '+971 50 886 5709', tel: '+971508865709' },
-  { name: 'Michelle Matuzzi', display: '+971 55 820 3129', tel: '+971558203129' },
+  { name: 'Kristina N.', display: '+971 50 886 5709', tel: '+971508865709' },
 ];
 
 const BridesmaidList = () => (
@@ -43,9 +41,9 @@ const FAQ_ITEMS = [
     q: 'Would you like to add something to the programme — e.g. give a speech?',
     a: (
       <>
-        We’d love that! Please give our bridesmaids <strong>advance notice</strong> —
-        they coordinate the programme and will give you a time slot (for anything that
-        isn’t embarrassing 😉). All three speak English and German:
+        We’d love that! Please give our bridesmaid Kristina <strong>advance notice</strong> —
+        she coordinates the programme and will give you a time slot (for anything that
+        isn’t embarrassing 😉). She speaks English and German:
         <BridesmaidList />
       </>
     ),

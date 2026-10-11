@@ -1,8 +1,6 @@
 // FAQ.jsx — accordion of common questions
 const BRIDESMAIDS = [
-  { name: 'Hanna Nyssen', display: '+971 55 147 6701', tel: '+971551476701' },
-  { name: 'Kristina Nikolendzic', display: '+971 50 886 5709', tel: '+971508865709' },
-  { name: 'Michelle Matuzzi', display: '+971 55 820 3129', tel: '+971558203129' },
+  { name: 'Kristina N.', display: '+971 50 886 5709', tel: '+971508865709' },
 ];
 
 const BridesmaidList = () => (
@@ -43,9 +41,9 @@ const FAQ_ITEMS = [
     q: 'Möchtest Du etwas zum Programm beitragen — z. B. eine Rede halten?',
     a: (
       <>
-        Wie schön! Bitte meldet Euch <strong>vorab</strong> bei unseren Brautjungfern —
-        sie koordinieren das Programm und geben Euch einen Zeitslot (für alles, was
-        nicht peinlich ist 😉). Alle drei sprechen Deutsch und Englisch:
+        Wie schön! Bitte meldet Euch <strong>vorab</strong> bei unserer Brautjungfer Kristina —
+        sie koordiniert das Programm und gibt Euch einen Zeitslot (für alles, was nicht
+        peinlich ist 😉). Sie spricht Deutsch und Englisch:
         <BridesmaidList />
       </>
     ),

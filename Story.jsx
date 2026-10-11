@@ -18,10 +18,12 @@ const Story = () => (
 
       <div className="jl-prose">
         <p>
-          Seit über sechs Jahren nennen wir Dubai unser Zuhause — und ehrlich
-          gesagt vermissen wir den deutschen Sommer dort selten. Deshalb haben
-          wir uns gegen eine Hochzeit in Deutschland entschieden und für Italien:
-          ein Ort, an dem die Sommerhitze sich ein bisschen wie heimkommen anfühlt.
+          Seit über sechs Jahren ist Dubai unser Zuhause — und unsere Herzen
+          schlagen an beiden Orten: in Deutschland bei unseren Familien und in den
+          Emiraten bei unseren Freunden, die längst zur Familie geworden sind.
+          Statt uns für eine Seite zu entscheiden, feiern wir an keinem der beiden
+          Orte. Stattdessen verbringen wir eine wunderbare Zeit in Italien, wo sich
+          die Sommerhitze für beide Welten ein bisschen wie Heimkommen anfühlt.
         </p>
         <p>
           Dazu kommt: am <strong>Lago di Garda</strong> haben wir beide schon als

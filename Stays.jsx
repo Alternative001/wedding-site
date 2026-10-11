@@ -26,6 +26,18 @@ const JL_STAYS = [
     map: 'https://www.google.com/maps/dir/?api=1&origin=Relais+Forte+Benedek,+Via+Morsella+12,+Pastrengo&destination=Appartamenti+Miralago,+Via+Morsella+24,+Pastrengo&travelmode=walking',
   },
   {
+    id: 'padovani',
+    name: 'Villa Padovani',
+    type: 'Venezianische Villa · Suiten',
+    distance: '≈ 3 Min mit dem Auto · 20 Min zu Fuß',
+    distanceNote: 'Piovezzano di Pastrengo',
+    desc: 'Seltene venezianische Villa aus dem 17. Jahrhundert zwischen Verona und Gardasee — zehn Suiten für höchstens 20 Gäste, Frühstück im Freien und eine 24-Stunden-Honesty-Bar. Hinweis: ein Haus nur für Erwachsene.',
+    details: ['Pool & Spa', 'Garten', 'Frühstück', 'Parkplatz', 'Nur Erwachsene'],
+    cta: 'Website',
+    href: 'https://villapadovani.it/',
+    map: 'https://www.google.com/maps/dir/?api=1&origin=Relais+Forte+Benedek,+Via+Morsella+12,+Pastrengo&destination=Villa+Padovani,+Via+Piovezzano+Vecchia+48,+Pastrengo&travelmode=driving',
+  },
+  {
     id: 'serena',
     name: 'Agriturismo Serena',
     type: 'Bauernhof · Zimmer',
@@ -87,7 +99,15 @@ const StaysModal = ({ open, onClose }) => {
           <div className="jl-eyebrow">Woanders übernachten</div>
           <h3 id="jl-stays-title" className="jl-h3">Unterkünfte in der Nähe</h3>
           <p className="jl-modal-intro">
-            Kein Zimmer am Forte ergattert? Diese drei Häuser in Pastrengo sind nur wenige Minuten entfernt.
+            Kein Zimmer am Forte ergattert? Diese vier Häuser rund um Pastrengo sind nur wenige Minuten entfernt.
+          </p>
+        </div>
+
+        <div className="jl-stays-alert" role="note">
+          <span className="jl-stays-alert-icon" aria-hidden="true">⚠️</span>
+          <p>
+            <strong>Bitte denkt daran:</strong> Unsere Hochzeit ist in der Hochsaison. Solltet Ihr
+            nicht am Forte übernachten, bucht Euch <strong>rechtzeitig</strong> ein Zimmer in der Nähe.
           </p>
         </div>
 

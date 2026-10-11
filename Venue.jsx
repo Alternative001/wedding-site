@@ -119,7 +119,7 @@ const Venue = () => (
         </div>
         <h3 className="jl-h3">Forte Benedek</h3>
         <p>
-          Historisches Fort mit Olivengarten, Pool und Blick auf den See —<br />
+          Historisches Fort mit Olivengarten, Pool und Blick auf den See —
           wir haben es komplett für uns.
         </p>
         <a className="jl-link" href="https://fortebenedek.com/it/" target="_blank" rel="noopener">
@@ -138,8 +138,8 @@ const Venue = () => (
           <strong>etwa 10 Zimmer</strong> direkt am Veranstaltungsort frei.
         </p>
         <p>
-          <strong>Ab 600 €</strong> für zwei Nächte (Standard-Doppelzimmer, 2 Personen).
-          Wer dort wohnen möchte, gibt uns kurz Bescheid — first come, first serve.
+          <strong>Ab 570 €</strong> für zwei Nächte inkl. Frühstück (2 Personen — die Deluxe Suite bis zu 4).
+          Wer dort wohnen möchte, gibt es einfach im RSVP an — first come, first serve.
         </p>
         <button type="button" className="jl-link" onClick={() => window.jlOpenRooms && window.jlOpenRooms()}>
           Zimmer ansehen →
@@ -166,7 +166,7 @@ const Venue = () => (
         </div>
         <h3 className="jl-h3">In der Nähe schlafen</h3>
         <p>
-          Kein Zimmer am Forte ergattert? Drei Häuser in Pastrengo sind nur wenige Minuten
+          Kein Zimmer am Forte ergattert? Vier Häuser rund um Pastrengo sind nur wenige Minuten
           entfernt — mit Entfernung, Infos und Links zum Buchen.
         </p>
         <button type="button" className="jl-link" onClick={() => window.jlOpenStays && window.jlOpenStays()}>

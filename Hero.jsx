@@ -30,7 +30,7 @@ const Hero = () => (
           </div>
 
           <p className="jl-hero-tag">
-             🍋 come and spend a day of
+             🍋 come and spend a weekend of
             <span className="jl-script-md">La Dolce Vita</span>
             with us 🍋
           </p>

@@ -6,7 +6,7 @@ const SCHEDULE = [
     label: 'Arrive',
     arrival: true,
     items: [
-      { time: 'from 2 pm', title: 'Arrival', note: 'Drift in across the day — whenever it suits you.' },
+      { time: 'check-in from 15:00', title: 'Arrival', note: 'Drift in across the day — whenever it suits you.' },
       { time: 'all day', title: 'Pool day', note: 'Sun loungers, Spritz, swimwear — the whole day belongs to the pool.' },
       { time: '18:30', title: 'Pizza night', note: 'Tables under the olive trees. Pizza and two hours of wine are on us 🍕🍷' },
       { time: 'later', title: 'Stay as long as you like', note: 'But make sure you’re ready for the big day tomorrow — get your rest in time. 😴' },
@@ -28,11 +28,11 @@ const SCHEDULE = [
     label: 'The Day',
     featured: true,
     items: [
-      { time: '13:30', title: 'Arrive at Forte Benedek', note: 'Aperitif, shade, music' },
+      { time: '14:40', title: 'Arrive at Forte Benedek', note: 'Get excited for the bridal couple ✨' },
       { time: '15:00', title: 'Ceremony', note: 'inside the Forte — shaded, out of the midday sun' },
-      { time: '15:30', title: 'Limoncello & Photos', note: 'Prendi un Limoncello 🍋' },
-      { time: '18:00', title: 'Dinner', note: '7-course menu, long tables, blue-and-yellow stripes' },
-      { time: '21:00', title: 'First dance · Party', note: 'until the sun comes up' },
+      { time: '16:00', title: 'Limoncello & Photos', note: 'Prendi un Limoncello 🍋, Spritz & canapés' },
+      { time: '18:00', title: 'Dinner', note: 'Enjoy the amazing Italian food and company. A good time is mandatory!' },
+      { time: 'later', title: 'First dance · Party', note: 'until the sun comes up' },
     ],
     dress: {
       title: 'Blue · Green · Yellow',
@@ -73,6 +73,17 @@ const Schedule = () => {
 
   const day = SCHEDULE[activeDay];
 
+  // The dress code sits below the itinerary, so a chip under the day tabs
+  // points to it; tapping it scrolls down and briefly highlights the block.
+  const dressRef = React.useRef(null);
+  const [dressFlash, setDressFlash] = React.useState(false);
+  const toDress = () => {
+    if (dressRef.current) dressRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setDressFlash(true);
+    setTimeout(() => setDressFlash(false), 1800);
+  };
+  const Drink = window.DrinkSwatch;
+
   return (
     <section id="program" className="jl-section jl-section-paper" data-screen-label="Program">
       <div className="jl-section-head">
@@ -96,6 +107,16 @@ const Schedule = () => {
           </button>
         ))}
       </div>
+
+      {day.dress && (
+        <button type="button" className={`jl-dress-hint ${switching ? 'is-switching' : ''}`} onClick={toDress}>
+          <span className="jl-dress-hint-label">👗 Dress code: <strong>{day.dress.title}</strong></span>
+          <span className="jl-dress-hint-dots" aria-hidden="true">
+            {day.dress.swatches.map((s) => <i key={s.name} style={{ background: s.hex }} />)}
+          </span>
+          <span className="jl-dress-hint-more">see below ↓</span>
+        </button>
+      )}
 
       <div className={`jl-schedule-card ${day.featured ? 'is-featured' : ''} ${switching ? 'is-switching' : ''}`}>
         {day.featured && (
@@ -123,9 +144,7 @@ const Schedule = () => {
           <div className="jl-schedule-open">
             <div className="jl-script-md" style={{ fontSize: 44, marginBottom: 8 }}>Breakfast &amp; Open End</div>
             <p>
-              To round things off there's a <strong>shared breakfast</strong> — with no
-              fixed time. When it starts depends on how long we're all still celebrating
-              the night before. 😊
+              To round things off there's a <strong>shared breakfast</strong>.
             </p>
             <p className="jl-fine" style={{ marginTop: 12 }}>
               After that it's open end: sleep in, jump in the lake one more time, or head
@@ -149,15 +168,17 @@ const Schedule = () => {
       </div>
 
       {day.dress && (
-        <div className={`jl-dresscode ${switching ? 'is-switching' : ''}`}>
+        <div ref={dressRef} className={`jl-dresscode ${switching ? 'is-switching' : ''} ${dressFlash ? 'is-flash' : ''}`}>
           <div className="jl-eyebrow">Dress code · {day.day}</div>
           <div className="jl-dresscode-head">{day.dress.title}</div>
           <div className="jl-dresscode-body">{day.dress.text}</div>
           {day.dress.swatches && (
             <div className="jl-swatches">
-              {day.dress.swatches.map((s) => (
+              {day.dress.swatches.map((s, i) => (
                 <div className="jl-swatch" key={s.name}>
-                  <span className="jl-swatch-dot" style={{ background: s.hex }}></span>
+                  {Drink
+                    ? <Drink hex={s.hex} index={i} />
+                    : <span className="jl-swatch-dot" style={{ background: s.hex }}></span>}
                   <span className="jl-swatch-name">{s.name}</span>
                 </div>
               ))}
