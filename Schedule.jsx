@@ -17,7 +17,7 @@ const SCHEDULE = [
       swatches: [
         { name: 'Weiß', hex: '#FFFFFF' },
         { name: 'Creme', hex: '#FBF6EC' },
-        { name: 'Champagner', hex: '#F1E7CF' },
+        { name: 'Champagner', hex: '#F1E7CF', glass: 'flute' },
         { name: 'Beige', hex: '#E7D6BC' },
       ],
     },
@@ -28,7 +28,7 @@ const SCHEDULE = [
     label: 'Der Tag',
     featured: true,
     items: [
-      { time: '14:40', title: 'Eintreffen am Forte Benedek', note: 'Vorfreude aufs Brautpaar ✨' },
+      { time: '14:30', title: 'Eintreffen am Forte Benedek', note: 'Vorfreude aufs Brautpaar ✨' },
       { time: '15:00', title: 'Trauung', note: 'im Gewölbe des Forte — im Schatten, weg von der Mittagssonne' },
       { time: '16:00', title: 'Limoncello & Foto', note: 'Prendi un Limoncello 🍋, Spritz & Canapés' },
       { time: '18:00', title: 'Abendessen', note: 'Genießt das fantastische italienische Essen und die Gesellschaft. Gute Laune ist Pflicht!' },
@@ -178,7 +178,7 @@ const Schedule = () => {
               {day.dress.swatches.map((s, i) => (
                 <div className="jl-swatch" key={s.name}>
                   {Drink
-                    ? <Drink hex={s.hex} index={i} />
+                    ? <Drink hex={s.hex} index={i} glass={s.glass} />
                     : <span className="jl-swatch-dot" style={{ background: s.hex }}></span>}
                   <span className="jl-swatch-name">{s.name}</span>
                 </div>

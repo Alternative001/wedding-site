@@ -1445,3 +1445,9 @@ body { background: var(--pattern-stripes-yellow); background-attachment: fixed; 
 }
 /* "Grazie!" was lemon-on-cobalt; on the striped background it needs cobalt */
 .jl-rsvp-success .jl-script-xl { color: var(--color-cobalt); }
+
+/* Mobile: the map is hidden there, so give the venue intro breathing room
+   before the first venue card */
+@media (max-width: 760px) {
+  #venue > .jl-venue-intro { margin-bottom: var(--space-7); }
+}

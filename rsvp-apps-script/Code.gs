@@ -237,6 +237,13 @@ function confirmGuest(r) {
     details = '<table style="border-collapse:collapse;margin:16px 0;font-size:14px">' +
       rows.map(([k, v]) => '<tr><td style="padding:4px 14px 4px 0;color:#6b6b6b">' + esc(k) + '</td><td style="padding:4px 0;color:#0E2A6B"><b>' + esc(v) + '</b></td></tr>').join('') +
       '</table>';
+    if (r.wantRoom) {
+      details += '<p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;background:#FFF4C9;border:1px solid #FCE789;border-radius:10px;padding:12px 14px">' +
+        (de
+          ? '🛏️ <b>Euer Zimmerwunsch am Forte ist notiert.</b> Wir sagen Euch Bescheid, ob das Zimmer noch verfügbar ist — und falls ja, wie es mit der Bezahlung weitergeht. Wir melden uns dazu bei Euch.'
+          : '🛏️ <b>We’ve noted that you’d like a room at the Forte.</b> We’ll let you know whether it’s still available and, if so, how to proceed with the payment — we’ll be in touch about that.') +
+        '</p>';
+    }
   } else {
     subject = de ? 'Danke für Eure Antwort · Lisa & Julian' : 'Thank you for letting us know · Lisa & Julian';
     intro = de
