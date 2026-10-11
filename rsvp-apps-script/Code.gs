@@ -122,6 +122,33 @@ function setup() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Email test — run this from the editor if emails don't arrive         */
+/* ------------------------------------------------------------------ */
+
+// Sends two test emails: one to this Google account itself, one to
+// NOTIFY_EMAIL. Running it from the editor also asks for the "send email"
+// permission if it's missing. Results (and any error) show in the log below.
+function testEmail() {
+  const me = Session.getEffectiveUser().getEmail();
+  console.log('Script runs as: ' + me);
+  console.log('Emails left today: ' + MailApp.getRemainingDailyQuota());
+  [me, CONFIG.NOTIFY_EMAIL].forEach((to, i) => {
+    try {
+      MailApp.sendEmail({
+        to: to,
+        subject: 'RSVP email test ' + (i + 1) + ' → ' + to,
+        body: 'If you can read this, the wedding RSVP script can send email to ' + to + '.',
+        name: CONFIG.SENDER_NAME,
+        replyTo: CONFIG.REPLY_TO,
+      });
+      console.log('✅ Sent to ' + to);
+    } catch (err) {
+      console.error('❌ Could not send to ' + to + ': ' + err);
+    }
+  });
+}
+
+/* ------------------------------------------------------------------ */
 /* Helpers                                                             */
 /* ------------------------------------------------------------------ */
 
