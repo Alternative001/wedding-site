@@ -138,7 +138,7 @@ const Venue = () => (
           <strong>etwa 10 Zimmer</strong> direkt am Veranstaltungsort frei.
         </p>
         <p>
-          <strong>Ab 570 €</strong> für zwei Nächte inkl. Frühstück (2 Personen — die Deluxe Suite bis zu 4).
+          <strong>Ab 500 €</strong> für zwei Nächte inkl. Frühstück (2 Personen — die Deluxe Suite bis zu 4).
           Wer dort wohnen möchte, gibt es einfach im RSVP an — first come, first serve.
         </p>
         <button type="button" className="jl-link" onClick={() => window.jlOpenRooms && window.jlOpenRooms()}>
