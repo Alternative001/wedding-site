@@ -14,6 +14,7 @@ const initial = () => ({
   message: '',
   noStage: 0,             // decline funnel: 0 → 1 → 2 (timer) → 3 (reason)
   noReason: '',
+  website: '',            // honeypot (must stay empty)
 });
 
 const Stepper = ({ label, value, onChange, min = 0, max = 10, note }) => (
@@ -98,11 +99,45 @@ const RSVP = () => {
          form.arrivalDay !== '' &&
          (form.kidsCount === 0 || form.kidsAges.every((a) => String(a).trim().length > 0))));
 
-  const handleSubmit = (e) => {
+  const [status, setStatus] = React.useState('idle'); // idle | sending | error | closed
+
+  // Sends the answer to the Google Apps Script web app (see rsvp-config.js and
+  // rsvp-apps-script/Code.gs), which writes it to the Sheet and emails both sides.
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    if (form.attending === 'yes' && window.triggerConfetti) {
-      window.triggerConfetti();
+    if (status === 'sending') return;
+    const endpoint = window.JL_RSVP_ENDPOINT;
+    if (!endpoint) { setStatus('closed'); return; }
+    const room = (window.JL_ROOMS || []).find((r) => r.name === form.room);
+    const payload = {
+      lang: 'de',
+      email: form.email.trim(),
+      attending: form.attending,
+      arrivalDay: form.arrivalDay,
+      adultCount: form.adultCount,
+      adultNames: form.adultNames,
+      kidsCount: form.kidsCount,
+      kidsAges: form.kidsAges,
+      diet: form.diet,
+      wantRoom: form.wantRoom,
+      roomId: room ? room.id : '',
+      roomName: form.room,
+      message: form.message,
+      noReason: form.noReason,
+      website: form.website, // honeypot
+    };
+    setStatus('sending');
+    try {
+      // A plain-text body keeps this a "simple" request, so the browser skips the
+      // CORS preflight that Apps Script can't answer.
+      const res = await fetch(endpoint, { method: 'POST', body: JSON.stringify(payload) });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) throw new Error(out.error || 'HTTP ' + res.status);
+      setStatus('idle');
+      setSubmitted(true);
+      if (form.attending === 'yes' && window.triggerConfetti) window.triggerConfetti();
+    } catch (err) {
+      setStatus('error');
     }
   };
 
@@ -124,7 +159,7 @@ const RSVP = () => {
               ? <>Wir planen mit <strong>{total}</strong> {total === 1 ? 'Person' : 'Personen'}. Eine Bestätigung kommt per Mail an <strong>{form.email}</strong>.</>
               : <>Wir vermissen Euch — schreibt gern eine Postkarte aus der Ferne 💛</>}
           </p>
-          <button className="jl-btn jl-btn-secondary" onClick={() => { setSubmitted(false); setForm(initial()); }}>
+          <button className="jl-btn jl-btn-secondary" onClick={() => { setSubmitted(false); setStatus('idle'); setForm(initial()); }}>
             Noch jemand zusagen lassen
           </button>
         </div>
@@ -334,9 +369,26 @@ const RSVP = () => {
           <textarea value={form.message} onChange={(e) => set('message', e.target.value)} rows="3" placeholder="Wir freuen uns so sehr…" />
         </div>
 
+        {/* Honeypot: hidden from people, filled in only by spam bots */}
+        <input type="text" name="website" className="jl-hp" tabIndex="-1" autoComplete="off" aria-hidden="true"
+          value={form.website} onChange={(e) => set('website', e.target.value)} />
+
+        {status === 'error' && (
+          <p className="jl-field jl-field-full jl-rsvp-error" role="alert">
+            Das hat leider nicht geklappt. Bitte versucht es gleich noch einmal — oder schreibt
+            uns an <a href="mailto:wedding@lemon-spark.com">wedding@lemon-spark.com</a>.
+          </p>
+        )}
+        {status === 'closed' && (
+          <p className="jl-field jl-field-full jl-rsvp-error" role="alert">
+            Die Online-Antwort ist noch nicht freigeschaltet — schreibt uns bis dahin gern an{' '}
+            <a href="mailto:wedding@lemon-spark.com">wedding@lemon-spark.com</a>.
+          </p>
+        )}
+
         <div className="jl-field jl-field-full jl-rsvp-submit">
-          <button type="submit" className="jl-btn jl-btn-primary" disabled={!canSubmit}>
-            Antwort absenden
+          <button type="submit" className="jl-btn jl-btn-primary" disabled={!canSubmit || status === 'sending'}>
+            {status === 'sending' ? 'Wird gesendet …' : 'Antwort absenden'}
           </button>
         </div>
       </form>
