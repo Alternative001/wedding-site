@@ -28,10 +28,10 @@ const CONFIG = {
 // Room ids sent by the website → one label per room (same for DE + EN guests,
 // so the Overview can count them).
 const ROOM_LABELS = {
-  'junior-window':  'Junior Suite Spa · Large Window (€570)',
-  'king-superior':  'King Superior Spa · Garden/Balcony (€620)',
-  'junior-jacuzzi': 'Junior Suite Spa · Private Jacuzzi (€680)',
-  'deluxe-suite':   'Deluxe Spa Suite · up to 4 (€790)',
+  'junior-window':  'Junior Suite Spa · Large Window (€500)',
+  'king-superior':  'King Superior Spa · Garden/Balcony (€530)',
+  'junior-jacuzzi': 'Junior Suite Spa · Private Jacuzzi (€585)',
+  'deluxe-suite':   'Deluxe Spa Suite · up to 4 (€600)',
 };
 
 const HEADERS = [
