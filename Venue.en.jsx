@@ -137,7 +137,7 @@ const Venue = () => (
         </p>
         <p>
           <strong>From €500</strong> for two nights incl. breakfast (2 people — the Deluxe Suite up to 4).
-          If you'd like to stay there, just tick it in the RSVP — first come, first served.
+          If you'd like to stay there, just request a room in the RSVP — first come, first served.
         </p>
         <button type="button" className="jl-link" onClick={() => window.jlOpenRooms && window.jlOpenRooms()}>
           See the rooms →

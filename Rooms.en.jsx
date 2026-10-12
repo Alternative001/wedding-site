@@ -141,7 +141,7 @@ const RoomCard = ({ room }) => {
       )}
       <div className="jl-room-foot">
         <span className="jl-room-price">{room.price}</span>
-        <span className="jl-room-pick-hint">Just pick your room in the RSVP ✨</span>
+        <span className="jl-room-pick-hint">Request your room in the RSVP ✨</span>
       </div>
     </div>
   </div>

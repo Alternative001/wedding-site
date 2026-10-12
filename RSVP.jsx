@@ -328,13 +328,17 @@ const RSVP = () => {
             <div className="jl-field jl-field-full">
               <label className="jl-check">
                 <input type="checkbox" checked={form.wantRoom} onChange={(e) => set('wantRoom', e.target.checked)} />
-                <span>Wir möchten ein Zimmer <strong>am</strong> Forte</span>
+                <span>Wir möchten ein Zimmer <strong>am</strong> Forte <strong>anfragen</strong></span>
               </label>
             </div>
 
             {form.wantRoom && (
               <div className="jl-field jl-field-full jl-room-pick">
-                <label>Welches Zimmer?</label>
+                <label>Welches Zimmer möchtet Ihr anfragen?</label>
+                <p className="jl-room-request-note">
+                  ℹ️ Das ist erst einmal nur eine <strong>Anfrage</strong> — noch keine Buchung.
+                  Wir melden uns bei Euch und sagen Euch, ob Ihr ein Zimmer bekommen habt.
+                </p>
                 <div className="jl-radio-row">
                   {(window.JL_ROOMS || []).map((r) => (
                     <button

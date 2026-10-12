@@ -328,13 +328,17 @@ const RSVP = () => {
             <div className="jl-field jl-field-full">
               <label className="jl-check">
                 <input type="checkbox" checked={form.wantRoom} onChange={(e) => set('wantRoom', e.target.checked)} />
-                <span>We want a room <strong>at</strong> the Forte</span>
+                <span>We’d like to <strong>request</strong> a room <strong>at</strong> the Forte</span>
               </label>
             </div>
 
             {form.wantRoom && (
               <div className="jl-field jl-field-full jl-room-pick">
-                <label>Which room?</label>
+                <label>Which room would you like to request?</label>
+                <p className="jl-room-request-note">
+                  ℹ️ This is just a <strong>request</strong> — not a booking yet. We’ll get back to
+                  you and let you know whether you got a room.
+                </p>
                 <div className="jl-radio-row">
                   {(window.JL_ROOMS || []).map((r) => (
                     <button
